@@ -30,16 +30,17 @@ export default function HomePage() {
     fetchProducts();
   }, []);
 
-  const ClickAddToCart = (productId) => {
+  const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
 };
 
-  return (
+ return (
     <>
       <NavBar />
+
       <section className="hero">
         <h1>All Products</h1>
-        <p>Do Shoping</p>
+        <p>Do Shopping</p>
       </section>
 
       <section className="products-section">
@@ -48,21 +49,22 @@ export default function HomePage() {
 
         <div className="product-grid">
           {products.map((product) => (
-            <div className="product-card" key={product._id}>
+            <div
+              className="product-card"
+              key={product._id}
+              onClick={() => handleProductClick(product._id)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="product-image">
                 <img src={product.productImage} alt={product.name} />
               </div>
 
               <div className="product-info">
                 <h3>{product.name}</h3>
-                <p className="description">
-                  {product.description}
-                </p>
+                {/* <p className="description">{product.description}</p> */}
+
                 <div className="card-footer">
-                  <span className="price">Rs.{product.price}</span>
-                  <button className="btn" onClick={() => ClickAddToCart(product._id)}>
-                      Add to Cart
-                  </button>
+                  <span className="price">Rs. {product.price}</span>
                 </div>
               </div>
             </div>

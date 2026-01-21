@@ -23,7 +23,9 @@ export default function NavBar({cartCount}) {
 
   return (
     <nav className="navbar">
-      <div className="nav-logo">Flipcart</div>
+      <div className="nav-logo" style={{ cursor: "pointer" }}onClick={() => navigate("/")}>
+        Flipcart
+      </div>
 
       <div className="nav-buttons">
         {!isLoggedIn ? (
