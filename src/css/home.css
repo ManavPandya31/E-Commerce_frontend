@@ -1,23 +1,46 @@
 .hero {
-  min-height: calc(30vh - 15px);
+  min-height: 15vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+  background: linear-gradient(135deg, #eef2ff, #fdf2f8);
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
-.hero h1 {
-  font-size: 38px;
-  color: #1f2937;
+.slider-container {
+  width: 100%;
 }
 
-.hero p {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #6b7280;
+.slick-slide > div {
+  display: flex;
+  justify-content: center;
+}
+
+.category-pill {
+  display: block;
+  text-align: center;
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-pill:hover {
+  background: #4f46e5;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.category-pill.active {
+  background: #4f46e5;
+  color: #ffffff;
+  border-color: #4f46e5;
+  box-shadow: 0 14px 30px rgba(79, 70, 229, 0.4);
 }
 
 .products-section {
@@ -76,12 +99,6 @@
   color: #111827;
 }
 
-.description {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 8px 0 14px;
-}
-
 .card-footer {
   display: flex;
   margin-top: 3px;
@@ -109,4 +126,16 @@
 
 .btn:hover {
   background: #4338ca;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding: 30px 15px;
+  }
+
+  .category-pill {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
 }
