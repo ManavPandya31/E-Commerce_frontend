@@ -1,0 +1,112 @@
+import React from "react";
+import { useEffect, useState } from "react";
+import { useParams , useNavigate } from "react-router-dom";
+import axios from "axios";
+import NavBar from "../Components/NavBar";
+import "../css/productdetails.css";
+
+export default function ProductDetails({ cartItems, setCartItems, setCartCount , cartCount }) {
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3131/api/products/findSingleProduct/${id}`);
+        console.log("Response From Single Product Fetch API :-",response);
+        
+        setProduct(response.data.data);
+        
+      } catch (error) {
+        console.log("Error fetching product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  const btnAddToCart = async () => {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first to continue");
+    navigate("/login");
+    return;
+  }
+
+  if (!product || !product._id) {
+    alert("Product information is missing.");
+    console.error("Missing product:", product);
+    return;
+  }
+
+  try {
+
+    const response = await axios.post("http://localhost:3131/api/cart/addCartItems",
+      {
+        productId: product._id,
+        quantity: 1
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    console.log("Add To Cart API Response:", response.data);
+
+    setTimeout(() => {
+      navigate("/cart");
+    }, 50);
+
+  } catch (error) {
+    console.log("Error:-",error);
+  }
+}
+
+   const BuyButton = () => {
+   
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first to continue");
+      navigate("/login");
+      return;
+    }
+    navigate(`/product/${id}`);
+  };
+
+  if (loading) return <p className="product-loading">Loading product...</p>
+  if (!product) return <p className="product-not-found">Product not found</p>
+
+   return (
+    <div>
+      <NavBar cartCount={cartCount} />
+      <div className="product-page-container">
+        <div className="product-page-card">
+          <div className="product-left">
+            <div className="product-image-main">
+              <img src={product.productImage} alt={product.name} />
+            </div>
+          </div>
+
+          <div className="product-right">
+            <h2 className="product-title">{product.name}</h2>
+            <p className="product-price">Rs. {product.price}</p>
+            <p className="product-description">{product.description}</p>
+            <div className="product-actions">
+              <button className="add-to-cart-btn" onClick={btnAddToCart}>Add to Cart</button>
+              <button className="buy-now-btn" onClick={BuyButton}>Buy Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

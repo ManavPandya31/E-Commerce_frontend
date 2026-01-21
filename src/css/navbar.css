@@ -1,0 +1,68 @@
+.navbar {
+  height: 70px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 40px;
+  background:#2874F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+
+.nav-logo {
+  font-size: 22px;
+  font-weight: 700;
+  color:white;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 15px;
+  /* margin-right: 90px; */
+}
+
+.nav-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.login-btn {
+  color: white;
+  border: 1px solid #4f46e5;
+}
+
+.login-btn:hover {
+  background: #eef2ff;
+}
+
+.register-btn {
+  background:white;
+  color: white;
+}
+
+.register-btn:hover {
+  background: #4338ca;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .nav-logo {
+    font-size: 18px;
+  }
+
+  .nav-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+}

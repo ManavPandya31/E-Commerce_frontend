@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.authContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.authCard {
+  background: #ffffff;
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.authTitle {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.authSubtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.authForm input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+}
+
+.authForm input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.authBtn {
+  background: #6366f1;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.authBtn:hover {
+  background: #4f46e5;
+}
+
+.authFooter {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.authFooter a {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authSelect {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+.authSelect:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+@media (max-width: 480px) {
+  .authCard {
+    padding: 20px;
+  }
+}
