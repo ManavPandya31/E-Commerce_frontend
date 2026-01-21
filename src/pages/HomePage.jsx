@@ -1,7 +1,7 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -9,51 +9,62 @@ import Slider from "react-slick";
 import "../css/home.css";
 
 export default function HomePage() {
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (categoryId = "") => {
     try {
-      const response = await axios.get(
-        "http://localhost:3131/api/products/showAllProducts",
+      setLoading(true);
+
+      const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
+        {
+          params: categoryId ? { categoryId } : {},
+        }
       );
-      console.log("Response From Fetch Products API :-", response);
 
       setProducts(response.data.data.products);
       setLoading(false);
-    } catch (error) {
-      console.log("Error While Fetch The Products..", error);
+
+    } catch (err) {
+      console.log("Error While Fetching Products", err);
+      setLoading(false);
     }
-  };
-
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
-
-  const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
   };
 
   const fetchCategories = async () => {
     try {
       const response = await axios.get("http://localhost:3131/api/products/getCategory");
-      console.log("Category API Response:", response);
-
       setCategories(response.data.data);
-      
-    } catch (error) {
-      console.log("Error while fetching categories", error);
+
+    } catch (err) {
+      console.log("Error while fetching categories", err);
     }
   };
-
-  useEffect(() => {
+    useEffect(() => {
     fetchProducts();
     fetchCategories();
   }, []);
+
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategory(categoryId);
+    fetchProducts(categoryId);
+  };
+
+  const handleReset = () => {
+    setSelectedCategory(null);
+    fetchProducts();
+  };
+
+  const handleProductClick = (productId) => {
+
+    navigate(`/product/${productId}`);
+  };
 
   const sliderSettings = {
     dots: false,
@@ -61,7 +72,7 @@ export default function HomePage() {
     speed: 10000,
     slidesToShow: 7,
     slidesToScroll: 3,
-    autoplay: true, 
+    autoplay: true,
     autoplaySpeed: 1000,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 5, slidesToScroll: 5 } },
@@ -70,36 +81,50 @@ export default function HomePage() {
     ],
   };
 
-  return (
-    <>
-      <NavBar />
-      <section className="hero">
-        {categories.length === 0 ? (
-          <p>Loading categories...</p>
-        ) : (
-          <div className="slider-container" key={categories.length}>
-            <Slider {...sliderSettings}>
-              {categories.map((cat) => (
-                <div key={cat._id}>
-                  <div className="category-pill">{cat.name}</div>
+return (
+  <>
+    <NavBar />
+    <section className="hero">
+      {categories.length === 0 ? (
+        <p>Loading categories...</p>
+      ) : (
+        <div className="slider-container">
+          <Slider {...sliderSettings}>
+            {categories.map((cat) => (
+              <div key={cat._id}>
+                <div
+                  className={`category-pill ${
+                    selectedCategory === cat._id ? "active" : ""
+                  }`}
+                  onClick={() => handleCategoryClick(cat._id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {cat.name}
                 </div>
-              ))}
-            </Slider>
-          </div>
-        )}
-      </section>
+              </div>
+            ))}
+          </Slider>
 
-      <section className="products-section">
-        {loading && <p className="status-text">Loading products...</p>}
-        {error && <p className="status-text error">{error}</p>}
+          <button className="reset-button" onClick={handleReset}>View All Category</button>
+        </div>
+      )}
+    </section>
 
+    <section className="products-section">
+      {loading && <p className="status-text">Loading products...</p>}
+      {error && <p className="status-text error">{error}</p>}
+
+      {!loading && products.length === 0 ? (
+        <p className="status-text">
+          This Category Products Are Available Soon ! 
+        </p>
+      ) : (
         <div className="product-grid">
           {products.map((product) => (
             <div
               className="product-card"
               key={product._id}
               onClick={() => handleProductClick(product._id)}
-              style={{ cursor: "pointer" }}
             >
               <div className="product-image">
                 <img src={product.productImage} alt={product.name} />
@@ -107,16 +132,13 @@ export default function HomePage() {
 
               <div className="product-info">
                 <h3>{product.name}</h3>
-                {/* <p className="description">{product.description}</p> */}
-
-                <div className="card-footer">
-                  <span className="price">Rs. {product.price}</span>
-                </div>
+                <span className="price">Rs. {product.price}</span>
               </div>
             </div>
           ))}
         </div>
-      </section>
-    </>
-  );
+      )}
+    </section>
+  </>
+);
 }
