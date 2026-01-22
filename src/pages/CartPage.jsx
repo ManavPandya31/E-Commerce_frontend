@@ -15,38 +15,25 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
 
   const token = localStorage.getItem("token");
 
-  const fetchCartItems = async () => {
-    try {
-      const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      
-      const items = response.data.data.items; 
+ const fetchCartItems = async () => {
+  try {
+    const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-      console.log("Read Cart API Response :-", response);
+    const items = response.data.data.items;
 
-      setCartItems(items);
+    setCartItems(items);
 
-      const total = response.data.data.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      setCartCount(total);
+    const total = items.reduce((sum, item) => sum + item.quantity, 0);
+    setCartCount(total);
 
-    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-      
-        if (totalQuantity < 1) {
-          navigate("/");
-        }
-
-    } catch (error) {
-      console.log("Fetch Cart Error :-", error);
-    }
-  };
+  } catch (error) {
+    console.log("Fetch Cart Error :-", error);
+  }
+};
 
   useEffect(() => {
     fetchCartItems();
@@ -79,18 +66,14 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
   };
 
   const decreaseQty = async (item) => {
-  if (item.quantity < 1) {
-    navigate("/");
-    return;
-  }
 
   if (item.quantity === 1) {
-    deleteItem(item._id);
+    await deleteItem(item.product._id);
     return;
   }
 
   try {
-    const response = await axios.put("http://localhost:3131/api/cart/updateCartItems",
+    await axios.put("http://localhost:3131/api/cart/updateCartItems",
       {
         productId: item.product._id,
         quantity: item.quantity - 1,
@@ -102,9 +85,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
       }
     );
 
-    console.log("Decrease Qty Response :-", response);
     fetchCartItems();
-
   } catch (error) {
     console.log("Decrease Qty Error :-", error);
   }
@@ -123,11 +104,6 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
 
       console.log("Delete Cart Item Response :-", response);
       fetchCartItems();
-
-    const remainingItems = cartItems.filter(item => item.product._id !== productId);
-      if (remainingItems.length < 1) {
-       navigate("/");
-    }
 
     } catch (error) {
       console.log("Delete Cart Item Error :-", error);
