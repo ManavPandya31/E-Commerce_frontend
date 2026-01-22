@@ -63,7 +63,7 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
 
     setTimeout(() => {
       navigate("/cart");
-    }, 50);
+    }, 1000);
 
   } catch (error) {
     console.log("Error:-",error);
