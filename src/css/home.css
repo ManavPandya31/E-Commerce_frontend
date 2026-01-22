@@ -28,6 +28,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .category-pill:hover {
@@ -57,13 +58,13 @@
 .status-text.error {
   color: #dc2626;
 }
+
 .reset-button {
   margin-top: 18px;
   padding: 10px 22px;
   background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: #ffffff;
-  /* margin-bottom: 1px; */
-  margin-left: 1200px;
+  margin-left: 10px;
   border: none;
   border-radius: 999px;
   font-size: 14px;
@@ -88,6 +89,7 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
 }
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -158,6 +160,65 @@
   background: #4338ca;
 }
 
+.categories-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.categories-wrapper-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.categories-horizontal {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.category-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.more-button {
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  transition: all 0.3s ease;
+}
+
+.more-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.45);
+}
+
+.more-button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+.more-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
@@ -165,14 +226,28 @@
   }
 
   .category-pill {
-    padding: 8px 16px;
+    padding: 8px 12px;
     font-size: 13px;
   }
-}
 
-@media (max-width: 768px) {
   .reset-button {
     padding: 8px 18px;
     font-size: 13px;
+    margin-left: auto;
+  }
+
+  .categories-wrapper-horizontal {
+    flex-wrap: wrap;
+  }
+
+  .categories-horizontal {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .more-button {
+    padding: 6px 14px;
+    font-size: 12px;
   }
 }
+  
