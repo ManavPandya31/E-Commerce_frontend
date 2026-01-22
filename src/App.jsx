@@ -1,6 +1,6 @@
 import Router from "./Routers/Router";
 import { useState } from "react";
-import { Provider } from "react-redux";
+import Loader from "./Components/Loader";
 import store from "./app/store.js";
 
 function App() {
@@ -11,14 +11,16 @@ function App() {
   console.log("Redux store:", store); 
 
   return (
-    
+    <>
+      <Loader />   
+      
       <Router
         cartItems={cartItems}
         setCartItems={setCartItems}
         cartCount={cartCount}
         setCartCount={setCartCount}
       />
-   
+    </>
   );
 }
 

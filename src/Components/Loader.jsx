@@ -1,21 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import "../css/loader.css";
 
-const initialState = {
-  isLoading: false,
-};
+export default function Loader() {
+  const isLoading = useSelector((state) => state.loader.isLoading);
 
-const loaderSlice = createSlice({
-  name: "loader",
-  initialState,
-  reducers: {
-    showLoader: (state) => {
-      state.isLoading = true;
-    },
-    hideLoader: (state) => {
-      state.isLoading = false;
-    },
-  },
-});
+  if (!isLoading) return null;
 
-export const { showLoader, hideLoader } = loaderSlice.actions;
-export default loaderSlice.reducer;
+  return (
+    <div className="loader-overlay">
+      <div className="loader-spinner"></div>
+    </div>
+  );
+}

@@ -2,12 +2,15 @@ import React from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
 import "../css/cartpage.css";
 
 export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,}) {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const btnShopping = () => {
     navigate("/");
@@ -17,6 +20,8 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
   const fetchCartItems = async () => {
     try {
+
+       dispatch(showLoader());
       const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -29,8 +34,12 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
       const total = items.reduce((sum, item) => sum + item.quantity, 0);
       setCartCount(total);
+
     } catch (error) {
       console.log("Fetch Cart Error :-", error);
+
+    }finally{
+       dispatch(hideLoader());
     }
   };
   useEffect(() => {
@@ -45,6 +54,9 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
   const increaseQty = async (item) => {
     try {
+
+       dispatch(showLoader());
+
       const response = await axios.put("http://localhost:3131/api/cart/updateCartItems",
         {
           productId: item.product._id,
@@ -59,8 +71,12 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
       console.log("Increase Qty Response :-", response);
       fetchCartItems();
+
     } catch (error) {
       console.log("Increase Qty Error :-", error);
+
+    }finally{
+       dispatch(hideLoader());
     }
   };
 
@@ -71,6 +87,9 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
     }
 
     try {
+
+       dispatch(showLoader());
+
       await axios.put("http://localhost:3131/api/cart/updateCartItems",
         {
           productId: item.product._id,
@@ -84,13 +103,20 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
       );
 
       fetchCartItems();
+
     } catch (error) {
       console.log("Decrease Qty Error :-", error);
+    }finally{
+       dispatch(hideLoader());
     }
   };
 
   const deleteItem = async (productId) => {
+
     try {
+
+       dispatch(showLoader());
+
       const response = await axios.delete("http://localhost:3131/api/cart/deleteCartItems",
         {
           headers: {
@@ -105,6 +131,9 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
     } catch (error) {
       console.log("Delete Cart Item Error :-", error);
+
+    }finally{
+        dispatch(hideLoader());
     }
   };
   const validItems = cartItems.filter((item) => item.product);
