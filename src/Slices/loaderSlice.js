@@ -11,6 +11,7 @@ const loaderSlice = createSlice({
     showLoader: (state) => {
       state.isLoading = true;
     },
+    
     hideLoader: (state) => {
       state.isLoading = false;
     },
