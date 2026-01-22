@@ -105,7 +105,7 @@ return (
             ))}
           </Slider>
 
-          <button className="reset-button" onClick={handleReset}>View All Category</button>
+          <button className="reset-button" onClick={handleReset}>View All Category Products</button>
         </div>
       )}
     </section>
