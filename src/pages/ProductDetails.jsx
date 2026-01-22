@@ -61,9 +61,10 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
 
     console.log("Add To Cart API Response:", response.data);
 
-    setTimeout(() => {
-      navigate("/cart");
-    }, 1000);
+    setCartCount(prev => prev + 1);
+    setCartItems(prev => [...prev, { ...product, quantity: 1 }]);
+
+    navigate("/cart");
 
   } catch (error) {
     console.log("Error:-",error);
