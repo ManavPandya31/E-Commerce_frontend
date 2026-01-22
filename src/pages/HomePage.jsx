@@ -22,29 +22,29 @@ export default function HomePage() {
     try {
       dispatch(showLoader()); 
 
-      const response = await axios.get(
-        "http://localhost:3131/api/products/showAllProducts",
+      const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
         { params: categoryId ? { categoryId } : {} }
       );
 
       console.log("Response From Show All Products:-", response);
       setProducts(response.data.data.products);
+
     } catch (err) {
       console.log("Error While Fetching Products", err);
       setError("Failed to load products.");
+
     } finally {
-      dispatch(hideLoader()); // hide global loader
+      dispatch(hideLoader()); 
     }
   };
 
-  // Fetch categories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3131/api/products/getCategory"
-      );
+      const response = await axios.get("http://localhost:3131/api/products/getCategory");
       console.log("Response From Get Category API :-", response);
+
       setCategories(response.data.data);
+      
     } catch (err) {
       console.log("Error while fetching categories", err);
     }
