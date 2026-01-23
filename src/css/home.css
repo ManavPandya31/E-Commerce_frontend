@@ -46,7 +46,7 @@
 
 .products-section {
   padding: 60px 40px;
-  background-color: #f9fafb;
+  background-color: white; 
 }
 
 .status-text {
@@ -98,21 +98,23 @@
 }
 
 .product-card {
-  background: #ffffff;
-  border-radius: 12px;
+  background: #252841; /* Lighter than background, but NOT white */
+  border-radius: 16px;
+  border: 1px solid #313552; /* Subtle border to define the shape */
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  background: #2d314d; /* Lightens up slightly on hover */
+  border-color: #4f46e5; /* Glows indigo on hover */
 }
 
 .product-image {
+  background: #1e2136; /* Darker than the card to focus on the product */
   height: 200px;
-  background: #f3f4f6;
 }
 
 .product-image img {
@@ -128,7 +130,7 @@
 
 .product-info h3 {
   font-size: 18px;
-  color: #111827;
+  color: #e2e8f0; /* Soft silver/white text */
 }
 
 .card-footer {
@@ -139,10 +141,9 @@
 }
 
 .price {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
-  text-align: center;
-  color: black;
+  color: #818cf8; /* Light indigo price */
 }
 
 .btn {

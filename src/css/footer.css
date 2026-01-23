@@ -1,8 +1,10 @@
 .footer {
-  background-color: #222;
-  color: #fff;
-  padding: 40px 20px 20px;
+  background-color: #111111; 
+  color: #ffffff;
+  padding: 60px 20px 20px;
   font-family: 'Arial', sans-serif;
+  border-top: 2px solid #4f46e5; 
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .footer-container {
@@ -19,15 +21,17 @@
 }
 
 .footer-section h3 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  color: #f1c40f;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  color: #6366f1; 
 }
 
 .footer-section p {
   font-size: 14px;
   line-height: 1.6;
-  color: #ccc;
+  color: #a1a1aa;
 }
 
 .footer-section ul {
@@ -41,40 +45,43 @@
 
 .footer-section ul li a {
   text-decoration: none;
-  color: #ccc;
-  transition: color 0.3s;
+  color: #a1a1aa;
+  transition: all 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-  color: #f1c40f;
+  color: #ffffff;
+  padding-left: 5px;
 }
 
 .social-icons a {
   display: inline-block;
   margin-right: 10px;
   text-decoration: none;
-  color: #ccc;
+  color: #a1a1aa;
   font-size: 18px;
   width: 35px;
   height: 35px;
   line-height: 35px;
   text-align: center;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
+  background: #1e1e1e;
   border-radius: 50%;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .social-icons a:hover {
-  background-color: #f1c40f;
-  color: #222;
-  border-color: #f1c40f;
+  background-color: #6366f1;
+  color: #ffffff;
+  border-color: #6366f1;
+  transform: translateY(-3px) scale(1.1);
 }
 
 .footer-bottom {
   text-align: center;
-  margin-top: 30px;
-  padding-top: 15px;
-  border-top: 1px solid #444;
-  font-size: 14px;
-  color: #888;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #222;
+  font-size: 13px;
+  color: #52525b;
 }
