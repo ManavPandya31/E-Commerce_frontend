@@ -5,13 +5,13 @@
   top: 0;
   z-index: 1000;
   padding: 0 40px;
-  background:#2874F0;
+  background: #7c3aed;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
-
 
 .nav-logo {
   font-size: 22px;

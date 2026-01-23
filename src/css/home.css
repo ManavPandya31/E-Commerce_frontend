@@ -1,28 +1,52 @@
 .hero {
-  min-height: calc(30vh - 15px);
+  min-height: 15vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+  background: linear-gradient(135deg, #eef2ff, #fdf2f8);
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
-.hero h1 {
-  font-size: 38px;
-  color: #1f2937;
+.slider-container {
+  width: 100%;
 }
 
-.hero p {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #6b7280;
+.slick-slide > div {
+  display: flex;
+  justify-content: center;
+}
+
+.category-pill {
+  display: block;
+  text-align: center;
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.category-pill:hover {
+  background: #4f46e5;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.category-pill.active {
+  background: #4f46e5;
+  color: #ffffff;
+  border-color: #4f46e5;
+  box-shadow: 0 14px 30px rgba(79, 70, 229, 0.4);
 }
 
 .products-section {
   padding: 60px 40px;
-  background-color: #f9fafb;
+  background-color: white; 
 }
 
 .status-text {
@@ -35,6 +59,37 @@
   color: #dc2626;
 }
 
+.reset-button {
+  margin-top: 18px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #ffffff;
+  margin-left: 10px;
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.45);
+}
+
+.reset-button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+.reset-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -43,21 +98,23 @@
 }
 
 .product-card {
-  background: #ffffff;
-  border-radius: 12px;
+  background: #252841; /* Lighter than background, but NOT white */
+  border-radius: 16px;
+  border: 1px solid #313552; /* Subtle border to define the shape */
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  background: #2d314d; /* Lightens up slightly on hover */
+  border-color: #4f46e5; /* Glows indigo on hover */
 }
 
 .product-image {
+  background: #1e2136; /* Darker than the card to focus on the product */
   height: 200px;
-  background: #f3f4f6;
 }
 
 .product-image img {
@@ -73,13 +130,7 @@
 
 .product-info h3 {
   font-size: 18px;
-  color: #111827;
-}
-
-.description {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 8px 0 14px;
+  color: #e2e8f0; /* Soft silver/white text */
 }
 
 .card-footer {
@@ -90,10 +141,9 @@
 }
 
 .price {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
-  text-align: center;
-  color: black;
+  color: #818cf8; /* Light indigo price */
 }
 
 .btn {
@@ -110,3 +160,95 @@
 .btn:hover {
   background: #4338ca;
 }
+
+.categories-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.categories-wrapper-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.categories-horizontal {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.category-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.more-button {
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  transition: all 0.3s ease;
+}
+
+.more-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.45);
+}
+
+.more-button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+.more-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding: 30px 15px;
+  }
+
+  .category-pill {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .reset-button {
+    padding: 8px 18px;
+    font-size: 13px;
+    margin-left: auto;
+  }
+
+  .categories-wrapper-horizontal {
+    flex-wrap: wrap;
+  }
+
+  .categories-horizontal {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .more-button {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+}
+  

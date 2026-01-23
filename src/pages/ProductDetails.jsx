@@ -2,6 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useParams , useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
 import "../css/productdetails.css";
 
@@ -10,11 +12,16 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+
+        dispatch(showLoader());
+
         const response = await axios.get(`http://localhost:3131/api/products/findSingleProduct/${id}`);
         console.log("Response From Single Product Fetch API :-",response);
         
@@ -22,8 +29,10 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
         
       } catch (error) {
         console.log("Error fetching product:", error);
+
       } finally {
-        setLoading(false);
+        //setLoading(false);
+        dispatch(hideLoader());
       }
     };
     fetchProduct();
@@ -47,6 +56,8 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
 
   try {
 
+     dispatch(showLoader());
+
     const response = await axios.post("http://localhost:3131/api/cart/addCartItems",
       {
         productId: product._id,
@@ -61,12 +72,16 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
 
     console.log("Add To Cart API Response:", response.data);
 
-    setTimeout(() => {
-      navigate("/cart");
-    }, 50);
+    setCartCount(prev => prev + 1);
+    setCartItems(prev => [...prev, { ...product, quantity: 1 }]);
+
+    navigate("/cart");
 
   } catch (error) {
     console.log("Error:-",error);
+    
+  }finally{
+    dispatch(hideLoader());
   }
 }
 
@@ -82,7 +97,7 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
     navigate(`/product/${id}`);
   };
 
-  if (loading) return <p className="product-loading">Loading product...</p>
+  //if (loading) return <p className="product-loading">Loading product...</p>
   if (!product) return <p className="product-not-found">Product not found</p>
 
    return (

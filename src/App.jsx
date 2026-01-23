@@ -1,19 +1,29 @@
 import Router from "./Routers/Router";
 import { useState } from "react";
+import Footer from "./Components/Footer";
+import Loader from "./Components/Loader";
+import store from "./app/store.js";
 
 function App() {
 
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
 
+  console.log("Redux store:", store); 
+
   return (
+    <>
+      <Loader />   
+      
       <Router
-      cartItems={cartItems}
-      setCartItems={setCartItems}
-      cartCount={cartCount}
-      setCartCount={setCartCount}
-    />
-  )
+        cartItems={cartItems}
+        setCartItems={setCartItems}
+        cartCount={cartCount}
+        setCartCount={setCartCount}
+      />
+      <Footer/>
+    </>
+  );
 }
 
-export default App
+export default App;
