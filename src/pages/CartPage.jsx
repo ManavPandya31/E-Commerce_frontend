@@ -48,7 +48,9 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
   if (cartItems.length === 0) {
     return (
+      <><NavBar/>
       <button className="cart-text" onClick={btnShopping}>Your Cart is Empty! Go For Shopping</button>
+      </>
     );
   }
 
