@@ -98,9 +98,9 @@
 }
 
 .product-card {
-  background: #252841; /* Lighter than background, but NOT white */
+  background: #252841; 
   border-radius: 16px;
-  border: 1px solid #313552; /* Subtle border to define the shape */
+  border: 1px solid #313552; 
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
@@ -108,12 +108,12 @@
 
 .product-card:hover {
   transform: translateY(-8px);
-  background: #2d314d; /* Lightens up slightly on hover */
-  border-color: #4f46e5; /* Glows indigo on hover */
+  background: #2d314d; 
+  border-color: #4f46e5; 
 }
 
 .product-image {
-  background: #1e2136; /* Darker than the card to focus on the product */
+  background: #1e2136; 
   height: 200px;
 }
 
@@ -130,7 +130,7 @@
 
 .product-info h3 {
   font-size: 18px;
-  color: #e2e8f0; /* Soft silver/white text */
+  color: #e2e8f0; 
 }
 
 .card-footer {
@@ -143,7 +143,7 @@
 .price {
   font-size: 19px;
   font-weight: bold;
-  color: #818cf8; /* Light indigo price */
+  color: #818cf8; 
 }
 
 .btn {
@@ -194,14 +194,14 @@
 
 .more-button {
   padding: 8px 18px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: linear-gradient(135deg, #5c5cc2, #1f9868);
   color: #fff;
   border: none;
   border-radius: 999px;
   font-size: 14px;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .more-button:hover:not(:disabled) {
