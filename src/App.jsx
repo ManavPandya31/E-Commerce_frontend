@@ -1,5 +1,6 @@
 import Router from "./Routers/Router";
 import { useState } from "react";
+import Footer from "./Components/Footer";
 import Loader from "./Components/Loader";
 import store from "./app/store.js";
 
@@ -20,6 +21,7 @@ function App() {
         cartCount={cartCount}
         setCartCount={setCartCount}
       />
+      <Footer/>
     </>
   );
 }
