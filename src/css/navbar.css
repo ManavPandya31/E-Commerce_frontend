@@ -5,7 +5,8 @@
   top: 0;
   z-index: 1000;
   padding: 0 40px;
-  background:#2874F0;
+  background: #7c3aed;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;

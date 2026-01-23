@@ -88,7 +88,7 @@ export default function HomePage() {
   };
 
   return (
-    <>
+    <>  
       <NavBar />
 
       <section className="hero">
