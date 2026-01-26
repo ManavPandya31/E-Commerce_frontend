@@ -128,9 +128,9 @@
   transition: all 0.3s ease;
 }
 
-.product-card:hover {
+/* .product-card:hover {
   transform: translateY(-8px);
-}
+} */
 
 .product-image {
   background: #f3f4f6;
