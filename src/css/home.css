@@ -8,6 +8,31 @@
   padding: 40px 20px;
 }
 
+.product-addToCart {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  transition: all 0.25s ease;
+}
+
+.product-addToCart:hover {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  transform: translateY(-2px);
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 16px 18px;
+}
+
 .slider-container {
   width: 100%;
 }
@@ -21,10 +46,10 @@
   display: block;
   text-align: center;
   padding: 10px 15px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 999px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -33,7 +58,7 @@
 
 .category-pill:hover {
   background: #4f46e5;
-  color: #fff;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -41,12 +66,12 @@
   background: #4f46e5;
   color: #ffffff;
   border-color: #4f46e5;
-  box-shadow: 0 14px 30px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.35);
 }
 
 .products-section {
   padding: 60px 40px;
-  background-color: white; 
+  background-color: #fafafa;
 }
 
 .status-text {
@@ -77,12 +102,10 @@
 .reset-button:hover {
   background: linear-gradient(135deg, #4338ca, #4f46e5);
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.45);
 }
 
 .reset-button:active {
   transform: translateY(0);
-  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
 }
 
 .reset-button:focus {
@@ -98,29 +121,29 @@
 }
 
 .product-card {
-  background: #252841; 
-  border-radius: 16px;
-  border: 1px solid #313552; 
+  background: #ffffff;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
   transition: all 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-8px);
-  background: #2d314d; 
-  border-color: #4f46e5; 
 }
 
 .product-image {
-  background: #1e2136; 
-  height: 200px;
+  background: #f3f4f6;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .product-info {
@@ -129,21 +152,15 @@
 }
 
 .product-info h3 {
-  font-size: 18px;
-  color: #e2e8f0; 
-}
-
-.card-footer {
-  display: flex;
-  margin-top: 3px;
-  align-items: center;
-  justify-content: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
 }
 
 .price {
-  font-size: 19px;
-  font-weight: bold;
-  color: #818cf8; 
+  font-size: 15px;
+  font-weight: 600;
+  color: blue;
 }
 
 .btn {
@@ -195,7 +212,7 @@
 .more-button {
   padding: 8px 18px;
   background: linear-gradient(135deg, #5c5cc2, #1f9868);
-  color: #fff;
+  color: #ffffff;
   border: none;
   border-radius: 999px;
   font-size: 14px;
@@ -207,17 +224,36 @@
 .more-button:hover:not(:disabled) {
   background: linear-gradient(135deg, #4338ca, #4f46e5);
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.45);
-}
-
-.more-button:active {
-  transform: translateY(0);
-  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
 }
 
 .more-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.product-card::before {
+  /* content: "New Arrival"; */
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #14b8a6;
+  color: #ffffff;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.product-card::after {
+  /* content: "♡"; */
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+.product-card:hover::after {
+  color: #ef4444;
 }
 
 @media (max-width: 768px) {
@@ -250,5 +286,8 @@
     padding: 6px 14px;
     font-size: 12px;
   }
+
+  .product-image {
+    height: 240px;
+  }
 }
-  

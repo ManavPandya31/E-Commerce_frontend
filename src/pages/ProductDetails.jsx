@@ -115,6 +115,7 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
             <h2 className="product-title">{product.name}</h2>
             <p className="product-price">Rs. {product.price}</p>
             <p className="product-description">{product.description}</p>
+            <p className="product-stock">Stock Available :-   {product.stock}</p>
             <div className="product-actions">
               <button className="add-to-cart-btn" onClick={btnAddToCart}>Add to Cart</button>
               <button className="buy-now-btn" onClick={BuyButton}>Buy Now</button>

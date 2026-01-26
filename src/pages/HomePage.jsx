@@ -87,8 +87,12 @@ export default function HomePage() {
     navigate(`/product/${productId}`);
   };
 
-  return (
-    <>  
+  const redirectAddToCart = (productId)=>{
+   navigate(`/product/${productId}`);
+  }
+
+   return (
+    <>
       <NavBar />
 
       <section className="hero">
@@ -103,6 +107,7 @@ export default function HomePage() {
             >
               Previous
             </button>
+
             <div className="categories-horizontal">
               {displayedCategories.map((cat) => (
                 <div
@@ -116,13 +121,17 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+
             <button
               className="more-button"
               onClick={handleMore}
-              disabled={(categoryPage + 1) * categoriesPerPage >= categories.length}
+              disabled={
+                (categoryPage + 1) * categoriesPerPage >= categories.length
+              }
             >
               More
             </button>
+
             <button className="reset-button" onClick={handleReset}>
               View All Category Products
             </button>
@@ -134,21 +143,35 @@ export default function HomePage() {
         {error && <p className="status-text error">{error}</p>}
 
         {products.length === 0 && !error ? (
-          <p className="status-text">This Category Products Are Available Soon!</p>
+          <p className="status-text">
+            This Category Products Are Available Soon!
+          </p>
         ) : (
           <div className="product-grid">
             {products.map((product) => (
-              <div
-                className="product-card"
-                key={product._id}
-                onClick={() => handleProductClick(product._id)}
-              >
-                <div className="product-image">
+              <div className="product-card" key={product._id}>
+                {/* <span className="badge">New Arrival</span>
+                <span className="wishlist">♡</span> */}
+
+                <div
+                  className="product-image"
+                  onClick={() => handleProductClick(product._id)}
+                >
                   <img src={product.productImage} alt={product.name} />
                 </div>
+
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <span className="price">Rs. {product.price}</span>
+                </div>
+
+                <div className="card-footer">
+                  <button
+                    className="product-addToCart"
+                     onClick={() => redirectAddToCart(product._id)}
+                  >
+                    Add To Cart
+                  </button>
                 </div>
               </div>
             ))}
