@@ -11,14 +11,14 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage/>} />
+        <Route path="/" element={<HomePage cartCount={cartCount} setCartCount={setCartCount} />} />
           <Route element={<Layout/>}>
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/register" element={<RegisterPage/>} />
            <Route path="/product/:id"element={<ProductDetails 
                 cartItems={cartItems} 
-                setCartItems={setCartItems} 
-                setCartCount={setCartCount} 
+                setCartItems={setCartItems}
+                cartCount={cartCount} setCartCount={setCartCount}  
               />
             } 
           />

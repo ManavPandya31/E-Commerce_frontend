@@ -7,7 +7,7 @@ import "../css/navbar.css";
 export default function NavBar({cartCount}) {
 
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
  useEffect(() => {
@@ -24,7 +24,7 @@ export default function NavBar({cartCount}) {
   return (
     <nav className="navbar">
       <div className="nav-logo" style={{ cursor: "pointer" }}onClick={() => navigate("/")}>
-        Flipcart
+        My Flipcart
       </div>
 
       <div className="nav-buttons">

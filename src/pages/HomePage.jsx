@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
 
-export default function HomePage() {
+export default function HomePage({cartCount}) {
 
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
@@ -93,7 +93,7 @@ export default function HomePage() {
 
    return (
     <>
-      <NavBar />
+    <NavBar cartCount={cartCount} />
 
       <section className="hero">
         {categories.length === 0 ? (
