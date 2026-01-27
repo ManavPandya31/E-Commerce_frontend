@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../css/auth.module.css";
+import bgImage from "../assets/loginbg.jpg";
 
 export default function LoginPage() {
 
@@ -41,7 +42,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.authContainer}>
+   <div className={styles.authContainer} style={{
+    backgroundImage: `
+      linear-gradient(
+        rgba(0, 0, 0, 0.55),
+        rgba(0, 0, 0, 0.55)
+      ),
+      url(${bgImage})
+    `,
+  }}
+>
       <div className={styles.authCard}>
         <h2 className={styles.authTitle}>Welcome Back</h2>
         <p className={styles.authSubtitle}>Login to your account</p>

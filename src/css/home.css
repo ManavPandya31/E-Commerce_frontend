@@ -152,6 +152,10 @@
   padding: 16px;
 }
 
+.products-section{
+  cursor: pointer;
+}
+
 .product-info h3 {
   font-size: 15px;
   font-weight: 500;

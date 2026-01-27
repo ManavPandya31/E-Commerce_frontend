@@ -133,4 +133,4 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
       </div>
     </div>
   );
-}
+} 
