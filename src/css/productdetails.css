@@ -36,7 +36,9 @@
 }
 
 .product-right {
+  margin-top: 10  0px;
   flex: 2;
+  margin-left: 100px;
   display: flex;
   flex-direction: column;
   gap: 20px;

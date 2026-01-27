@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
 import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
@@ -12,22 +13,30 @@ export default function HomePage({cartCount}) {
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categoryPage, setCategoryPage] = useState(0);
-  const categoriesPerPage = 10;
+  const [categoryPage, setCategoryPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [productPage, setProductPage] = useState(1);
+  const [productTotalPages, setProductTotalPages] = useState(1);
+  const productsPerPage = 5; 
+  const categoriesPerPage = 7;
 
   const navigate = useNavigate();
   const dispatch = useDispatch(); 
 
-  const fetchProducts = async (categoryId = "") => {
+  const fetchProducts = async (categoryId = "", page = 1) => {
     try {
       dispatch(showLoader()); 
 
       const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
-        { params: categoryId ? { categoryId } : {} }
-      );
+      { params: {categoryId,page,limit: productsPerPage,}});
 
       console.log("Response From Show All Products:-", response);
-      setProducts(response.data.data.products);
+
+      const newProducts = response.data.data.products;
+
+      setProducts(prevProducts => page === 1 ? newProducts : [...prevProducts, ...newProducts]);
+      setProductPage(response.data.data.pageData.currentPage);
+      setProductTotalPages(response.data.data.pageData.totalPages);
 
     } catch (err) {
       console.log("Error While Fetching Products", err);
@@ -38,12 +47,16 @@ export default function HomePage({cartCount}) {
     }
   };
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (page = 1) => {
     try {
-      const response = await axios.get("http://localhost:3131/api/products/getCategory");
+      const response = await axios.get("http://localhost:3131/api/products/getCategory", {
+        params: { page, limit: categoriesPerPage }
+      });
       console.log("Response From Get Category API :-", response);
 
-      setCategories(response.data.data);
+      setCategories(response.data.data.categories);
+      setCategoryPage(response.data.data.pageData.currentPage);
+      setTotalPages(response.data.data.pageData.totalPages);
       
     } catch (err) {
       console.log("Error while fetching categories", err);
@@ -51,47 +64,65 @@ export default function HomePage({cartCount}) {
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight >= documentHeight - 100) {
+        if (productPage < productTotalPages) {
+          fetchProducts(selectedCategory, productPage + 1);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [productPage, productTotalPages, selectedCategory]);
+
+  useEffect(() => {
     fetchProducts();
     fetchCategories();
   }, []);
 
   const handleCategoryClick = (categoryId) => {
-    setSelectedCategory(categoryId);
-    fetchProducts(categoryId);
+      setSelectedCategory(categoryId);
+      setProducts([]);
+      setProductPage(1);
+      fetchProducts(categoryId, 1);
   };
 
   const handleReset = () => {
     setSelectedCategory(null);
-    fetchProducts();
-    setCategoryPage(0);
+    setProducts([]);
+    setProductPage(1);
+    fetchProducts("", 1);
   };
 
   const handleMore = () => {
-    if ((categoryPage + 1) * categoriesPerPage < categories.length) {
-      setCategoryPage(categoryPage + 1);
+    if (categoryPage < totalPages) {
+      fetchCategories(categoryPage + 1);
     }
   };
 
   const handlePrevious = () => {
-    if (categoryPage > 0) {
-      setCategoryPage(categoryPage - 1);
+    if (categoryPage > 1) {
+      fetchCategories(categoryPage - 1);
     }
   };
-
-  const displayedCategories = categories.slice(
-    categoryPage * categoriesPerPage,
-    (categoryPage + 1) * categoriesPerPage
-  );
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
   };
 
   const redirectAddToCart = (productId)=>{
-   navigate(`/product/${productId}`);
+    navigate(`/product/${productId}`);
   }
 
-   return (
+  return (
     <>
     <NavBar cartCount={cartCount} />
 
@@ -103,18 +134,16 @@ export default function HomePage({cartCount}) {
             <button
               className="more-button"
               onClick={handlePrevious}
-              disabled={categoryPage === 0}
+              disabled={categoryPage === 1}
             >
               Previous
             </button>
 
             <div className="categories-horizontal">
-              {displayedCategories.map((cat) => (
+              {categories.map((cat) => (
                 <div
                   key={cat._id}
-                  className={`category-pill ${
-                    selectedCategory === cat._id ? "active" : ""
-                  }`}
+                  className={`category-pill ${selectedCategory === cat._id ? "active" : ""}`}
                   onClick={() => handleCategoryClick(cat._id)}
                 >
                   {cat.name}
@@ -125,9 +154,7 @@ export default function HomePage({cartCount}) {
             <button
               className="more-button"
               onClick={handleMore}
-              disabled={
-                (categoryPage + 1) * categoriesPerPage >= categories.length
-              }
+              disabled={categoryPage >= totalPages}
             >
               More
             </button>
@@ -150,9 +177,6 @@ export default function HomePage({cartCount}) {
           <div className="product-grid">
             {products.map((product) => (
               <div className="product-card" key={product._id}>
-                {/* <span className="badge">New Arrival</span>
-                <span className="wishlist">♡</span> */}
-
                 <div
                   className="product-image"
                   onClick={() => handleProductClick(product._id)}
