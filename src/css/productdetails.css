@@ -136,6 +136,28 @@
   width: 100%;
 }
 
+.price-section2 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.original-price2 {
+  font-size: 18px;
+  color: #878787;
+  margin-right: 700px;
+  text-decoration: line-through;
+}
+
+.final-price2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-right: 680px;
+  color: #111;
+}
+
 @media (max-width: 950px) {
   .product-page-card {
     flex-direction: column;

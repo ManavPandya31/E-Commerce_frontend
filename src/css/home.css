@@ -137,6 +137,7 @@
   height: 320px;
   display: flex;
   align-items: center;
+  position: relative;
   justify-content: center;
 }
 
@@ -157,11 +158,50 @@
   color: #111827;
 }
 
-.price {
-  font-size: 15px;
-  font-weight: 600;
-  color: blue;
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 8px;
 }
+
+.price-section {
+  display: flex;  
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px; 
+  flex-wrap: wrap; 
+}
+
+.final-price {
+  font-weight: bold;
+  color: black;
+  margin-right: 8px;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color:yellow;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.discount-label {
+  background-color: #ff4d4f;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap; 
+}
+
 
 .btn {
   background: #4f46e5;

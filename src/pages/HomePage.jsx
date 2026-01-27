@@ -16,36 +16,47 @@ export default function HomePage({cartCount}) {
   const [categoryPage, setCategoryPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [productPage, setProductPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(false);
   const [productTotalPages, setProductTotalPages] = useState(1);
   const productsPerPage = 5; 
-  const categoriesPerPage = 7;
+  const categoriesPerPage = 5;
 
   const navigate = useNavigate();
   const dispatch = useDispatch(); 
 
-  const fetchProducts = async (categoryId = "", page = 1) => {
-    try {
-      dispatch(showLoader()); 
+ const fetchProducts = async (categoryId = "", page = 1) => {
+  if (isFetching) return;
 
-      const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
-      { params: {categoryId,page,limit: productsPerPage,}});
+  try {
+    setIsFetching(true);
+    dispatch(showLoader());
 
-      console.log("Response From Show All Products:-", response);
+    const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
+      {
+        params: {categoryId, page, limit: productsPerPage,},
+      }
+    );
 
-      const newProducts = response.data.data.products;
+    console.log("Show All Products Api Response :-",response)
 
-      setProducts(prevProducts => page === 1 ? newProducts : [...prevProducts, ...newProducts]);
-      setProductPage(response.data.data.pageData.currentPage);
-      setProductTotalPages(response.data.data.pageData.totalPages);
+    const newProducts = response.data.data.products;
 
-    } catch (err) {
-      console.log("Error While Fetching Products", err);
-      setError("Failed to load products.");
+    setProducts(prev =>
+      page === 1 ? newProducts : [...prev, ...newProducts]
+    );
 
-    } finally {
-      dispatch(hideLoader()); 
-    }
-  };
+    setProductPage(response.data.data.pageData.currentPage);
+    setProductTotalPages(response.data.data.pageData.totalPages);
+
+  } catch (err) {
+    console.log("Error While Fetching Products", err);
+    setError("Failed to load products.");
+
+  } finally {
+    setIsFetching(false);
+    dispatch(hideLoader());
+  }
+};
 
   const fetchCategories = async (page = 1) => {
     try {
@@ -63,25 +74,22 @@ export default function HomePage({cartCount}) {
     }
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-
-      if (scrollTop + windowHeight >= documentHeight - 100) {
-        if (productPage < productTotalPages) {
-          fetchProducts(selectedCategory, productPage + 1);
-        }
+useEffect(() => {
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 100
+    ) {
+      if (!isFetching && productPage < productTotalPages) {
+        fetchProducts(selectedCategory, productPage + 1);
       }
-    };
+    }
+  };
 
-    window.addEventListener("scroll", handleScroll);
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [isFetching, productPage, productTotalPages, selectedCategory]);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [productPage, productTotalPages, selectedCategory]);
 
   useEffect(() => {
     fetchProducts();
@@ -122,86 +130,103 @@ export default function HomePage({cartCount}) {
     navigate(`/product/${productId}`);
   }
 
-  return (
-    <>
+return (
+  <>
     <NavBar cartCount={cartCount} />
 
-      <section className="hero">
-        {categories.length === 0 ? (
-          <p>Loading categories...</p>
-        ) : (
-          <div className="categories-wrapper-horizontal">
-            <button
-              className="more-button"
-              onClick={handlePrevious}
-              disabled={categoryPage === 1}
-            >
-              Previous
-            </button>
+    <section className="hero">
+      {categories.length === 0 ? (
+        <p>Loading categories...</p>
+      ) : (
+        <div className="categories-wrapper-horizontal">
+          <button
+            className="more-button"
+            onClick={handlePrevious}
+            disabled={categoryPage === 1}
+          >
+            Previous
+          </button>
 
-            <div className="categories-horizontal">
-              {categories.map((cat) => (
-                <div
-                  key={cat._id}
-                  className={`category-pill ${selectedCategory === cat._id ? "active" : ""}`}
-                  onClick={() => handleCategoryClick(cat._id)}
-                >
-                  {cat.name}
-                </div>
-              ))}
-            </div>
-
-            <button
-              className="more-button"
-              onClick={handleMore}
-              disabled={categoryPage >= totalPages}
-            >
-              More
-            </button>
-
-            <button className="reset-button" onClick={handleReset}>
-              View All Category Products
-            </button>
-          </div>
-        )}
-      </section>
-
-      <section className="products-section">
-        {error && <p className="status-text error">{error}</p>}
-
-        {products.length === 0 && !error ? (
-          <p className="status-text">
-            This Category Products Are Available Soon!
-          </p>
-        ) : (
-          <div className="product-grid">
-            {products.map((product) => (
-              <div className="product-card" key={product._id}>
-                <div
-                  className="product-image"
-                  onClick={() => handleProductClick(product._id)}
-                >
-                  <img src={product.productImage} alt={product.name} />
-                </div>
-
-                <div className="product-info">
-                  <h3>{product.name}</h3>
-                  <span className="price">Rs. {product.price}</span>
-                </div>
-
-                <div className="card-footer">
-                  <button
-                    className="product-addToCart"
-                     onClick={() => redirectAddToCart(product._id)}
-                  >
-                    Add To Cart
-                  </button>
-                </div>
+          <div className="categories-horizontal">
+            {categories.map((cat) => (
+              <div
+                key={cat._id}
+                className={`category-pill ${selectedCategory === cat._id ? "active" : ""}`}
+                onClick={() => handleCategoryClick(cat._id)}
+              >
+                {cat.name}
               </div>
             ))}
           </div>
-        )}
-      </section>
-    </>
-  );
+
+          <button
+            className="more-button"
+            onClick={handleMore}
+            disabled={categoryPage >= totalPages}
+          >
+            More
+          </button>
+
+          <button className="reset-button" onClick={handleReset}>
+            View All Category Products
+          </button>
+        </div>
+      )}
+    </section>
+
+    <section className="products-section">
+      {error && <p className="status-text error">{error}</p>}
+
+      {products.length === 0 && !error ? (
+        <p className="status-text">
+          This Category Products Are Available Soon!
+        </p>
+      ) : (
+        <div className="product-grid">
+          {products.map((product) => (
+            <div className="product-card" key={product._id}>
+              <div
+                className="product-image"
+                onClick={() => handleProductClick(product._id)}
+              >
+                <img src={product.productImage} alt={product.name} />
+                {product.discount && product.discount.value > 0 && (
+                  <div className="discount-badge">
+                    {product.discount.type === "Percetange"
+                      ? `${product.discount.value}% OFF`
+                      : `₹${product.discount.value} OFF`}
+                  </div>
+                )}
+              </div>
+
+              <div className="product-info">
+                <h3>{product.name}</h3>
+
+                {product.discount && product.discount.value > 0 ? (
+                  <div className="price-section">
+                    <span className="original-price">Rs. {product.price}</span>
+                    <span className="final-price">Rs. {product.finalPrice}</span>
+                  </div>
+                ) : (
+                  <span className="price">Rs. {product.price}</span>
+                )}
+              </div>
+
+              <div className="card-footer">
+                <button
+                  className="product-addToCart"
+                  onClick={() => redirectAddToCart(product._id)}
+                >
+                  Add To Cart
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </>
+);
+
 }
+

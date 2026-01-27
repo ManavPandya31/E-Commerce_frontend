@@ -22,8 +22,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
               />
             } 
           />
-           <Route 
-            path="/cart"  element={<CartPage 
+           <Route path="/cart"  element={<CartPage 
                 cartItems={cartItems} 
                 setCartItems={setCartItems} 
                 cartCount={cartCount} 
