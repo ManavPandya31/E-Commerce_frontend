@@ -8,6 +8,7 @@ import CartPage from '../pages/CartPage';
 import ProfileAndOtherPage from '../pages/ProfileAndOtherPage';
 import ProfileInfo from '../pages/ProfileInfo';
 import ManageAddresses from '../pages/ManageAddress';
+import CheckOutPage from '../pages/CheckOutPage';
 import { BrowserRouter as Router , Routes , Route } from "react-router-dom";
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
@@ -34,6 +35,8 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
             } 
           />
         </Route>
+        
+        <Route path="/checkout/:id" element={<CheckOutPage />} />
         <Route path="/profile" element={<ProfileAndOtherPage/>}>
           <Route index element={<ProfileInfo />} />
           <Route path="info" element={<ProfileInfo />} />

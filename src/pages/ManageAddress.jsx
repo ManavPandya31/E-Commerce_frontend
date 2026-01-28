@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
+import "../css/profileandotherpage.css";
 
 export default function ManageAddresses() {
+
   const dispatch = useDispatch();
 
   const [showForm, setShowForm] = useState(false);
@@ -16,7 +18,7 @@ export default function ManageAddresses() {
     alternatePhone: "" || "",
     state: "",
     addressType: "HOME",
-    house: "",
+    // house: "",
     street: "",
     city: "",
     pincode: "",
@@ -71,7 +73,6 @@ export default function ManageAddresses() {
         alternatePhone: "",
         state: "",
         country: "India",
-        state: "",
         addressType: "HOME",
         details: "",
         isDefault: false,
@@ -309,7 +310,7 @@ export default function ManageAddresses() {
               <div className="addr-top">
                 <span className="tag">{addr.addressType}</span>
                 <div className="addr-user-info">
-                  <strong>{addr.fullName}</strong>
+                  {/* <strong>{addr.fullName}</strong> */}
                 </div>
               </div>
 
