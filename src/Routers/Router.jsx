@@ -5,6 +5,9 @@ import Layout from "../pages/Layout";
 import HomePage from "../pages/HomePage";
 import ProductDetails from "../pages/ProductDetails";
 import CartPage from '../pages/CartPage';
+import ProfileAndOtherPage from '../pages/ProfileAndOtherPage';
+import ProfileInfo from '../pages/ProfileInfo';
+import ManageAddresses from '../pages/ManageAddress';
 import { BrowserRouter as Router , Routes , Route } from "react-router-dom";
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
@@ -30,6 +33,11 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
               />
             } 
           />
+        </Route>
+        <Route path="/profile" element={<ProfileAndOtherPage/>}>
+          <Route index element={<ProfileInfo />} />
+          <Route path="info" element={<ProfileInfo />} />
+          <Route path="addresses" element={<ManageAddresses />} />
         </Route>
       </Routes>
     </Router>

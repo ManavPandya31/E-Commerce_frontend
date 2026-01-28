@@ -13,6 +13,7 @@ export default function NavBar({ cartCount }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const debounceRef = useRef(null);
   const searchRef = useRef(null);
+  const [userName, setUserName] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,12 +21,35 @@ export default function NavBar({ cartCount }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
+     if (token) {
+    fetchUserDetails(token); 
+  } else {
+    setUserName(""); 
+  }
   }, [location]);
 
   const btnLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
+  };
+
+    const fetchUserDetails = async (token) => {
+    try {
+      const res = await axios.get("http://localhost:3131/api/auth/userDetails", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },});
+        console.log("response from UserDetails APi :-",res);
+        
+
+      if (res.data && res.data.data) {
+        setUserName(res.data.data.fullName); 
+      }
+    } catch (error) {
+      console.log("Error fetching user details:", error);
+      setUserName("");
+    }
   };
 
   const handleSearch = (e) => {
@@ -164,7 +188,15 @@ export default function NavBar({ cartCount }) {
           <HiShoppingCart style={{ marginRight: "8px" }} />
           Cart ({cartCount})
         </button>
+
+        <span className="nav-user-name"
+          style={{ marginLeft: "12px", fontWeight: "500", cursor: "pointer" }}
+          onClick={() => navigate("/profile")}
+        >
+          {userName || "Account"}
+        </span>
+
       </div>
-    </nav>
+    </nav>  
   );
 }
