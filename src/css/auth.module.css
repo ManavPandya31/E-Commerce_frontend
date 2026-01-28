@@ -1,13 +1,24 @@
-* {
+:global(*) {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Segoe UI", sans-serif;
 }
 
-.authContainer {
+/* .authContainer {
   min-height: 100vh;
   background: linear-gradient(135deg, #4f46e5, #9333ea);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+} */
+
+.authContainer {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,23 +26,36 @@
 }
 
 .authCard {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  border-radius: 14px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  max-width: 420px;
+  padding: 32px;
+
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.authCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45);
 }
 
 .authTitle {
   text-align: center;
   font-size: 26px;
   font-weight: 600;
+  color: #ffffff;
 }
 
 .authSubtitle {
   text-align: center;
-  color: #6b7280;
+  color: #d1d5db;
   margin-bottom: 20px;
 }
 
@@ -42,59 +66,139 @@
 }
 
 .authForm input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
   font-size: 15px;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .authForm input:focus {
   outline: none;
-  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6);
 }
 
 .authBtn {
-  background: #6366f1;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 13px;
+  border-radius: 10px;
   border: none;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .authBtn:hover {
-  background: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
 }
 
 .authFooter {
   text-align: center;
   margin-top: 15px;
   font-size: 14px;
+  color: #e5e7eb;
 }
 
 .authFooter a {
-  color: #6366f1;
+  color: #a5b4fc;
   text-decoration: none;
   font-weight: 500;
 }
 
 .authSelect {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
   font-size: 15px;
-  background-color: #fff;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: #111827;
+
+  appearance: none;
+  cursor: pointer;
 }
 
 .authSelect:focus {
   outline: none;
-  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6);
+}
+
+.authError {
+  margin-top: 10px;
+  color: #fecaca;
+  text-align: center;
+  font-size: 14px;
+}
+
+.authSuccess {
+  margin-top: 10px;
+  color: #86efac;
+  text-align: center;
+  font-size: 14px;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.authCard {
+  animation: fadeSlideUp 0.7s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.authForm input,
+.authForm select,
+.authBtn,
+.authFooter {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+.authForm input:nth-of-type(1) { animation-delay: 0.15s; }
+.authForm input:nth-of-type(2) { animation-delay: 0.25s; }
+.authForm input:nth-of-type(3) { animation-delay: 0.35s; }
+.authForm input:nth-of-type(4) { animation-delay: 0.45s; }
+
+.authForm select { animation-delay: 0.55s; }
+.authBtn { animation-delay: 0.65s; }
+.authFooter { animation-delay: 0.75s; }
+
+
+@keyframes bgZoom {
+  from {
+    background-size: 100%;
+  }
+  to {
+    background-size: 110%;
+  }
+}
+
+.authContainer {
+  animation: bgZoom 20s ease-in-out infinite alternate;
 }
 
 @media (max-width: 480px) {
   .authCard {
-    padding: 20px;
+    padding: 22px;
+    border-radius: 14px;
   }
 }

@@ -113,8 +113,17 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
 
           <div className="product-right">
             <h2 className="product-title">{product.name}</h2>
-            <p className="product-price">Rs. {product.price}</p>
+            
+                {product.discount && product.discount.value > 0 ? (
+                  <div className="price-section2">
+                    <span className="original-price2">Rs. {product.price}</span>
+                    <span className="final-price2">Rs. {product.finalPrice}</span>
+                  </div>
+                ) : (
+                  <span className="price2">Rs. {product.price}</span>
+                )}
             <p className="product-description">{product.description}</p>
+            <p className="product-stock">Stock Available :- {product.stock}</p>
             <div className="product-actions">
               <button className="add-to-cart-btn" onClick={btnAddToCart}>Add to Cart</button>
               <button className="buy-now-btn" onClick={BuyButton}>Buy Now</button>
@@ -124,4 +133,4 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
       </div>
     </div>
   );
-}
+} 

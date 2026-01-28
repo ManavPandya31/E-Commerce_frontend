@@ -3,9 +3,9 @@
   width: 100%;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 5000;
   padding: 0 40px;
-  background: #7c3aed;
+  background-color: #2874f0;
   color: white;
   display: flex;
   align-items: center;
@@ -50,6 +50,86 @@
 
 .register-btn:hover {
   background: #4338ca;
+}
+
+.nav-logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+  color: #2874f0;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.nav-btn:hover {
+  background: #f1f1f1;
+}
+
+.nav-search {
+  position: relative; 
+  flex: 1;
+  max-width: 400px;
+  margin: 0 20px;
+}
+
+.nav-search input {
+  width: 100%;
+  padding: 8px 35px 8px 12px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+}
+
+.category-section {
+  overflow: visible;
+}
+
+.search-dropdown {
+  position: fixed;   
+  background: #212121 ;
+  border-radius: 6px;
+  z-index: 999999;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  flex-direction: row-reverse;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-item:hover {
+  background: black;
+}
+
+.no-result {
+  text-align: center;
+  color: #777;
 }
 
 @media (max-width: 600px) {

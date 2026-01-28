@@ -27,12 +27,17 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-
-      const items = response.data.data.items;
+      console.log("Cart Data:-",response);
+      const items = response.data.data.items || [];
 
       setCartItems(items);
 
-      const total = items.reduce((sum, item) => sum + item.quantity, 0);
+    const validItems = items.filter(item => item.product);
+    const total = validItems.reduce(
+       (sum, item) => sum + item.quantity,
+        0
+      );
+    
       setCartCount(total);
 
     } catch (error) {
@@ -46,11 +51,16 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
     fetchCartItems();
   }, []);
 
-  if (cartItems.length === 0) {
-    return (
-      <button className="cart-text" onClick={btnShopping}>Your Cart is Empty! Go For Shopping</button>
-    );
-  }
+  if (!cartItems || cartItems.filter(item => item.product).length === 0) {
+  return (
+    <>
+      <NavBar cartCount={cartCount} />
+      <button className="cart-text" onClick={btnShopping}>
+        Your Cart is Empty! Go For Shopping
+      </button>
+    </>
+  );
+}
 
   const increaseQty = async (item) => {
     try {
@@ -136,11 +146,12 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
         dispatch(hideLoader());
     }
   };
+
   const validItems = cartItems.filter((item) => item.product);
 
   const grandTotal = validItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
+    (sum, item) => sum + (Number(item.product.finalPrice) || 0) * item.quantity,
+    0
   );
 
   return (
@@ -157,21 +168,19 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
               />
               <div className="cart-info">
                 <h5>{item.product.name}</h5>
-                <p className="text-muted">Price: Rs.{item.price}</p>
+                <p className="text-muted">
+                  Price: Rs.{item.product.finalPrice || 0}
+                </p>
 
                 <div className="qty-section">
-                  <button className="qty-btn" onClick={() => decreaseQty(item)}>
-                    {" "}
-                    -{" "}
-                  </button>
+                  <button className="qty-btn" onClick={() => decreaseQty(item)}> - </button>
                   <span className="qty-number">{item.quantity}</span>
-                  <button className="qty-btn" onClick={() => increaseQty(item)}>
-                    {" "}
-                    +{" "}
-                  </button>
+                  <button className="qty-btn" onClick={() => increaseQty(item)}> + </button>
                 </div>
 
-                <p className="fw-bold mt-2 text-end">Total: Rs.{item.price * item.quantity}</p>
+                <p className="fw-bold mt-2 text-end">
+                  Total: Rs.{(item.product.finalPrice || 0) * item.quantity}
+                </p>
               </div>
             </div>
           ))}
@@ -182,7 +191,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
           {validItems.map((item) => (
             <p key={item._id}>
               {item.product.name} x {item.quantity}: Rs.{" "}
-              {item.price * item.quantity}
+              {(item.product.finalPrice || 0) * item.quantity}
             </p>
           ))}
           <hr />

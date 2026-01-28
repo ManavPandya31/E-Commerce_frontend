@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../css/auth.module.css";
+import bgImage from "../assets/loginbg.jpg";
 
 export default function RegisterPage() {
 
@@ -40,7 +41,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className={styles.authContainer}>
+    <div
+  className={styles.authContainer}
+  style={{
+    backgroundImage: `
+      linear-gradient(
+        rgba(0, 0, 0, 0.55),
+        rgba(0, 0, 0, 0.55)
+      ),
+      url(${bgImage})
+    `,
+  }}
+>
       <div className={styles.authCard}>
         <h2 className={styles.authTitle}>Create Account</h2>
         <p className={styles.authSubtitle}>Register</p>
@@ -96,16 +108,8 @@ export default function RegisterPage() {
             {loading ? "Registering..." : "Register"}
           </button>
 
-          {error && (
-            <p style={{ color: "red", marginTop: "10px" }}>
-              {error}
-            </p>
-          )}
-          {success && (
-            <p style={{ color: "green", marginTop: "10px" }}>
-              {success}
-            </p>
-          )}
+          {error && <p className={styles.authError}>{error}</p>}
+          {success && <p className={styles.authSuccess}>{success}</p>}
         </form>
 
         <p className={styles.authFooter}>

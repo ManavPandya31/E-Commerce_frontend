@@ -137,6 +137,7 @@
   background-color: #111;
   margin: 300px auto;
   display: flex;
+  cursor: pointer;
   justify-content: center;
   align-items: center;
 }
