@@ -1,15 +1,18 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiShoppingCart, HiSearch } from "react-icons/hi";
 import axios from "axios";
 import "../css/navbar.css";
 
 export default function NavBar({ cartCount }) {
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({ categories: [], products: [] });
   const [showDropdown, setShowDropdown] = useState(false);
+  const debounceRef = useRef(null);
+  const searchRef = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,36 +28,37 @@ export default function NavBar({ cartCount }) {
     navigate("/");
   };
 
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    if (!query) {
-      setSearchResults([]);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    if (!query.trim()) {
+      setSearchResults({ categories: [], products: [] });
       setShowDropdown(false);
       return;
     }
 
-    try {
-      const res = await axios.get(
-        `http://localhost:3131/api/search/searchBar?q=${query}`,
-      );
-      console.log("Response From Searchbar Api:-", res);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${query}`);
+        console.log("Response From Searchbar :- ", res);
 
-      setSearchResults(res.data.data);
-      setShowDropdown(true);
-    } catch (error) {
-      console.log("Search error:", error);
-    }
+        setSearchResults(res.data.data || { categories: [], products: [] });
+        setShowDropdown(true);
+
+      } catch (error) {
+        console.log("Search error:", error);
+        setSearchResults({ categories: [], products: [] });
+        setShowDropdown(false);
+      }
+    }, 400);
   };
 
-  const getItemType = (item) => {
-    if (item.name) return "product";
-    if (item.category) return "category";
-    if (item.price) return "price";
-
-    return "unknown";
-  };
+  const hasResults = searchResults.categories.length > 0 || searchResults.products.length > 0;
 
   return (
     <nav className="navbar">
@@ -66,41 +70,77 @@ export default function NavBar({ cartCount }) {
         My Flipcart
       </div>
 
-      <div className="nav-search">
+      <div className="nav-search" ref={searchRef}>
         <input
           type="text"
-          placeholder="Search"
+          placeholder="Search for products"
           value={searchQuery}
           onChange={handleSearch}
-          onFocus={() => searchResults.length && setShowDropdown(true)}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+          onFocus={() => hasResults && setShowDropdown(true)}
         />
         <HiSearch className="search-icon" />
-        {showDropdown && searchResults.length > 0 && (
-          <div className="search-dropdown">
-            {searchResults.map((item) => {
-              const type = getItemType(item);
-              return (
-                <div
-                  key={item._id} 
-                  className="search-item"
-                  onClick={() => {
-                    if (type === "product") navigate(`/product/${item._id}`);
-                    else if (type === "category")
-                      navigate(`/category/${item._id}`);
-                    else if (type === "price") {
-                    }
-                    setSearchQuery("");
+
+        {showDropdown && searchRef.current && (
+          <div
+            className="search-dropdown"
+            style={{
+              top:
+                searchRef.current.getBoundingClientRect().bottom +
+                window.scrollY +
+                6,
+              left:
+                searchRef.current.getBoundingClientRect().left +
+                window.scrollX,
+              width: searchRef.current.offsetWidth,
+            }}
+          >
+            {hasResults ? (
+              <>
+                {searchResults.categories.map((cat) => (
+                  <div
+                    key={cat._id}
+                    className="search-item category-suggestion"
+                    onClick={() => {
+                    setSearchQuery(cat.name);
                     setShowDropdown(false);
-                  }}
-                >
-                  {type === "product" && item.name}
-                  {type === "category" && `Category: ${item.category}`}
-                  {type === "price" &&
-                    `Price: ${item.price.min} - ${item.price.max}`}
-                </div>
-              );
-            })}
+                }}
+                  >
+                    <HiSearch className="suggestion-icon" style={{ marginRight: "10px", color: "#878787" }} />
+                    <div className="search-name">
+                      {searchQuery} <span style={{ color: "#2874f0", fontWeight: "500" }}>in {cat.name}</span>
+                    </div>
+                  </div>
+                ))}
+
+                {searchResults.products.map((item) => (
+                  <div
+                    key={item._id}
+                    className="search-item product-suggestion"
+                    style={{ display: "flex", alignItems: "center" }}
+                    onClick={() => {
+                      navigate(`/product/${item._id}`);
+                      setSearchQuery("");
+                      setSearchResults({ categories: [], products: [] });
+                      setShowDropdown(false);
+                    }}
+                  >
+                    {item.image && (
+                      <img 
+                        src={item.image} 
+                        alt="" 
+                        style={{ width: "32px", height: "32px", marginRight: "12px", objectFit: "contain" }} 
+                      />
+                    )}
+                    <div>
+                      <div className="search-name">{item.name}</div>
+                      <div style={{ fontSize: "12px", color: "#878787" }}>in {item.categoryName}</div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <div className="search-item no-result">No products found</div>
+            )}
           </div>
         )}
       </div>
