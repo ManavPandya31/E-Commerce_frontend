@@ -21,10 +21,7 @@ export default function ManageAddresses() {
 
       if (!token) return;
 
-      const res = await axios.get(
-        "http://localhost:3131/api/auth/getAllAddress",
-        config,
-      );
+      const res = await axios.get("http://localhost:3131/api/auth/getAllAddress",config,);
       console.log("Response From getAllAddress :-", res);
 
       setAddresses(res.data.data.addresses || []);
@@ -42,7 +39,7 @@ export default function ManageAddresses() {
   }, []);
 
 
-    return (
+  return (
   <div className="address-wrapper">
     <h3 className="section-main-title">Manage Addresses</h3>
 

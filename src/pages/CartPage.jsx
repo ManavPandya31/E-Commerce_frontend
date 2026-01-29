@@ -33,8 +33,8 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
       setCartItems(items);
 
     const validItems = items.filter(item => item.product);
-    const total = validItems.reduce(
-       (sum, item) => sum + item.quantity,
+      const total = validItems.reduce(
+        (sum, item) => sum + item.quantity,
         0
       );
     
@@ -159,25 +159,17 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
       <NavBar cartCount={cartCount} />
       <div className="container py-5 cart-container">
         <div className="cart-items">
-          {validItems.map((item) => (
+          {validItems.map(item => (
             <div key={item._id} className="cart-card">
-              <img
-                src={item.product.productImage}
-                alt={item.product.name}
-                className="cart-img"
-              />
+              <img src={item.product.productImage} alt={item.product.name} className="cart-img" />
               <div className="cart-info">
                 <h5>{item.product.name}</h5>
-                <p className="text-muted">
-                  Price: Rs.{item.product.finalPrice || 0}
-                </p>
-
+                <p className="text-muted">Price: Rs.{item.product.finalPrice || 0}</p>
                 <div className="qty-section">
                   <button className="qty-btn" onClick={() => decreaseQty(item)}> - </button>
                   <span className="qty-number">{item.quantity}</span>
                   <button className="qty-btn" onClick={() => increaseQty(item)}> + </button>
                 </div>
-
                 <p className="fw-bold mt-2 text-end">
                   Total: Rs.{(item.product.finalPrice || 0) * item.quantity}
                 </p>
@@ -188,14 +180,27 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
         <div className="cart-summary">
           <h3>Price Details</h3>
-          {validItems.map((item) => (
+          {validItems.map(item => (
             <p key={item._id}>
-              {item.product.name} x {item.quantity}: Rs.{" "}
-              {(item.product.finalPrice || 0) * item.quantity}
+              {item.product.name} x {item.quantity}: Rs. {(item.product.finalPrice || 0) * item.quantity}
             </p>
           ))}
           <hr />
           <p className="grand-total">Total Amount: Rs.{grandTotal}</p>
+
+          <button
+            className="btn-place-order"
+            onClick={() => {
+              if (!token) {
+                alert("Please login first!");
+                navigate("/login");
+                return;
+              }
+              navigate("/checkout"); 
+            }}
+          >
+            PLACE ORDER
+          </button>
         </div>
       </div>
     </div>

@@ -36,7 +36,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
           />
         </Route>
         
-        <Route path="/checkout/:id" element={<CheckOutPage />} />
+        <Route path="/checkout" element={<CheckOutPage />} />
         <Route path="/profile" element={<ProfileAndOtherPage/>}>
           <Route index element={<ProfileInfo />} />
           <Route path="info" element={<ProfileInfo />} />
