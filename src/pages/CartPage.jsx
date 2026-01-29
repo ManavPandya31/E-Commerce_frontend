@@ -21,13 +21,14 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
   const fetchCartItems = async () => {
     try {
 
-       dispatch(showLoader());
+      dispatch(showLoader());
       const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
       console.log("Cart Data:-",response);
+
       const items = response.data.data.items || [];
 
       setCartItems(items);

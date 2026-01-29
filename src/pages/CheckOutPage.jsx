@@ -1,6 +1,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+// import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
@@ -9,13 +12,14 @@ import AddAddress from "../Components/AddAddress";
 import "../css/checkoutpage.css";
 import GetAddress from "../Components/GetAddress";
 
-export default function CheckOutPage() {
+export default function CheckOutPage({cartCount}) {
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
-  const [showAddAddress, setShowAddAddress] = useState(false);
+  const [showAddAddress, setShowAddAddress] = useState(false);  
+  const [cartTotal, setCartTotal] = useState(0);
 
-  //   const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -47,42 +51,135 @@ export default function CheckOutPage() {
     }
   };
 
+ const fetchSingleProductPrice = async () => {
+  try {
+    dispatch(showLoader());
+
+    const res = await axios.get(`http://localhost:3131/api/products/findSingleProduct/${id}`);
+    console.log("Response From Single Product API :-" ,res);
+    
+    const product = res.data.data;
+    setCartTotal(product.finalPrice ??  product.price);
+
+  } catch (error) {
+    console.log("Error fetching product price", error);
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
   useEffect(() => {
     fetchAddresses();
+    fetchSingleProductPrice();
   }, []);
+
+const handlePlaceOrder = async () => {
+
+  if (!selectedAddressId) {
+    Swal.fire({
+      icon: "warning",
+      title: "No Address Selected",
+      text: "Please select a delivery address before placing the order",
+      confirmButtonText: "OK",
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: "Confirm Order",
+    text: "Do you want to place the order?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, place order",
+    cancelButtonText: "Cancel",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      dispatch(showLoader());
+      const token = localStorage.getItem("token");
+
+      const orderData = {
+        addressId: selectedAddressId,
+         products: [
+          {
+            product: id,  
+            quantity: 1  ,
+            price: cartTotal
+          }
+       ]
+      };
+
+      const response = await axios.post("http://localhost:3131/api/orders/createOrder",orderData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("Order Created:", response.data);
+
+      Swal.fire({
+        icon: "success",
+        title: "Order Placed!",
+        text: "Your order has been placed successfully.",
+        confirmButtonText: "OK",
+      });
+
+      //navigate("/orders"); 
+
+    } catch (error) {
+      console.log("Error creating order:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Order Failed",
+        text: "Something went wrong while placing your order.",
+      });
+    } finally {
+      dispatch(hideLoader());
+    }
+  }
+};
 
   return (
   <div>
-    <NavBar />
+    <NavBar cartCount={cartCount} />
 
-    <div className="checkout-container">
-      <h2>Select Delivery Address</h2>
+    <div className="checkout-wrapper">
+      <div className="checkout-container">
+        <h2>Select Delivery Address</h2>
 
-      <GetAddress
-        showRadio={true}
-        selectedAddressId={selectedAddressId}
-        onSelect={(id) => setSelectedAddressId(id)}
-      />
+        <GetAddress
+          showRadio={true}
+          selectedAddressId={selectedAddressId}
+          onSelect={(id) => setSelectedAddressId(id)}
+        />
 
-      <div style={{ marginTop: "20px" }}>
-        <div
-          className="add-btn-container"
-          onClick={() => setShowAddAddress(true)}
-        >
-          <span className="plus">+</span> ADD A NEW ADDRESS
-        </div>
+        <div style={{ marginTop: "20px" }}>
+          <div
+            className="add-btn-container"
+            onClick={() => setShowAddAddress(true)}
+          >
+            <span className="plus">+</span> ADD A NEW ADDRESS
+          </div>
 
-        {showAddAddress && (
+          {showAddAddress && (
             <AddAddress
-                onClose={() => setShowAddAddress(false)}
-                onSuccess={() => {
-                window.location.reload();  
-            }}
-           />
-        )}
+              onClose={() => setShowAddAddress(false)}
+              onSuccess={() => window.location.reload()}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="price-summary">
+        <h3>Price Details</h3>
+        <div className="price-row">
+          <span>Total Amount</span>
+          <span>₹ {cartTotal}</span>
+        </div>
+          <button className="place-order-btn" onClick={handlePlaceOrder}>PLACE ORDER</button>
       </div>
     </div>
   </div>
 );
-
 }

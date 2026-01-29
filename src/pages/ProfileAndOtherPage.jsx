@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NavLink, Outlet } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from '../Components/NavBar';
 import "../css/profileandotherpage.css";
 
 export default function ProfileAndOtherPage() {
+
   const [userDetails, setUserDetails] = useState({fullName: "",email: "",phoneNumber: "",address: "",});
+ 
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -13,6 +18,8 @@ export default function ProfileAndOtherPage() {
       if (!token) return;
 
       try {
+
+        dispatch(showLoader());
         const res = await axios.get("http://localhost:3131/api/auth/userDetails", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -21,6 +28,8 @@ export default function ProfileAndOtherPage() {
         }
       } catch (error) {
         console.log("Error fetching user details:", error);
+      }finally{
+         dispatch(hideLoader());
       }
     };
 
