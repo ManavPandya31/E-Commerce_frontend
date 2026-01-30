@@ -85,17 +85,19 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
   }
 }
 
-   const BuyButton = () => {
-   
-    const token = localStorage.getItem("token");
+  const BuyButton = () => {
+    
+  const token = localStorage.getItem("token");
 
-    if (!token) {
-      alert("Please login first to continue");
-      navigate("/login");
-      return;
-    }
-    navigate(`/product/${id}`);
-  };
+  if (!token) {
+    alert("Please login first to continue");
+    navigate("/login");
+    return;
+  }
+
+  navigate(`/checkout/${id}`);
+};
+
 
   //if (loading) return <p className="product-loading">Loading product...</p>
   if (!product) return <p className="product-not-found">Product not found</p>

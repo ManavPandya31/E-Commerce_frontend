@@ -142,6 +142,38 @@
   align-items: center;
 }
 
+.btn-place-order {
+  display: inline-block;
+  width: 100%;
+  max-width: 180px;      
+  padding: 12px 20px;
+  margin-top: 20px;
+  margin-left: 150px;
+  background: linear-gradient(90deg, #ff6a00, #ee0979); 
+  color: White;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(238, 9, 121, 0.4);
+}
+
+/* .btn-place-order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(238, 9, 121, 0.5);
+} */
+
+.btn-place-order:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  color: #888;
+}
+
 @media (max-width: 992px) {
   .cart-container {
     flex-direction: column;
