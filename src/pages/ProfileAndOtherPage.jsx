@@ -55,14 +55,10 @@ export default function ProfileAndOtherPage({cartCount}) {
 
         <div className="sidebar-menu">
           <div className="menu-section">
-            <NavLink
-    to="orders"
-    className={({ isActive }) =>
-      isActive ? "menu-header active-text" : "menu-header"
-    }
-  >
-    <span className="icon-blue"></span> MY ORDERS
-  </NavLink>
+            <NavLink to="orders" className={({ isActive }) => isActive ? "menu-header active-text" : "menu-header"
+          }>
+          <span className="icon-blue"></span> MY ORDERS
+          </NavLink>
           </div>
 
           <div className="menu-section">
