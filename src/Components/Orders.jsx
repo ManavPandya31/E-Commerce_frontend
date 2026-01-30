@@ -49,9 +49,9 @@ export default function Orders() {
       <h2>My Orders</h2>
       {orders.map((order) => (
         <div key={order._id} className="order-card">
-          <div className="order-header">
+          {/* <div className="order-header">
             <span>Status: {order.status || "Pending"}</span>
-          </div>
+          </div> */}
 
           <div className="order-items">
             {order.products.map((item, idx) => {

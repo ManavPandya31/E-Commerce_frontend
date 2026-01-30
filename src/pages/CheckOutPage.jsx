@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
@@ -24,7 +24,7 @@ export default function CheckOutPage({ cartCount }) {
   const { id } = useParams();
   const location = useLocation();
   const addressId = location.state?.addressId;
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   /*
@@ -159,6 +159,75 @@ export default function CheckOutPage({ cartCount }) {
     }
   }, []);
 
+ const handlePlaceOrder = async () => {
+
+  if (!selectedAddress) {
+    Swal.fire({
+      icon: "warning",
+      title: "No Address Selected",
+      text: "Please select a delivery address",
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to place this order?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, place order",
+    cancelButtonText: "Cancel",
+  });
+
+  if (!result.isConfirmed) {
+    return;
+  }
+
+  try {
+    dispatch(showLoader());
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      products: cartItems.map(item => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        price: item.finalPrice ?? item.price
+      })),
+      addressId: selectedAddress._id
+    };
+
+    const res = await axios.post("http://localhost:3131/api/orders/createOrder",payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    console.log("Order Response:", res);
+
+    Swal.fire({
+      icon: "success",
+      title: "Order Placed!",
+      text: res.data.message || "Your order has been placed successfully!",
+    }).then(() => {
+      navigate("/profile/orders");
+    });
+
+  } catch (error) {
+    console.log("Error placing order:", error);
+
+    let message = "Something went wrong while placing the order";
+    if (error.response && error.response.data && error.response.data.message) {
+      message = error.response.data.message;
+    }
+
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: message,
+    });
+
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
 return (
   <div>
     <NavBar cartCount={cartCount} />
@@ -225,9 +294,10 @@ return (
           <span>₹ {cartTotal}</span>
         </div>
 
-        <button className="place-order-btn">
-          PLACE ORDER
+        <button className="place-order-btn" onClick={handlePlaceOrder}>
+        PLACE ORDER
         </button>
+
       </div>
 
     </div>

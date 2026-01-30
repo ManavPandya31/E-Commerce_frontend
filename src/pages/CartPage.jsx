@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -10,170 +10,159 @@ import GetAddress from "../Components/GetAddress";
 import AddAddress from "../Components/AddAddress";
 import "../css/cartpage.css";
 
-export default function CartPage({
-  cartItems,
-  setCartItems,
-  cartCount,
-  setCartCount,
-}) {
+export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,}) {
+
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [showAddressModal, setShowAddressModal] = useState(false);
   const [showAddAddress, setShowAddAddress] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const btnShopping = () => {
-    navigate("/");
-  };
-
   const token = localStorage.getItem("token");
 
   const fetchCartItems = async () => {
+
     try {
+
       dispatch(showLoader());
-      const response = await axios.get(
-        "http://localhost:3131/api/cart/readAllItems",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+
+      const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("Cart Data:-", response);
-
+      console.log("Response From Get Cart Api :-",response);
+      
       const items = response.data.data.items || [];
-
       setCartItems(items);
 
       const validItems = items.filter((item) => item.product);
-      const total = validItems.reduce((sum, item) => sum + item.quantity, 0);
+      setCartCount(validItems.reduce((sum, item) => sum + item.quantity, 0));
 
-      setCartCount(total);
     } catch (error) {
       console.log("Fetch Cart Error :-", error);
+
     } finally {
       dispatch(hideLoader());
     }
   };
+
   useEffect(() => {
     fetchCartItems();
   }, []);
 
-  if (!cartItems || cartItems.filter((item) => item.product).length === 0) {
-    return (
-      <>
-        <NavBar cartCount={cartCount} />
-        <button className="cart-text" onClick={btnShopping}>
-          Your Cart is Empty! Go For Shopping
-        </button>
-      </>
-    );
-  }
-
   const increaseQty = async (item) => {
-    try {
-      dispatch(showLoader());
+      
+  try {
+    dispatch(showLoader());
+    const response = await axios.put("http://localhost:3131/api/cart/updateCartItems",
+      {
+        productId: item.product._id,
+        quantity: item.quantity + 1,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    console.log("Increase Qty Response :-", response);
 
-      const response = await axios.put(
-        "http://localhost:3131/api/cart/updateCartItems",
-        {
-          productId: item.product._id,
-          quantity: item.quantity + 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+    fetchCartItems();
 
-      console.log("Increase Qty Response :-", response);
-      fetchCartItems();
-    } catch (error) {
-      console.log("Increase Qty Error :-", error);
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
+  } catch (error) {
+    console.log("Increase Qty Error :-", error);
 
-  const decreaseQty = async (item) => {
-    if (item.quantity === 1) {
-      await deleteItem(item.product._id);
-      return;
-    }
-
-    try {
-      dispatch(showLoader());
-
-      await axios.put(
-        "http://localhost:3131/api/cart/updateCartItems",
-        {
-          productId: item.product._id,
-          quantity: item.quantity - 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      fetchCartItems();
-    } catch (error) {
-      console.log("Decrease Qty Error :-", error);
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
-
-  const deleteItem = async (productId) => {
-    try {
-      dispatch(showLoader());
-
-      const response = await axios.delete(
-        "http://localhost:3131/api/cart/deleteCartItems",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          data: { productId },
-        },
-      );
-
-      console.log("Delete Cart Item Response :-", response);
-      fetchCartItems();
-    } catch (error) {
-      console.log("Delete Cart Item Error :-", error);
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
-
-  const validItems = cartItems.filter((item) => item.product);
-
-  const grandTotal = validItems.reduce(
-    (sum, item) => sum + item.finalPrice * item.quantity,
-    0,
-  );
-
-  const handlePlaceOrder = () => {
-  if (!selectedAddressId) {
-    Swal.fire({
-      icon: "warning",
-      title: "Select Address",
-      text: "Please select a delivery address before placing the order",
-    });
-    return;
+  } finally {
+    dispatch(hideLoader());
   }
-
-  navigate("/checkout", {
-    state: {
-      addressId: selectedAddressId,
-    },
-  });
 };
 
-  return (
-    <div>
-      <NavBar cartCount={cartCount} />
+ const decreaseQty = async (item) => {
+  if (item.quantity === 1) {
+    await deleteItem(item.product._id);
+    return;
+  }
+  try {
+    dispatch(showLoader());
+    await axios.put("http://localhost:3131/api/cart/updateCartItems",
+      {
+        productId: item.product._id,
+        quantity: item.quantity - 1,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    fetchCartItems();
+
+  } catch (error) {
+    console.log("Decrease Qty Error :-", error);
+
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
+ const deleteItem = async (productId) => {
+  try {
+    dispatch(showLoader());
+    const response = await axios.delete("http://localhost:3131/api/cart/deleteCartItems",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { productId },
+      }
+    );
+    console.log("Delete Cart Item Response :-", response);
+    fetchCartItems();
+
+  } catch (error) {
+    console.log("Delete Cart Item Error :-", error);
+
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
+ const validItems = cartItems.filter((item) => item.product);
+
+ const grandTotal = validItems.reduce(
+    (sum, item) => sum + (item.finalPrice || 0) * item.quantity,
+    0
+  );
+
+  const handlePlaceOrderClick = async () => {
+
+    if (!selectedAddressId) {
+      setShowAddressModal(true);
+      return;
+    }
+    
+    // const result = await Swal.fire({
+    //   title: "Are you sure?",
+    //   text: "Do you want to place this order?",
+    //   icon: "question",
+    //   showCancelButton: true,
+    //   confirmButtonText: "Yes, place order",
+    //   cancelButtonText: "Cancel",
+    // });
+
+    // if (!result.isConfirmed) return;
+
+    navigate("/checkout", { state: { addressId: selectedAddressId } });
+  };
+
+return (
+  <div>
+    <NavBar cartCount={cartCount} />
+
+    {validItems.length === 0 ? (
+      <div className="empty-cart-container">
+        <div className="empty-cart-content">
+          <h2>Your Cart is Empty</h2>
+          {/* <p>Add items to your cart to get started.</p> */}
+          <button
+            className="btn-empty-cart"
+            onClick={() => navigate("/")} 
+          >
+            Shop Now
+          </button>
+        </div>
+      </div>
+    ) : (
       <div className="container py-5 cart-container">
         <div className="cart-items">
           {validItems.map((item) => (
@@ -187,14 +176,18 @@ export default function CartPage({
                 <h5>{item.product.name}</h5>
                 <p className="text-muted">Price: Rs.{item.finalPrice || 0}</p>
                 <div className="qty-section">
-                  <button className="qty-btn" onClick={() => decreaseQty(item)}>
-                    {" "}
-                    -{" "}
+                  <button
+                    className="qty-btn"
+                    onClick={() => decreaseQty(item)}
+                  >
+                    -
                   </button>
                   <span className="qty-number">{item.quantity}</span>
-                  <button className="qty-btn" onClick={() => increaseQty(item)}>
-                    {" "}
-                    +{" "}
+                  <button
+                    className="qty-btn"
+                    onClick={() => increaseQty(item)}
+                  >
+                    +
                   </button>
                 </div>
                 <p className="fw-bold mt-2 text-end">
@@ -216,7 +209,20 @@ export default function CartPage({
           <hr />
           <p className="grand-total">Total Amount: Rs.{grandTotal}</p>
 
-          <h3>Select Delivery Address</h3>
+          <button
+            className="btn-place-order"
+            onClick={handlePlaceOrderClick}
+          >
+            PLACE ORDER
+          </button>
+        </div>
+      </div>
+    )}
+
+    {showAddressModal && (
+      <div className="modal-backdrop">
+        <div className="modal-content">
+          <h2>Select Delivery Address</h2>
 
           <GetAddress
             showRadio={true}
@@ -224,27 +230,49 @@ export default function CartPage({
             onSelect={(id) => setSelectedAddressId(id)}
           />
 
-          <div style={{ marginTop: "16px" }}>
-            <div
-              className="add-btn-container"
+          {showAddAddress ? (
+            <AddAddress
+              onClose={() => setShowAddAddress(false)}
+              onSuccess={() => window.location.reload()}
+            />
+          ) : (
+            <button
+              className="btn-add-address"
               onClick={() => setShowAddAddress(true)}
             >
-              <span className="plus">+</span> ADD A NEW ADDRESS
-            </div>
+              + Add New Address
+            </button>
+          )}
 
-            {showAddAddress && (
-              <AddAddress
-                onClose={() => setShowAddAddress(false)}
-                onSuccess={() => window.location.reload()}
-              />
-            )}
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "16px" }}>
+            <button
+              className="btn-add-address"
+              onClick={() => {
+                if (!selectedAddressId) {
+                  Swal.fire({
+                    icon: "warning",
+                    title: "Select Address",
+                    text: "Please select a delivery address",
+                  });
+                  return;
+                }
+                setShowAddressModal(false);
+                handlePlaceOrderClick();
+              }}
+            >
+              CONFIRM
+            </button>
+
+            <button
+              className="btn-close"
+              onClick={() => setShowAddressModal(false)}
+            >
+              CANCEL
+            </button>
           </div>
-
-          <button className="btn-place-order" onClick={handlePlaceOrder}>
-            PLACE ORDER
-          </button>
         </div>
       </div>
-    </div>
-  );
+    )}
+  </div>
+);
 }
