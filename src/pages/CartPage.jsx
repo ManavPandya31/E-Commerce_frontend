@@ -150,10 +150,10 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
   const validItems = cartItems.filter((item) => item.product);
 
-  const grandTotal = validItems.reduce(
-    (sum, item) => sum + (Number(item.product.finalPrice) || 0) * item.quantity,
-    0
-  );
+ const grandTotal = validItems.reduce(
+  (sum, item) => sum + item.finalPrice * item.quantity,
+  0
+);
 
   return (
     <div>
@@ -165,14 +165,14 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
               <img src={item.product.productImage} alt={item.product.name} className="cart-img" />
               <div className="cart-info">
                 <h5>{item.product.name}</h5>
-                <p className="text-muted">Price: Rs.{item.product.finalPrice || 0}</p>
+                <p className="text-muted">Price: Rs.{item.finalPrice || 0}</p>
                 <div className="qty-section">
                   <button className="qty-btn" onClick={() => decreaseQty(item)}> - </button>
                   <span className="qty-number">{item.quantity}</span>
                   <button className="qty-btn" onClick={() => increaseQty(item)}> + </button>
                 </div>
                 <p className="fw-bold mt-2 text-end">
-                  Total: Rs.{(item.product.finalPrice || 0) * item.quantity}
+                  Total: Rs.{(item.finalPrice || 0) * item.quantity}
                 </p>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
           <h3>Price Details</h3>
           {validItems.map(item => (
             <p key={item._id}>
-              {item.product.name} x {item.quantity}: Rs. {(item.product.finalPrice || 0) * item.quantity}
+              {item.product.name} x {item.quantity}: Rs. {(item.finalPrice || 0) * item.quantity}
             </p>
           ))}
           <hr />

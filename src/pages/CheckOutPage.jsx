@@ -68,79 +68,74 @@ export default function CheckOutPage({cartCount}) {
   }
 };
 
+  const fetchCartTotal = async () => {
+  try {
+    dispatch(showLoader());
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get("http://localhost:3131/api/cart/readAllItems",
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    setCartTotal(res.data.data.totalAmount);
+  } catch (err) {
+    console.log("Cart total error", err);
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
   useEffect(() => {
     fetchAddresses();
-    fetchSingleProductPrice();
+
+    if (id) {
+      fetchSingleProductPrice();   
+  } else {
+      fetchCartTotal();            
+  }
   }, []);
 
 const handlePlaceOrder = async () => {
 
   if (!selectedAddressId) {
-    Swal.fire({
-      icon: "warning",
-      title: "No Address Selected",
-      text: "Please select a delivery address before placing the order",
-      confirmButtonText: "OK",
-    });
+    Swal.fire("Select address first");
     return;
   }
 
-  const result = await Swal.fire({
-    title: "Confirm Order",
-    text: "Do you want to place the order?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Yes, place order",
-    cancelButtonText: "Cancel",
-  });
+  const token = localStorage.getItem("token");
+  let products = [];
 
-  if (result.isConfirmed) {
-    try {
-      dispatch(showLoader());
-      const token = localStorage.getItem("token");
+  if (id) {
+    products = [{
+      product: id,
+      quantity: 1,
+      price: cartTotal
+    }];
+    
+  } else {
+    const cartRes = await axios.get("http://localhost:3131/api/cart/readAllItems",
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      const orderData = {
-        addressId: selectedAddressId,
-         products: [
-          {
-            product: id,  
-            quantity: 1  ,
-            price: cartTotal
-          }
-       ]
-      };
-
-      const response = await axios.post("http://localhost:3131/api/orders/createOrder",orderData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      console.log("Order Created:", response.data);
-
-      Swal.fire({
-        icon: "success",
-        title: "Order Placed!",
-        text: "Your order has been placed successfully.",
-        confirmButtonText: "OK",
-      });
-
-      //navigate("/orders"); 
-
-    } catch (error) {
-      console.log("Error creating order:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Order Failed",
-        text: "Something went wrong while placing your order.",
-      });
-    } finally {
-      dispatch(hideLoader());
-    }
+    products = cartRes.data.data.items.map(item => ({
+      product: item.product,
+      quantity: item.quantity,
+      price: item.finalPrice
+    }));
   }
+
+  await axios.post("http://localhost:3131/api/orders/createOrder",
+    {
+      addressId: selectedAddressId,
+      products
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  Swal.fire("Order placed successfully!");
 };
 
-  return (
+return (
   <div>
     <NavBar cartCount={cartCount} />
 
