@@ -6,7 +6,7 @@ import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from '../Components/NavBar';
 import "../css/profileandotherpage.css";
 
-export default function ProfileAndOtherPage() {
+export default function ProfileAndOtherPage({cartCount}) {
 
   const [userDetails, setUserDetails] = useState({fullName: "",email: "",phoneNumber: "",address: "",});
  
@@ -49,15 +49,20 @@ export default function ProfileAndOtherPage() {
           </div> */}
           <div>
             <span className="hello">Hello,</span>
-            <div className="user-name">{userDetails.fullName || "User"}</div>
+            <div className="user-name">{userDetails.fullName}</div>
           </div>
         </div>
 
         <div className="sidebar-menu">
           <div className="menu-section">
-            <div className="menu-header">
-              <span className="icon-blue"></span> MY ORDERS
-            </div>
+            <NavLink
+    to="orders"
+    className={({ isActive }) =>
+      isActive ? "menu-header active-text" : "menu-header"
+    }
+  >
+    <span className="icon-blue"></span> MY ORDERS
+  </NavLink>
           </div>
 
           <div className="menu-section">

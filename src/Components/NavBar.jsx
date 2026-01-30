@@ -193,7 +193,7 @@ export default function NavBar({ cartCount }) {
           style={{ marginLeft: "12px", fontWeight: "500", cursor: "pointer" }}
           onClick={() => navigate("/profile")}
         >
-          {userName || "Account"}
+          {userName}
         </span>
 
       </div>

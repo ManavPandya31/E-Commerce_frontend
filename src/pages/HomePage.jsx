@@ -2,8 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
-import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
-import { useDispatch } from "react-redux"; 
+// import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
+// import { useDispatch } from "react-redux"; 
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
 
@@ -22,14 +22,15 @@ export default function HomePage({cartCount}) {
   const categoriesPerPage = 5;
 
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
+  // const dispatch = useDispatch(); 
 
  const fetchProducts = async (categoryId = "", page = 1) => {
-  if (isFetching) return;
+ 
+   if (isFetching) return;
 
   try {
+    
     setIsFetching(true);
-    dispatch(showLoader());
 
     const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
       {
@@ -54,7 +55,6 @@ export default function HomePage({cartCount}) {
 
   } finally {
     setIsFetching(false);
-    dispatch(hideLoader());
   }
 };
 
@@ -97,6 +97,7 @@ useEffect(() => {
   }, []);
 
   const handleCategoryClick = (categoryId) => {
+
       setSelectedCategory(categoryId);
       setProducts([]);
       setProductPage(1);
@@ -104,6 +105,7 @@ useEffect(() => {
   };
 
   const handleReset = () => {
+
     setSelectedCategory(null);
     setProducts([]);
     setProductPage(1);
@@ -224,9 +226,12 @@ return (
           ))}
         </div>
       )}
+      {isFetching && products.length > 0 && (
+        <div className="bottom-loader">
+          <div className="loader"></div>
+        </div>
+      )}
     </section>
   </>
 );
-
 }
-
