@@ -1,13 +1,23 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
+import Swal from "sweetalert2";
+import GetAddress from "../Components/GetAddress";
+import AddAddress from "../Components/AddAddress";
 import "../css/cartpage.css";
 
-export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,}) {
+export default function CartPage({
+  cartItems,
+  setCartItems,
+  cartCount,
+  setCartCount,
+}) {
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [showAddAddress, setShowAddAddress] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,55 +30,50 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
   const fetchCartItems = async () => {
     try {
-
       dispatch(showLoader());
-      const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
+      const response = await axios.get(
+        "http://localhost:3131/api/cart/readAllItems",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      console.log("Cart Data:-",response);
+      console.log("Cart Data:-", response);
 
       const items = response.data.data.items || [];
 
       setCartItems(items);
 
-    const validItems = items.filter(item => item.product);
-      const total = validItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-    
-      setCartCount(total);
+      const validItems = items.filter((item) => item.product);
+      const total = validItems.reduce((sum, item) => sum + item.quantity, 0);
 
+      setCartCount(total);
     } catch (error) {
       console.log("Fetch Cart Error :-", error);
-
-    }finally{
-       dispatch(hideLoader());
+    } finally {
+      dispatch(hideLoader());
     }
   };
   useEffect(() => {
     fetchCartItems();
   }, []);
 
-  if (!cartItems || cartItems.filter(item => item.product).length === 0) {
-  return (
-    <>
-      <NavBar cartCount={cartCount} />
-      <button className="cart-text" onClick={btnShopping}>
-        Your Cart is Empty! Go For Shopping
-      </button>
-    </>
-  );
-}
+  if (!cartItems || cartItems.filter((item) => item.product).length === 0) {
+    return (
+      <>
+        <NavBar cartCount={cartCount} />
+        <button className="cart-text" onClick={btnShopping}>
+          Your Cart is Empty! Go For Shopping
+        </button>
+      </>
+    );
+  }
 
   const increaseQty = async (item) => {
     try {
+      dispatch(showLoader());
 
-       dispatch(showLoader());
-
-      const response = await axios.put("http://localhost:3131/api/cart/updateCartItems",
+      const response = await axios.put(
+        "http://localhost:3131/api/cart/updateCartItems",
         {
           productId: item.product._id,
           quantity: item.quantity + 1,
@@ -82,12 +87,10 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
       console.log("Increase Qty Response :-", response);
       fetchCartItems();
-
     } catch (error) {
       console.log("Increase Qty Error :-", error);
-
-    }finally{
-       dispatch(hideLoader());
+    } finally {
+      dispatch(hideLoader());
     }
   };
 
@@ -98,10 +101,10 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
     }
 
     try {
+      dispatch(showLoader());
 
-       dispatch(showLoader());
-
-      await axios.put("http://localhost:3131/api/cart/updateCartItems",
+      await axios.put(
+        "http://localhost:3131/api/cart/updateCartItems",
         {
           productId: item.product._id,
           quantity: item.quantity - 1,
@@ -114,21 +117,19 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
       );
 
       fetchCartItems();
-
     } catch (error) {
       console.log("Decrease Qty Error :-", error);
-    }finally{
-       dispatch(hideLoader());
+    } finally {
+      dispatch(hideLoader());
     }
   };
 
   const deleteItem = async (productId) => {
-
     try {
+      dispatch(showLoader());
 
-       dispatch(showLoader());
-
-      const response = await axios.delete("http://localhost:3131/api/cart/deleteCartItems",
+      const response = await axios.delete(
+        "http://localhost:3131/api/cart/deleteCartItems",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -139,37 +140,62 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
       console.log("Delete Cart Item Response :-", response);
       fetchCartItems();
-
     } catch (error) {
       console.log("Delete Cart Item Error :-", error);
-
-    }finally{
-        dispatch(hideLoader());
+    } finally {
+      dispatch(hideLoader());
     }
   };
 
   const validItems = cartItems.filter((item) => item.product);
 
- const grandTotal = validItems.reduce(
-  (sum, item) => sum + item.finalPrice * item.quantity,
-  0
-);
+  const grandTotal = validItems.reduce(
+    (sum, item) => sum + item.finalPrice * item.quantity,
+    0,
+  );
+
+  const handlePlaceOrder = () => {
+  if (!selectedAddressId) {
+    Swal.fire({
+      icon: "warning",
+      title: "Select Address",
+      text: "Please select a delivery address before placing the order",
+    });
+    return;
+  }
+
+  navigate("/checkout", {
+    state: {
+      addressId: selectedAddressId,
+    },
+  });
+};
 
   return (
     <div>
       <NavBar cartCount={cartCount} />
       <div className="container py-5 cart-container">
         <div className="cart-items">
-          {validItems.map(item => (
+          {validItems.map((item) => (
             <div key={item._id} className="cart-card">
-              <img src={item.product.productImage} alt={item.product.name} className="cart-img" />
+              <img
+                src={item.product.productImage}
+                alt={item.product.name}
+                className="cart-img"
+              />
               <div className="cart-info">
                 <h5>{item.product.name}</h5>
                 <p className="text-muted">Price: Rs.{item.finalPrice || 0}</p>
                 <div className="qty-section">
-                  <button className="qty-btn" onClick={() => decreaseQty(item)}> - </button>
+                  <button className="qty-btn" onClick={() => decreaseQty(item)}>
+                    {" "}
+                    -{" "}
+                  </button>
                   <span className="qty-number">{item.quantity}</span>
-                  <button className="qty-btn" onClick={() => increaseQty(item)}> + </button>
+                  <button className="qty-btn" onClick={() => increaseQty(item)}>
+                    {" "}
+                    +{" "}
+                  </button>
                 </div>
                 <p className="fw-bold mt-2 text-end">
                   Total: Rs.{(item.finalPrice || 0) * item.quantity}
@@ -181,25 +207,40 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
         <div className="cart-summary">
           <h3>Price Details</h3>
-          {validItems.map(item => (
+          {validItems.map((item) => (
             <p key={item._id}>
-              {item.product.name} x {item.quantity}: Rs. {(item.finalPrice || 0) * item.quantity}
+              {item.product.name} x {item.quantity}: Rs.{" "}
+              {(item.finalPrice || 0) * item.quantity}
             </p>
           ))}
           <hr />
           <p className="grand-total">Total Amount: Rs.{grandTotal}</p>
 
-          <button
-            className="btn-place-order"
-            onClick={() => {
-              if (!token) {
-                alert("Please login first!");
-                navigate("/login");
-                return;
-              }
-              navigate("/checkout"); 
-            }}
-          >
+          <h3>Select Delivery Address</h3>
+
+          <GetAddress
+            showRadio={true}
+            selectedAddressId={selectedAddressId}
+            onSelect={(id) => setSelectedAddressId(id)}
+          />
+
+          <div style={{ marginTop: "16px" }}>
+            <div
+              className="add-btn-container"
+              onClick={() => setShowAddAddress(true)}
+            >
+              <span className="plus">+</span> ADD A NEW ADDRESS
+            </div>
+
+            {showAddAddress && (
+              <AddAddress
+                onClose={() => setShowAddAddress(false)}
+                onSuccess={() => window.location.reload()}
+              />
+            )}
+          </div>
+
+          <button className="btn-place-order" onClick={handlePlaceOrder}>
             PLACE ORDER
           </button>
         </div>

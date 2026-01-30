@@ -10,6 +10,7 @@ import ProfileAndOtherPage from "../pages/ProfileAndOtherPage";
 import ProfileInfo from "../pages/ProfileInfo";
 import ManageAddresses from "../pages/ManageAddress";
 import CheckOutPage from "../pages/CheckOutPage";
+import Orders from "../Components/Orders";  
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
   return (
@@ -55,6 +56,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
         <Route index element={<ProfileInfo />} />
         <Route path="info" element={<ProfileInfo />} />
         <Route path="addresses" element={<ManageAddresses />} />
+        <Route path="orders" element={<Orders />} /> 
       </Route>
     </Routes>
   );

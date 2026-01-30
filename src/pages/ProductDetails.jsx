@@ -5,6 +5,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
+import GetAddress from "../Components/GetAddress";
+import AddAddress from "../Components/AddAddress";
 import "../css/productdetails.css";
 
 export default function ProductDetails({ cartItems, setCartItems, setCartCount , cartCount }) {
@@ -12,6 +14,8 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   //const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -85,8 +89,8 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
   }
 }
 
-  const BuyButton = () => {
-    
+const BuyButton = () => {
+
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -95,44 +99,88 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
     return;
   }
 
-  navigate(`/checkout/${id}`);
+  setShowAddressModal(true);
 };
 
+const handleAddressSelect = (id) => {
+  setSelectedAddressId(id);
+  setShowAddressModal(false);
+  navigate(`/checkout/${product._id}`, { state: { addressId: id } });
+};
 
-  //if (loading) return <p className="product-loading">Loading product...</p>
+//if (loading) return <p className="product-loading">Loading product...</p>
   if (!product) return <p className="product-not-found">Product not found</p>
 
-   return (
-    <div>
-      <NavBar cartCount={cartCount} />
-      <div className="product-page-container">
-        <div className="product-page-card">
-          <div className="product-left">
-            <div className="product-image-main">
-              <img src={product.productImage} alt={product.name} />
-            </div>
+return (
+  <div>
+    <NavBar cartCount={cartCount} />
+    <div className="product-page-container">
+      <div className="product-page-card">
+        <div className="product-left">
+          <div className="product-image-main">
+            <img src={product.productImage} alt={product.name} />
           </div>
+        </div>
 
-          <div className="product-right">
-            <h2 className="product-title">{product.name}</h2>
-            
-                {product.discount && product.discount.value > 0 ? (
-                  <div className="price-section2">
-                    <span className="original-price2">Rs. {product.price}</span>
-                    <span className="final-price2">Rs. {product.finalPrice}</span>
-                  </div>
-                ) : (
-                  <span className="price2">Rs. {product.price}</span>
-                )}
-            <p className="product-description">{product.description}</p>
-            <p className="product-stock">Stock Available :- {product.stock}</p>
-            <div className="product-actions">
-              <button className="add-to-cart-btn" onClick={btnAddToCart}>Add to Cart</button>
-              <button className="buy-now-btn" onClick={BuyButton}>Buy Now</button>
+        <div className="product-right">
+          <h2 className="product-title">{product.name}</h2>
+
+          {product.discount && product.discount.value > 0 ? (
+            <div className="price-section2">
+              <span className="original-price2">Rs. {product.price}</span>
+              <span className="final-price2">Rs. {product.finalPrice}</span>
             </div>
+          ) : (
+            <span className="price2">Rs. {product.price}</span>
+          )}
+          <p className="product-description">{product.description}</p>
+          <p className="product-stock">Stock Available :- {product.stock}</p>
+          <div className="product-actions">
+            <button className="add-to-cart-btn" onClick={btnAddToCart}>
+              Add to Cart
+            </button>
+            <button className="buy-now-btn" onClick={BuyButton}>
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
     </div>
-  );
+
+    {showAddressModal && (
+      <div className="modal-backdrop">
+        <div className="modal-content">
+          <h2>Select Delivery Address</h2>
+          {!selectedAddressId ? (
+            <>
+              <GetAddress
+                showRadio={true}
+                onSelect={handleAddressSelect}
+                onSuccess={() => {}}
+              />
+              <button
+                className="btn-add-address"
+                onClick={() => setSelectedAddressId("add_new")}
+              >
+                Add New Address
+              </button>
+            </>
+          ) : selectedAddressId === "add_new" ? (
+            <AddAddress
+              onClose={() => setSelectedAddressId(null)}
+              onSuccess={() => setSelectedAddressId(null)}
+            />
+          ) : null}
+
+          <button
+            className="btn-close"
+            onClick={() => setShowAddressModal(false)}
+          >
+            CLOSE
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+);
 } 
