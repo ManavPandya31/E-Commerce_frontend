@@ -212,14 +212,22 @@ return (
                 ) : (
                   <span className="price">Rs. {product.price}</span>
                 )}
+
+                {product.stock === 0 && (
+                  <p className="stock-message out-of-stock">Out Of Stock</p>
+                )}
+                {product.stock > 0 && product.stock < 3 && (
+                  <p className="stock-message low-stock">Stock Running Low</p>
+                )}
               </div>
 
               <div className="card-footer">
                 <button
                   className="product-addToCart"
                   onClick={() => redirectAddToCart(product._id)}
+                  disabled={product.stock === 0}
                 >
-                  Add To Cart
+                  {product.stock === 0 ? "Comming Soon" : "Add To Cart"}
                 </button>
               </div>
             </div>
