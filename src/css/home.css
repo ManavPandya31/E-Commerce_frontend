@@ -126,6 +126,9 @@
   overflow: hidden;
   position: relative;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* .product-card:hover {
@@ -150,6 +153,7 @@
 .product-info {
   text-align: center;
   padding: 16px;
+  flex-grow: 1;
 }
 
 .products-section{
@@ -160,6 +164,14 @@
   font-size: 15px;
   font-weight: 500;
   color: #111827;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 16px 18px;
+  margin-top: auto;
 }
 
 .original-price {
@@ -314,6 +326,20 @@
   height: 30px;
   animation: spin 1s linear infinite;
   display: inline-block;
+}
+
+.stock-message {
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.low-stock {
+  color: orange;
+}
+
+.out-of-stock {
+  color: red;
 }
 
 @keyframes spin {
