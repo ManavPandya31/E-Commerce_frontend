@@ -154,7 +154,7 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
             {/* <p className="product-stock">Stock Available :- {product.stock}</p> */}
             {product.stock < 3 && product.stock > 0 && (
               <p className="product-stock" style={{ color: "red", fontWeight: "600" }}>
-                 Stock Running Low.. {product.stock} Left In Stock
+                 Stock Running low.. {product.stock} Left In Stock
               </p>
             )}
             <div className="product-actions">
