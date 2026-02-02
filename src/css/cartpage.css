@@ -221,6 +221,57 @@
   font-weight: 700;
   color: #333;
   margin: 0;
+}.address-card {
+  display: block;
+}
+
+.cart-address-modal .address-card:not(:last-child) {
+  display: none;
+}
+.cart-address-modal.show-all-addresses .address-card {
+  display: block;
+}
+
+.btn-back-address {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  color: #555;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-back-address:hover {
+  color: #000;
+}
+
+.btn-change-address {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #f1f3f6;
+  color: #2874f0;
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-change-address:hover {
+  background: #e6edff;
+  border-color: #2874f0;
+}
+
+.btn-change-address:active {
+  transform: scale(0.97);
 }
 
 .address-modal {

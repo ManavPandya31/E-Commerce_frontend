@@ -1,0 +1,27 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #fff;
+  width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.add-address-btn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #2874f0;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}

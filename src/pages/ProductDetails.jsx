@@ -126,9 +126,17 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
         <div className="product-page-card">
           <div className="product-left">
             <div className="product-image-main">
-              <img src={product.productImage} alt={product.name} />
-            </div>
+      <img src={product.productImage} alt={product.name} />
+
+        {product.discount && product.discount.value > 0 && (
+          <div className="discount-badge product-details-badge">
+              {product.discount.type === "Percentage"
+                ? `${product.discount.value}% OFF`
+                : `₹${product.discount.value} OFF`}
           </div>
+        )}
+          </div>
+        </div>
 
           <div className="product-right">
             <h2 className="product-title">{product.name}</h2>
@@ -143,8 +151,12 @@ export default function ProductDetails({ cartItems, setCartItems, setCartCount ,
             )}
 
             <p className="product-description">{product.description}</p>
-            <p className="product-stock">Stock Available :- {product.stock}</p>
-
+            {/* <p className="product-stock">Stock Available :- {product.stock}</p> */}
+            {product.stock < 3 && product.stock > 0 && (
+              <p className="product-stock" style={{ color: "red", fontWeight: "600" }}>
+                 Stock Running Low.. {product.stock} Left In Stock
+              </p>
+            )}
             <div className="product-actions">
               <button
                 className="add-to-cart-btn"

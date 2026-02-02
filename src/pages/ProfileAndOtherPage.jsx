@@ -40,7 +40,7 @@ export default function ProfileAndOtherPage({cartCount}) {
   const lastName = userDetails.fullName.split(" ").slice(1).join(" ") || "";
 
   return (
-    <div><NavBar/>
+    <div><NavBar cartCount={cartCount} />
     <div className="account-layout">
       <div className="sidebar">
         <div className="user-brief">
