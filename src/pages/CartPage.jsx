@@ -26,40 +26,50 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
 
   const fetchCartItems = async () => {
     try {
+
       dispatch(showLoader());
       const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log("Response From Get Cart Api :-", response);
+
       const items = response.data.data.items || [];
       setCartItems(items);
       const validItems = items.filter((item) => item.product);
       setCartCount(
         validItems.reduce((sum, item) => sum + item.quantity, 0)
       );
+
     } catch (error) {
       console.log("Fetch Cart Error :-", error);
+
     } finally {
       dispatch(hideLoader());
     }
   };
 
   const fetchAddressesForCart = async () => {
+
     try {
+      
       const res = await axios.get("http://localhost:3131/api/auth/getAllAddress",
         { headers: { Authorization: `Bearer ${token}` } });
       console.log("Response From Get Address Api (Cart) :-", res);
+
       const addresses = res.data.data.addresses || [];
+
       if (addresses.length > 0) {
         setHasAddress(true);
         const lastAddress = addresses[addresses.length - 1];
         setSelectedAddressId(lastAddress._id);
         setSelectedAddress(lastAddress);
+
       } else {
         setHasAddress(false);
         setSelectedAddressId(null);
         setSelectedAddress(null);
       }
+
     } catch (error) {
       console.log("Fetch Address Cart Error :-", error);
       setHasAddress(false);
@@ -81,9 +91,12 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
         },
         { headers: { Authorization: `Bearer ${token}` } });
       console.log("Increase Qty Response :-", response);
+
       fetchCartItems();
+
     } catch (error) {
       console.log("Increase Qty Error :-", error);
+
     } finally {
       dispatch(hideLoader());
     }
@@ -103,9 +116,12 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
         },
         { headers: { Authorization: `Bearer ${token}` } });
       console.log("Decrease Qty Response :-", response);
+
       fetchCartItems();
+
     } catch (error) {
       console.log("Decrease Qty Error :-", error);
+
     } finally {
       dispatch(hideLoader());
     }
@@ -120,9 +136,12 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
           data: { productId },
         });
       console.log("Delete Cart Item Response :-", response);
+
       fetchCartItems();
+
     } catch (error) {
       console.log("Delete Cart Item Error :-", error);
+
     } finally {
       dispatch(hideLoader());
     }
@@ -135,6 +154,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
   );
 
   const handlePlaceOrderClick = () => {
+
     if (!selectedAddressId) {
       setShowAddressModal(true);
       return;
@@ -173,9 +193,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
       addressId: selectedAddress._id
     };
 
-    const res = await axios.post(
-      "http://localhost:3131/api/orders/createOrder",
-      payload,
+    const res = await axios.post("http://localhost:3131/api/orders/createOrder",payload,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -199,8 +217,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
   }
 };
 
-
-  return (
+return (
   <div>
     <NavBar cartCount={cartCount} />
 
@@ -444,5 +461,4 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
     )}
   </div>
 );
-
 }
