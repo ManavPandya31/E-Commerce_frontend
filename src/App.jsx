@@ -1,5 +1,5 @@
 import Router from "./Routers/Router";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import Footer from "./Components/Footer";
 import Loader from "./Components/Loader";
 import store from "./app/store.js";
@@ -10,7 +10,14 @@ function App() {
   const location = useLocation();
 
   const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(() => {
+    return Number(localStorage.getItem("cartCount")) || 0;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cartCount", cartCount);
+  }, [cartCount]);
+  
   const hideFooterRoutes = ["/login", "/register"];
   const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
 
@@ -32,3 +39,4 @@ function App() {
 }
 
 export default App;
+

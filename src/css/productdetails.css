@@ -168,26 +168,29 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 1000; 
 }
 
 .modal-content {
   background-color: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  width: 850px;
-  max-width: 95%;
-  max-height: 80vh;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90% !important;
+  max-width: 900px !important; /* This will now be forced */
+  max-height: 85vh;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   gap: 16px;
+  z-index: 10000;
 }
 
 .modal-content h2 {
   margin: 0 0 12px 0;
   text-align: center;
+  font-size: 22px;
+  color: #111;
 }
 
 .modal-content button {
@@ -200,19 +203,165 @@
 .btn-close {
   background-color: #f44336;
   color: #fff;
-  font-weight: bold;
-  align-self: center;
-  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 12px;
 }
 
 .btn-add-address {
   background-color: #1976d2;
   color: #fff;
-  font-weight: bold;
-  border-radius: 6px;
-  padding: 8px 12px;
-  margin-top: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.modal-backdrop,
+.order-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 850px; /* This is now the only rule for max-width */
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 1011;
+}
+
+.modal-content h2 {
+  margin: 0 0 12px 0;
+  text-align: center;
+  font-size: 22px;
+  color: #111;
+}
+
+.modal-content button,
+.btn-add-address,
+.btn-close {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-close {
+  background-color: #f44336;
+  color: #fff;
+  align-self: center;
+  margin-top: 12px;
+}
+
+.btn-add-address {
+  background-color: #1976d2;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.btn-add-address:hover {
+  background-color: #0d47a1;
+}
+
+.order-modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px; 
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 10001;
+}
+
+.btn-add-address:hover {
+  background-color: #0d47a1;
+}
+
+.my-swal-highest {
+  z-index: 12000 !important;
+}
+
+.order-modal-content h2 {
+  text-align: center;
+  font-size: 22px;
+  color: #111;
+}
+
+.address-card {
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background-color: #fff;
+  margin-bottom: 12px;
+}
+
+.address-card.selected {
+  border: 2px solid #2874f0;
+}
+
+.price-summary {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+
+.btn-place-order {
+  background: linear-gradient(90deg, #ff6a00, #ee0979);
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(238, 9, 121, 0.4);
+}
+
+.btn-place-order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(238, 9, 121, 0.5);
+}
+
+@media (max-width: 768px) {
+  .modal-content,
+  .order-modal-content {
+    width: 95%;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 950px) {

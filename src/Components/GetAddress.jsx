@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { showLoader , hideLoader } from '../Slices/loaderSlice';
 import AddAddress from './AddAddress';
 
-export default function GetAddress({showRadio = false,selectedAddressId,onSelect,onSuccess}) {
+export default function GetAddress({showRadio = false,selectedAddressId,onSelect,onSuccess,onDelete}) {
 
     const [addresses, setAddresses] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -54,6 +54,7 @@ export default function GetAddress({showRadio = false,selectedAddressId,onSelect
 
       fetchAddresses();
       if (onSuccess) onSuccess();
+        if (onDelete) onDelete();
       
     } catch (error) {
       console.log("Delete Address Error:", error);

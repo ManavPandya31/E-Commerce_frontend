@@ -221,6 +221,91 @@
   font-weight: 700;
   color: #333;
   margin: 0;
+}.address-card {
+  display: block;
+}
+
+.cart-address-modal .address-card:not(:last-child) {
+  display: none;
+}
+.cart-address-modal.show-all-addresses .address-card {
+  display: block;
+}
+
+.btn-back-address {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  color: #555;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.order-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* above address modal */
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+.order-modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.btn-back-address:hover {
+  color: #000;
+}
+
+.btn-change-address {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #f1f3f6;
+  color: #2874f0;
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-change-address:hover {
+  background: #e6edff;
+  border-color: #2874f0;
+}
+
+.btn-change-address:active {
+  transform: scale(0.97);
 }
 
 .address-modal {
@@ -234,6 +319,19 @@
   justify-content: center;
   align-items: center;
   z-index: 9999; 
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9000; /* lower than order modal */
 }
 
 .address-modal-content {

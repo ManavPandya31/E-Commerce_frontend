@@ -50,9 +50,23 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
       </Route>
 
       <Route path="/checkout/:id" element={<CheckOutPage />} />
-      <Route path="/checkout" element={<CheckOutPage />} />
+      <Route path="/checkout" element={
+            <CheckOutPage
+              cartItems={cartItems}
+              setCartItems={setCartItems}
+              cartCount={cartCount}
+              setCartCount={setCartCount}
+            />
+          }
+        />
+          <Route path="/profile" element={
+         <ProfileAndOtherPage
+         cartCount={cartCount}
+         setCartCount={setCartCount}
+      />
+     }
+     >
 
-      <Route path="/profile" element={<ProfileAndOtherPage />}>
         <Route index element={<ProfileInfo />} />
         <Route path="info" element={<ProfileInfo />} />
         <Route path="addresses" element={<ManageAddresses />} />
