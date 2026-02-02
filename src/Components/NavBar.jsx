@@ -34,7 +34,7 @@ export default function NavBar({ cartCount }) {
     navigate("/");
   };
 
-    const fetchUserDetails = async (token) => {
+  const fetchUserDetails = async (token) => {
     try {
       const res = await axios.get("http://localhost:3131/api/auth/userDetails", {
         headers: {
@@ -52,6 +52,21 @@ export default function NavBar({ cartCount }) {
     }
   };
 
+  const fetchSearchResults = async (query) => {
+  try {
+    const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${query}`);
+    console.log("Search API response:", res);
+
+    setSearchResults(res.data.data || { categories: [], products: [] });
+    setShowDropdown(true);
+
+  } catch (error) {
+    console.log("Search error:", error);
+    setSearchResults({ categories: [], products: [] });
+    setShowDropdown(false);
+  }
+};
+
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -66,20 +81,9 @@ export default function NavBar({ cartCount }) {
       return;
     }
 
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${query}`);
-        console.log("Response From Searchbar :- ", res);
-
-        setSearchResults(res.data.data || { categories: [], products: [] });
-        setShowDropdown(true);
-
-      } catch (error) {
-        console.log("Search error:", error);
-        setSearchResults({ categories: [], products: [] });
-        setShowDropdown(false);
-      }
-    }, 400);
+    debounceRef.current = setTimeout(() => {
+      fetchSearchResults(query);
+      }, 400);
   };
 
   const hasResults = searchResults.categories.length > 0 || searchResults.products.length > 0;
@@ -126,6 +130,7 @@ export default function NavBar({ cartCount }) {
                     className="search-item category-suggestion"
                     onClick={() => {
                     setSearchQuery(cat.name);
+                    fetchSearchResults(cat.name);
                     setShowDropdown(false);
                 }}
                   >
