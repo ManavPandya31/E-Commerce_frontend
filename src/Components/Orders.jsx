@@ -76,7 +76,7 @@ export default function Orders() {
 
           <div className="order-total">
             <strong>
-              Total: ₹{order.products.reduce((sum, i) => sum + (i.price || 0), 0)}
+              Total: ₹{order.totalAmount}
             </strong>
           </div>
         </div>

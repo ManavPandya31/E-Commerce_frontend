@@ -18,6 +18,9 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [couponCode, setCouponCode] = useState(""); 
+  const [appliedCoupon, setAppliedCoupon] = useState(null); 
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -148,10 +151,13 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
   };
 
   const validItems = cartItems.filter((item) => item.product);
+  
   const grandTotal = validItems.reduce(
     (sum, item) => sum + (item.finalPrice || 0) * item.quantity,
     0
   );
+
+  const finalAmount = appliedCoupon ? appliedCoupon.payableAmount : grandTotal;
 
   const handlePlaceOrderClick = () => {
 
@@ -190,7 +196,10 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
         quantity: item.quantity,
         price: item.finalPrice ?? item.price
       })),
-      addressId: selectedAddress._id
+      addressId: selectedAddress._id,
+      coupon: appliedCoupon?.code || null,
+      discountAmount: appliedCoupon ? grandTotal - appliedCoupon.payableAmount : 0,
+      totalAmount: appliedCoupon?.payableAmount ?? grandTotal
     };
 
     const res = await axios.post("http://localhost:3131/api/orders/createOrder",payload,
@@ -215,9 +224,47 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount,
   } finally {
     dispatch(hideLoader());
   }
+  };
+
+  const handleApplyCoupon = async () => {
+  if (!couponCode) {
+    Swal.fire("Error", "Please enter a coupon code", "error");
+    return;
+  }
+
+  try {
+    dispatch(showLoader());
+
+    const payload = {
+      code: couponCode,
+      products: cartItems.map(item => ({
+        product: item.product._id,
+        quantity: item.quantity
+      }))
+    };
+
+    const res = await axios.post(
+      "http://localhost:3131/api/orders/applyCoupon",
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.data.sucess) {
+      setAppliedCoupon(res.data.data);
+      Swal.fire("Success", res.data.message, "success");
+    } else {
+      Swal.fire("Error", res.data.message || "Invalid coupon", "error");
+    }
+
+  } catch (error) {
+    console.log("Apply Coupon Error:", error);
+    Swal.fire("Error", "Something went wrong", "error");
+  } finally {
+    dispatch(hideLoader());
+  }
 };
 
-return (
+ return (
   <div>
     <NavBar cartCount={cartCount} />
 
@@ -276,7 +323,7 @@ return (
 
           <hr />
 
-          <p className="grand-total">Total Amount: Rs.{grandTotal}</p>
+          {/* <p className="grand-total">Total Amount: Rs.{grandTotal}</p> */}
 
           {selectedAddress ? (
             <div className="selected-address-box">
@@ -303,6 +350,24 @@ return (
               Add Address
             </button>
           )}
+
+            <div className="coupon-section">
+  <input
+    type="text"
+    placeholder="Enter Coupon Code"
+    value={couponCode}
+    onChange={(e) => setCouponCode(e.target.value)}
+    className="coupon-input"
+  />
+  <button className="btn-apply-coupon" onClick={handleApplyCoupon}>
+    Apply Coupon
+  </button>
+</div>
+
+<p className="final-amount">
+  Final Amount: Rs.{appliedCoupon?.payableAmount ?? grandTotal}
+</p>
+
 
           <button
             className="btn-place-order"
@@ -432,7 +497,7 @@ return (
             <h3>Price Details</h3>
             <div className="price-row">
               <span>Total Amount</span>
-              <span>₹ {grandTotal}</span>
+               <span>₹ {appliedCoupon?.payableAmount ?? grandTotal}</span>
             </div>
           </div>
 
@@ -449,6 +514,7 @@ return (
             >
               CANCEL
             </button>
+
             <button
               className="btn-place-order"
               onClick={handleConfirmOrder}

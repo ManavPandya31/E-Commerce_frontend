@@ -383,6 +383,42 @@
   }
 }
 
+/* Coupon Section */
+.coupon-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn-apply-coupon {
+  padding: 8px 16px;
+  background-color: #2563eb; /* blue */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn-apply-coupon:hover {
+  background-color: #1e40af;
+}
+
+.final-amount {
+  font-weight: bold;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
 @media (max-width: 768px) {
   .qty-section {
     margin-top: 8px;

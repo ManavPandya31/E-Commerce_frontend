@@ -9,7 +9,7 @@ import CartPage from "../pages/CartPage";
 import ProfileAndOtherPage from "../pages/ProfileAndOtherPage";
 import ProfileInfo from "../pages/ProfileInfo";
 import ManageAddresses from "../pages/ManageAddress";
-import CheckOutPage from "../pages/CheckOutPage";
+// import CheckOutPage from "../pages/CheckOutPage";
 import Orders from "../Components/Orders";  
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
@@ -49,7 +49,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
         />
       </Route>
 
-      <Route path="/checkout/:id" element={<CheckOutPage />} />
+      {/* <Route path="/checkout/:id" element={<CheckOutPage />} />
       <Route path="/checkout" element={
             <CheckOutPage
               cartItems={cartItems}
@@ -58,7 +58,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
               setCartCount={setCartCount}
             />
           }
-        />
+        /> */}
           <Route path="/profile" element={
          <ProfileAndOtherPage
          cartCount={cartCount}
