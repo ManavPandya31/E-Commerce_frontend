@@ -225,7 +225,7 @@ return (
             ) : (
               <span className="price2">Rs. {product.price}</span>
             )}
-
+              <p className="product-description">Product Description :- {product.description}</p>
             {product.stock < 3 && product.stock > 0 && (
               <p className="product-stock" style={{ color: "red", fontWeight: 600 }}>
                 Stock Running low.. {product.stock} Left In Stock
@@ -353,7 +353,7 @@ return (
                 CANCEL
               </button>
               <button className="btn-place-order" onClick={handleConfirmOrder}>
-                PAY & PLACE ORDER
+                Payment
               </button>
             </div>
           </div>

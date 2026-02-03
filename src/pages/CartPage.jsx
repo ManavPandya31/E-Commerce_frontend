@@ -292,7 +292,7 @@ return (
                 style={{ marginTop: "10px" }}
                 onClick={() => setShowAddressModal(true)}
               >
-                Add / Change Address
+                Add Address
               </button>
             </div>
           ) : (
@@ -453,7 +453,7 @@ return (
               className="btn-place-order"
               onClick={handleConfirmOrder}
             >
-              PAY & PLACE ORDER
+              Payment
             </button>
           </div>
         </div>

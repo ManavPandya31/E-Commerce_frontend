@@ -158,6 +158,12 @@
   color: #111;
 }
 
+.product-description{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: large;
+  color: black;
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;
