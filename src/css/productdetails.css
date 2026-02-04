@@ -158,6 +158,31 @@
   color: #111;
 }
 
+.product-description{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: large;
+  color: black;
+}
+
+.product-image-main {
+  position: relative; 
+}
+
+.product-image-main .discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: red;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 10px;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;

@@ -69,6 +69,47 @@ export default function ProductDetails({ cartItems, setCartItems, cartCount, set
     }
   };
 
+  const handleAddToCart = async () => {
+
+  if (isOutOfStock) return alert("Product is out of stock");
+
+  if (!token) return navigate("/login");
+
+  try {
+    dispatch(showLoader());
+
+    const payload = {
+      productId: product._id,
+      quantity: 1,
+    };
+
+    const res = await axios.post("http://localhost:3131/api/cart/addCartItems",payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    console.log("Add to Cart Response:", res);
+
+    if (res.data?.cart?.items) {
+
+      setCartItems(res.data.cart.items);
+      setCartCount(res.data.cart.items.length);
+    }
+
+    navigate("/cart");
+
+  } catch (error) {
+    console.log("Add to Cart Error:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Failed to add product to cart",
+      customClass: { container: 'my-swal-highest' }});
+      
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
   const BuyButton = async () => {
 
     if (isOutOfStock) return alert("Product is out of stock");
@@ -184,7 +225,7 @@ return (
             ) : (
               <span className="price2">Rs. {product.price}</span>
             )}
-
+              <p className="product-description">Product Description :- {product.description}</p>
             {product.stock < 3 && product.stock > 0 && (
               <p className="product-stock" style={{ color: "red", fontWeight: 600 }}>
                 Stock Running low.. {product.stock} Left In Stock
@@ -194,7 +235,7 @@ return (
             <div className="product-actions">
               <button
                 className="add-to-cart-btn"
-                onClick={() => {}}
+                onClick={handleAddToCart}
                 disabled={isOutOfStock}
               >
                 Add to Cart
@@ -312,7 +353,7 @@ return (
                 CANCEL
               </button>
               <button className="btn-place-order" onClick={handleConfirmOrder}>
-                PAY & PLACE ORDER
+                Payment
               </button>
             </div>
           </div>
