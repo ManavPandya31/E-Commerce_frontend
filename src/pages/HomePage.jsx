@@ -24,7 +24,7 @@ export default function HomePage({cartCount}) {
   const navigate = useNavigate();
   // const dispatch = useDispatch(); 
 
- const fetchProducts = async (categoryId = "", page = 1) => {
+  const fetchProducts = async (categoryId = "", page = 1) => {
  
    if (isFetching) return;
 
@@ -56,7 +56,7 @@ export default function HomePage({cartCount}) {
   } finally {
     setIsFetching(false);
   }
-};
+  };
 
   const fetchCategories = async (page = 1) => {
     try {
@@ -74,7 +74,7 @@ export default function HomePage({cartCount}) {
     }
   };
 
-useEffect(() => {
+  useEffect(() => {
   const handleScroll = () => {
     if (
       window.innerHeight + window.scrollY >=
@@ -88,7 +88,7 @@ useEffect(() => {
 
   window.addEventListener("scroll", handleScroll);
   return () => window.removeEventListener("scroll", handleScroll);
-}, [isFetching, productPage, productTotalPages, selectedCategory]);
+  }, [isFetching, productPage, productTotalPages, selectedCategory]);
 
 
   useEffect(() => {
