@@ -23,6 +23,7 @@ export default function ProductDetails({ cartItems, setCartItems, cartCount, set
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [hasAddress, setHasAddress] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -34,9 +35,11 @@ export default function ProductDetails({ cartItems, setCartItems, cartCount, set
         console.log("Response From FetchProduct API :-",response);
 
         setProduct(response.data.data);
+        fetchRelatedProducts(response.data.data._id);
         
       } catch (error) {
-        console.log("Error fetching product:", error)
+        console.log("Error fetching product:", error);
+
       } finally {
         dispatch(hideLoader());
       }
@@ -129,7 +132,7 @@ export default function ProductDetails({ cartItems, setCartItems, cartCount, set
     setShowOrderModal(true);
   };
 
- const handleConfirmOrder = async () => {
+  const handleConfirmOrder = async () => {
   if (!selectedAddress) return;
 
   const result = await Swal.fire({
@@ -191,174 +194,231 @@ export default function ProductDetails({ cartItems, setCartItems, cartCount, set
   } finally {
     dispatch(hideLoader());
   }
-};
+  };
+
+  const fetchRelatedProducts = async (productId) => {
+  try {
+    const res = await axios.get(`http://localhost:3131/api/products/related-products/related/${productId}`);
+    console.log("Response From Related Products Api :-",res);
+    
+    setRelatedProducts(res.data.data || []);
+
+  } catch (error) {
+    console.log("Error fetching related products:", error);
+  }
+  };
 
   if (!product) return <p className="product-not-found">Product not found</p>;
 
 return (
-    <div>
-      <NavBar cartCount={cartCount} />
+  <div>
+    <NavBar cartCount={cartCount} />
 
-      <div className="product-page-container">
-        <div className="product-page-card">
-          <div className="product-left">
-            <div className="product-image-main">
-              <img src={product.productImage} alt={product.name} />
-              {product.discount?.value > 0 && (
-                <div className="discount-badge product-details-badge">
-                  {product.discount.type === "Percentage"
-                    ? `${product.discount.value}% OFF`
-                    : `₹${product.discount.value} OFF`}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="product-right">
-            <h2 className="product-title">{product.name}</h2>
-
-            {product.discount?.value > 0 ? (
-              <div className="price-section2">
-                <span className="original-price2">Rs. {product.price}</span>
-                <span className="final-price2">Rs. {product.finalPrice}</span>
+    <div className="product-page-container">
+      <div className="product-page-card">
+        <div className="product-left">
+          <div className="product-image-main">
+            <img src={product.productImage} alt={product.name} />
+            {product.discount?.value > 0 && (
+              <div className="discount-badge product-details-badge">
+                {product.discount.type === "Percentage"
+                  ? `${product.discount.value}% OFF`
+                  : `₹${product.discount.value} OFF`}
               </div>
-            ) : (
-              <span className="price2">Rs. {product.price}</span>
             )}
-              <p className="product-description">Product Description :- {product.description}</p>
-            {product.stock < 3 && product.stock > 0 && (
-              <p className="product-stock" style={{ color: "red", fontWeight: 600 }}>
-                Stock Running low.. {product.stock} Left In Stock
-              </p>
-            )}
+          </div>
+        </div>
 
-            <div className="product-actions">
-              <button
-                className="add-to-cart-btn"
-                onClick={handleAddToCart}
-                disabled={isOutOfStock}
-              >
-                Add to Cart
-              </button>
+        <div className="product-right">
+          <h2 className="product-title">{product.name}</h2>
 
-              <button
-                className="buy-now-btn"
-                onClick={BuyButton}
-                disabled={isOutOfStock}
-              >
-                Buy Now
-              </button>
+          {product.discount?.value > 0 ? (
+            <div className="price-section2">
+              <span className="original-price2">Rs. {product.price}</span>
+              <span className="final-price2">Rs. {product.finalPrice}</span>
             </div>
+          ) : (
+            <span className="price2">Rs. {product.price}</span>
+          )}
+
+          <p className="product-description">
+            Product Description :- {product.description}
+          </p>
+
+          {product.stock < 3 && product.stock > 0 && (
+            <p className="product-stock" style={{ color: "red", fontWeight: 600 }}>
+              Stock Running low.. {product.stock} Left In Stock
+            </p>
+          )}
+
+          <div className="product-actions">
+            <button
+              className="add-to-cart-btn"
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+            >
+              Add to Cart
+            </button>
+
+            <button
+              className="buy-now-btn"
+              onClick={BuyButton}
+              disabled={isOutOfStock}
+            >
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
-
-       {showAddressModal && (
-        <div className="modal-backdrop">
-          <div className="modal-content">
-            <h2>Select Delivery Address</h2>
-
-            {hasAddress ? (
-              <GetAddress
-                showRadio={true}
-                selectedAddressId={selectedAddressId}
-                onSelect={(id, addr) => {
-                  setSelectedAddressId(id);
-                  setSelectedAddress(addr);
-                }}
-                onSuccess={fetchAddresses}
-                refetchAddresses={fetchAddresses}
-              />
-            ) : null}
-
-            {showAddAddress ? (
-              <AddAddress
-                onClose={() => setShowAddAddress(false)}
-                onSuccess={() => {
-                  setShowAddAddress(false);
-                  fetchAddresses();
-                }}
-              />
-            ) : (
-              <button
-                className="btn-add-address"
-                onClick={() => setShowAddAddress(true)}
-              >
-                + Add New Address
-              </button>
-            )}
-
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
-              <button className="btn-close" onClick={() => setShowAddressModal(false)}>
-                CANCEL
-              </button>
-              <button
-                className="btn-place-order"
-                disabled={!selectedAddressId}
-                onClick={handlePlaceOrderClick}
-                style={{
-                  opacity: !selectedAddressId ? 0.6 : 1,
-                  cursor: !selectedAddressId ? "not-allowed" : "pointer",
-                }}
-              >
-                CONTINUE
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-          {showOrderModal && selectedAddress && (
-        <div className="order-modal">
-          <div className="order-modal-content">
-            <h2>Confirm Your Order</h2>
-
-            <h3>Delivery Address</h3>
-            <div className="address-card selected">
-              <input type="radio" checked readOnly />
-              <div className="address-details">
-                <p className="mobile">{selectedAddress.mobile}</p>
-                <p>{selectedAddress.fullName}</p>
-                <p>{selectedAddress.street}, {selectedAddress.city}</p>
-                <p>{selectedAddress.state} - {selectedAddress.pincode}</p>
-              </div>
-            </div>
-
-            <h3 style={{ marginTop: 16 }}>Order Details</h3>
-            <div className="address-list">
-              <div className="address-card" style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <img
-                  src={product.productImage}
-                  alt={product.name}
-                  style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 8 }}
-                />
-                <div className="address-details">
-                  <p className="mobile">{product.name}</p>
-                  <p>Quantity: 1</p>
-                  <p>Price: ₹ {product.finalPrice ?? product.price}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="price-summary" style={{ marginTop: 16 }}>
-              <h3>Price Details</h3>
-              <div className="price-row">
-                <span>Total Amount</span>
-                <span>₹ {product.finalPrice ?? product.price}</span>
-              </div>
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 24 }}>
-              <button className="btn-close" onClick={() => setShowOrderModal(false)}>
-                CANCEL
-              </button>
-              <button className="btn-place-order" onClick={handleConfirmOrder}>
-                Payment
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
-  );
+
+    {relatedProducts.length > 0 && (
+      <div className="related-products-section">
+        <h3 className="related-title">Related Products</h3>
+
+        <div className="related-products-grid">
+          {relatedProducts.map((item) => (
+            <div
+              key={item._id}
+              className="related-product-card"
+              onClick={() => navigate(`/product/${item._id}`)}
+              // navigate(`/product/${productId}`);
+            >
+              <img
+                src={item.productImage}
+                alt={item.name}
+                className="related-product-img"
+              />
+
+              <p className="related-product-name">{item.name}</p>
+
+              <p className="related-product-price">
+                Rs. {item.finalPrice ?? item.price}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {showAddressModal && (
+      <div className="modal-backdrop">
+        <div className="modal-content">
+          <h2>Select Delivery Address</h2>
+
+          {hasAddress ? (
+            <GetAddress
+              showRadio={true}
+              selectedAddressId={selectedAddressId}
+              onSelect={(id, addr) => {
+                setSelectedAddressId(id);
+                setSelectedAddress(addr);
+              }}
+              onSuccess={fetchAddresses}
+              refetchAddresses={fetchAddresses}
+            />
+          ) : null}
+
+          {showAddAddress ? (
+            <AddAddress
+              onClose={() => setShowAddAddress(false)}
+              onSuccess={() => {
+                setShowAddAddress(false);
+                fetchAddresses();
+              }}
+            />
+          ) : (
+            <button
+              className="btn-add-address"
+              onClick={() => setShowAddAddress(true)}
+            >
+              + Add New Address
+            </button>
+          )}
+
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+            <button className="btn-close" onClick={() => setShowAddressModal(false)}>
+              CANCEL
+            </button>
+            <button
+              className="btn-place-order"
+              disabled={!selectedAddressId}
+              onClick={handlePlaceOrderClick}
+              style={{
+                opacity: !selectedAddressId ? 0.6 : 1,
+                cursor: !selectedAddressId ? "not-allowed" : "pointer",
+              }}
+            >
+              CONTINUE
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {showOrderModal && selectedAddress && (
+      <div className="order-modal">
+        <div className="order-modal-content">
+          <h2>Confirm Your Order</h2>
+
+          <h3>Delivery Address</h3>
+          <div className="address-card selected">
+            <input type="radio" checked readOnly />
+            <div className="address-details">
+              <p className="mobile">{selectedAddress.mobile}</p>
+              <p>{selectedAddress.fullName}</p>
+              <p>
+                {selectedAddress.street}, {selectedAddress.city}
+              </p>
+              <p>
+                {selectedAddress.state} - {selectedAddress.pincode}
+              </p>
+            </div>
+          </div>
+
+          <h3 style={{ marginTop: 16 }}>Order Details</h3>
+          <div className="address-list">
+            <div
+              className="address-card"
+              style={{ display: "flex", alignItems: "center", gap: 16 }}
+            >
+              <img
+                src={product.productImage}
+                alt={product.name}
+                style={{
+                  width: 80,
+                  height: 80,
+                  objectFit: "cover",
+                  borderRadius: 8,
+                }}
+              />
+              <div className="address-details">
+                <p className="mobile">{product.name}</p>
+                <p>Quantity: 1</p>
+                <p>Price: ₹ {product.finalPrice ?? product.price}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="price-summary" style={{ marginTop: 16 }}>
+            <h3>Price Details</h3>
+            <div className="price-row">
+              <span>Total Amount</span>
+              <span>₹ {product.finalPrice ?? product.price}</span>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 24 }}>
+            <button className="btn-close" onClick={() => setShowOrderModal(false)}>
+              CANCEL
+            </button>
+            <button className="btn-place-order" onClick={handleConfirmOrder}>
+              Payment
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+);
 }
