@@ -31,9 +31,9 @@
 }
 
 .cart-summary p {
-  font-size: 18px;
-  margin: 10px 0;
-  color: #222;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
 }
 
 .cart-summary .grand-total {
@@ -44,17 +44,13 @@
 }
 
 .cart-card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
   padding: 16px;
-  margin-bottom: 20px;
-  border-radius: 16px;
-  max-width: 700px; 
+  border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  background-color: #fff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #fff;
 }
 
 .cart-card:hover {
@@ -73,19 +69,18 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
   justify-content: space-between;
 }
 
 .cart-info h5 {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 4px;
 }
 
 .cart-info p {
-  margin: 2px 0;
   font-size: 14px;
-  color: #555;
+  margin: 4px 0;
 }
 
 .qty-section {
@@ -119,9 +114,10 @@
 }
 
 .cart-info .fw-bold {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #222;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
 }
 
 .grand-total {
@@ -146,23 +142,32 @@
 }
 
 .btn-place-order {
-  display: inline-block;
-  width: 100%;
-  max-width: 180px;      
-  padding: 12px 20px;
+  width: 40%;
+  padding: 14px;
+  height: 50px;
   margin-top: 20px;
-  margin-left: 150px;
-  background: linear-gradient(90deg, #ff6a00, #ee0979); 
-  color: White;
+  background: linear-gradient(90deg, #ff6a00, #ee0979);
+  color: #fff;
   font-size: 16px;
-  font-weight: 600;
-  text-align: center;
-  text-transform: uppercase;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(238, 9, 121, 0.4);
+  transition: 0.3s;
+}
+
+.btn-place-order2{
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: linear-gradient(90deg, #ff6a00, #ee0979);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 /* .btn-place-order:hover {
@@ -418,6 +423,7 @@
 }
 
 .combo-below-main {
+  width: 100%;
   margin-top: 16px;
   padding-top: 12px;
   border-top: 1px dashed #ddd;
@@ -430,7 +436,7 @@
 }
 
 .combo-small-box {
-  width: 100px;
+  width: 90px;
   padding: 8px;
   border-radius: 10px;
   background: #f9fafb;
@@ -455,7 +461,7 @@
   color: #2563eb;
 }
 
-.combo-footer {
+/* .combo-footer {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
@@ -472,7 +478,52 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+} */
+
+.order-modal .combo-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
+
+.order-modal .combo-box.small {
+  width: 80px;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  text-align: center;
+  background: #fafafa;
+  font-size: 12px;
+}
+
+.order-modal .combo-box.small img {
+  width: 100%;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.order-modal .combo-box.small p {
+  font-size: 11px;
+  margin: 4px 0 2px;
+  font-weight: 500;
+}
+
+.order-modal .combo-box.small span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.order-modal .combo-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  color: #111;
+}
+
 
 /* Combo/Sub-products in Order Modal */
 .order-modal .combo-wrapper {
@@ -543,6 +594,7 @@
 .coupon-section {
   display: flex;
   gap: 10px;
+  margin-top: 20px;
   margin-bottom: 16px;
 }
 
@@ -575,12 +627,108 @@
   font-size: 16px;
 }
 
+.summary-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.price-row.total {
+  font-size: 17px;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.address-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 16px;
+}
+
+.address-box h4 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.address-box p {
+  font-size: 14px;
+  margin: 2px 0;
+  color: #444;
+}
+
+.address-box .mobile {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.combo-below-main {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.combo-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111;
+}
+
+.combo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.combo-price {
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.combo-separate-card {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.combo-separate-card {
+  margin-top: 10px;
+}
+
 @media (max-width: 768px) {
-  .qty-section {
-    margin-top: 8px;
+  .cart-container {
+    padding: 20px;
   }
 
-  .cart-info .fw-bold {
-    text-align: left;
+  .cart-card {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-img {
+    width: 100%;
+    height: 200px;
+  }
+
+  .cart-summary {
+    min-width: unset;
   }
 }

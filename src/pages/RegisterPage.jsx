@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../css/auth.module.css";
 import bgImage from "../assets/loginbg.jpg";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
 
@@ -28,6 +30,8 @@ export default function RegisterPage() {
       console.log("Response :- ", response);
 
       setSuccess("Registration Successful!");
+
+      toast.success("Please verify your email first, then login");
 
       setTimeout(() => {
         navigate("/login");

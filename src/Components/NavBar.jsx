@@ -9,7 +9,7 @@ export default function NavBar({ cartCount }) {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState({ categories: [], products: [] });
+  const [searchResults, setSearchResults] = useState({categories: [],products: [],});
   const [showDropdown, setShowDropdown] = useState(false);
   const debounceRef = useRef(null);
   const searchRef = useRef(null);
@@ -21,11 +21,11 @@ export default function NavBar({ cartCount }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
-     if (token) {
-    fetchUserDetails(token); 
-  } else {
-    setUserName(""); 
-  }
+    if (token) {
+      fetchUserDetails(token);
+    } else {
+      setUserName("");
+    }
   }, [location]);
 
   const btnLogout = () => {
@@ -36,16 +36,16 @@ export default function NavBar({ cartCount }) {
 
   const fetchUserDetails = async (token) => {
     try {
-      const res = await axios.get("http://localhost:3131/api/auth/userDetails", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },});
-        console.log("response from UserDetails APi :-",res);
-        
+      const res = await axios.get("http://localhost:3131/api/auth/userDetails",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,},},);
+      console.log("response from UserDetails APi :-", res);
 
       if (res.data && res.data.data) {
-        setUserName(res.data.data.fullName); 
+        setUserName(res.data.data.fullName);
       }
+
     } catch (error) {
       console.log("Error fetching user details:", error);
       setUserName("");
@@ -53,21 +53,23 @@ export default function NavBar({ cartCount }) {
   };
 
   const fetchSearchResults = async (query) => {
-  try {
-    const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${query}`);
-    console.log("Search API response:", res);
 
-    setSearchResults(res.data.data || { categories: [], products: [] });
-    setShowDropdown(true);
+    try {
+      const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${query}`,);
+      console.log("Search API response:", res);
 
-  } catch (error) {
-    console.log("Search error:", error);
-    setSearchResults({ categories: [], products: [] });
-    setShowDropdown(false);
-  }
-};
+      setSearchResults(res.data.data || { categories: [], products: [] });
+      setShowDropdown(true);
+
+    } catch (error) {
+      console.log("Search error:", error);
+      setSearchResults({ categories: [], products: [] });
+      setShowDropdown(false);
+    }
+  };
 
   const handleSearch = (e) => {
+    
     const query = e.target.value;
     setSearchQuery(query);
 
@@ -83,10 +85,11 @@ export default function NavBar({ cartCount }) {
 
     debounceRef.current = setTimeout(() => {
       fetchSearchResults(query);
-      }, 400);
+    }, 400);
   };
 
-  const hasResults = searchResults.categories.length > 0 || searchResults.products.length > 0;
+  const hasResults =
+    searchResults.categories.length > 0 || searchResults.products.length > 0;
 
   return (
     <nav className="navbar">
@@ -117,30 +120,47 @@ export default function NavBar({ cartCount }) {
                 window.scrollY +
                 6,
               left:
-                searchRef.current.getBoundingClientRect().left +
-                window.scrollX,
+                searchRef.current.getBoundingClientRect().left + window.scrollX,
               width: searchRef.current.offsetWidth,
             }}
           >
             {hasResults ? (
               <>
+                {/* Category suggestions */}
                 {searchResults.categories.map((cat) => (
                   <div
                     key={cat._id}
                     className="search-item category-suggestion"
-                    onClick={() => {
-                    setSearchQuery(cat.name);
-                    fetchSearchResults(cat.name);
-                    setShowDropdown(false);
-                }}
+                    onClick={async () => {
+                      setSearchQuery(cat.name);
+                      try {
+                        // Fetch products under the category
+                        const res = await axios.get(
+                          `http://localhost:3131/api/search/searchBar?q=${cat.name}`,
+                        );
+                        setSearchResults(
+                          res.data.data || { categories: [], products: [] },
+                        );
+                        setShowDropdown(true);
+                      } catch (error) {
+                        console.log("Error fetching category products:", error);
+                      }
+                    }}
                   >
-                    <HiSearch className="suggestion-icon" style={{ marginRight: "10px", color: "#878787" }} />
+                    <HiSearch
+                      className="suggestion-icon"
+                      style={{ marginRight: "10px", color: "#878787" }}
+                    />
                     <div className="search-name">
-                      {searchQuery} <span style={{ color: "#2874f0", fontWeight: "500" }}>in {cat.name}</span>
+                      {cat.name}{" "}
+                      <span style={{ color: "#2874f0", fontWeight: "500" }}>
+                        Category
+                      </span>
                     </div>
                   </div>
                 ))}
 
+                {/* Product suggestions */}
                 {searchResults.products.map((item) => (
                   <div
                     key={item._id}
@@ -154,15 +174,22 @@ export default function NavBar({ cartCount }) {
                     }}
                   >
                     {item.image && (
-                      <img 
-                        src={item.image} 
-                        alt="" 
-                        style={{ width: "32px", height: "32px", marginRight: "12px", objectFit: "contain" }} 
+                      <img
+                        src={item.image}
+                        alt=""
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          marginRight: "12px",
+                          objectFit: "contain",
+                        }}
                       />
                     )}
                     <div>
                       <div className="search-name">{item.name}</div>
-                      <div style={{ fontSize: "12px", color: "#878787" }}>in {item.categoryName}</div>
+                      <div style={{ fontSize: "12px", color: "#878787" }}>
+                        in {item.categoryName}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -194,14 +221,14 @@ export default function NavBar({ cartCount }) {
           Cart ({cartCount})
         </button>
 
-        <span className="nav-user-name"
+        <span
+          className="nav-user-name"
           style={{ marginLeft: "12px", fontWeight: "500", cursor: "pointer" }}
           onClick={() => navigate("/profile")}
         >
           {userName}
         </span>
-
       </div>
-    </nav>  
+    </nav>
   );
 }

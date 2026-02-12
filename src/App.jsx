@@ -3,6 +3,8 @@ import { useState , useEffect} from "react";
 import Footer from "./Components/Footer";
 import Loader from "./Components/Loader";
 import store from "./app/store.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
 
 function App() {
@@ -25,6 +27,16 @@ function App() {
 
   return (
     <>
+    <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+      />
+
       <Loader />   
       
       <Router
