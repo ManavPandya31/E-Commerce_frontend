@@ -9,12 +9,17 @@ import CartPage from "../pages/CartPage";
 import ProfileAndOtherPage from "../pages/ProfileAndOtherPage";
 import ProfileInfo from "../pages/ProfileInfo";
 import ManageAddresses from "../pages/ManageAddress";
+import ResetPassword from "../pages/ResetPassword";
 // import CheckOutPage from "../pages/CheckOutPage";
+import VerifyEmail from "../pages/VerifyEmail";
 import Orders from "../Components/Orders";  
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
   return (
+  <>
     <Routes>
+       <Route path="/reset-password/:token" element={<ResetPassword />} />
+       <Route path="/verify-email/:token" element={<VerifyEmail />} />
       <Route
         path="/"
         element={<HomePage cartCount={cartCount} setCartCount={setCartCount} />}
@@ -73,6 +78,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
         <Route path="orders" element={<Orders />} /> 
       </Route>
     </Routes>
+    </>
   );
 };
 

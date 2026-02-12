@@ -5,15 +5,6 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* .authContainer {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-} */
-
 .authContainer {
   min-height: 100vh;
   background-size: cover;
@@ -23,22 +14,21 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+  animation: bgZoom 20s ease-in-out infinite alternate;
 }
 
 .authCard {
   background: rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-
   width: 100%;
   max-width: 420px;
   padding: 32px;
-
   border-radius: 18px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.25);
-
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeSlideUp 0.7s ease-out forwards;
 }
 
 .authCard:hover {
@@ -112,10 +102,8 @@
   border-radius: 10px;
   border: none;
   font-size: 15px;
-
   background: rgba(255, 255, 255, 0.95);
   color: #111827;
-
   appearance: none;
   cursor: pointer;
 }
@@ -138,6 +126,153 @@
   text-align: center;
   font-size: 14px;
 }
+/* .forgotOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+} */
+
+.forgotModal {
+  width: 450px; 
+  max-width: 90%;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.forgotTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.forgotSubtitle {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 16px;
+}
+
+.forgotModal input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.forgotModal input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+.forgotBtn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.forgotBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+}
+
+.forgotMsgSuccess {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #16a34a;
+  text-align: center;
+}
+
+.forgotMsgError {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #dc2626;
+  text-align: center;
+}
+
+.forgotClose {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.forgotOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* modal box */
+/* .forgotModal {
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  padding: 25px;
+  border-radius: 12px;
+  position: relative;
+} */
+
+.forgotClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.otpContainer {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.otpContainer input {
+  width: 40px;
+  height: 45px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.otpModal{
+  text-align: right;
+  cursor: pointer;
+  color: #a5b4fc;
+}
 
 @keyframes fadeSlideUp {
   from {
@@ -148,10 +283,6 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-.authCard {
-  animation: fadeSlideUp 0.7s ease-out forwards;
 }
 
 @keyframes fadeIn {
@@ -177,11 +308,9 @@
 .authForm input:nth-of-type(2) { animation-delay: 0.25s; }
 .authForm input:nth-of-type(3) { animation-delay: 0.35s; }
 .authForm input:nth-of-type(4) { animation-delay: 0.45s; }
-
 .authForm select { animation-delay: 0.55s; }
 .authBtn { animation-delay: 0.65s; }
 .authFooter { animation-delay: 0.75s; }
-
 
 @keyframes bgZoom {
   from {
@@ -190,10 +319,6 @@
   to {
     background-size: 110%;
   }
-}
-
-.authContainer {
-  animation: bgZoom 20s ease-in-out infinite alternate;
 }
 
 @media (max-width: 480px) {
