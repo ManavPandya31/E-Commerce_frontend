@@ -19,12 +19,12 @@ export default function VerifyEmail() {
       console.log("Response From Verify Email APi :-",res);
       
       toast.success("Email verified successfully!");
-      navigate("/login"); 
+      navigate("/auth"); 
 
     } catch (err) {
       console.error(err);
       toast.error(err?.response?.data?.message || "Invalid or expired link");
-      navigate("/register"); 
+      navigate("/auth"); 
 
     } finally {
       setLoading(false);

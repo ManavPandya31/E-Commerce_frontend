@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { HiShoppingCart, HiSearch } from "react-icons/hi";
+import { HiShoppingCart, HiSearch , HiUser } from "react-icons/hi";
 import axios from "axios";
 import "../css/navbar.css";
 
@@ -134,10 +134,8 @@ export default function NavBar({ cartCount }) {
                     onClick={async () => {
                       setSearchQuery(cat.name);
                       try {
-                        // Fetch products under the category
-                        const res = await axios.get(
-                          `http://localhost:3131/api/search/searchBar?q=${cat.name}`,
-                        );
+                      
+                        const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${cat.name}`,);
                         setSearchResults(
                           res.data.data || { categories: [], products: [] },
                         );
@@ -160,7 +158,6 @@ export default function NavBar({ cartCount }) {
                   </div>
                 ))}
 
-                {/* Product suggestions */}
                 {searchResults.products.map((item) => (
                   <div
                     key={item._id}
@@ -204,12 +201,12 @@ export default function NavBar({ cartCount }) {
       <div className="nav-buttons">
         {!isLoggedIn ? (
           <>
-            <Link to="/login" className="nav-btn login-btn">
+            <Link to="/auth" className="nav-btn login-btn">
               Login
             </Link>
-            <Link to="/register" className="nav-btn register-btn">
+            {/* <Link to="/register" className="nav-btn register-btn">
               Register
-            </Link>
+            </Link> */}
           </>
         ) : (
           <button onClick={btnLogout} className="nav-btn logout-btn">
@@ -222,11 +219,11 @@ export default function NavBar({ cartCount }) {
         </button>
 
         <span
-          className="nav-user-name"
-          style={{ marginLeft: "12px", fontWeight: "500", cursor: "pointer" }}
+          className="nav-user-icon"
+          style={{ marginLeft: "12px", fontWeight: "500", cursor: "pointer" , color : "black"}}
           onClick={() => navigate("/profile")}
         >
-          {userName}
+         <HiUser style={{ fontSize: "24px", color: "black" }} />
         </span>
       </div>
     </nav>
