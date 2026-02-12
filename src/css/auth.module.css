@@ -1,4 +1,4 @@
-:global(*) {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -7,323 +7,234 @@
 
 .authContainer {
   min-height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: #f6f7fb;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  animation: bgZoom 20s ease-in-out infinite alternate;
 }
 
 .authCard {
-  background: rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   width: 100%;
-  max-width: 420px;
-  padding: 32px;
+  max-width: 460px;
+  background: #ffffff;
+  padding: 40px 35px;
   border-radius: 18px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeSlideUp 0.7s ease-out forwards;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 }
 
-.authCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45);
+/* Toggle */
+
+.toggleWrapper {
+  display: flex;
+  background: #f1f3f8;
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 28px;
+}
+
+.toggleWrapper button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.activeTab {
+  background: #ffffff;
+  color: #f97316 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
 .authTitle {
   text-align: center;
   font-size: 26px;
   font-weight: 600;
-  color: #ffffff;
-}
-
-.authSubtitle {
-  text-align: center;
-  color: #d1d5db;
-  margin-bottom: 20px;
-}
-
-.authForm {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.authForm input {
-  padding: 13px;
-  border-radius: 10px;
-  border: none;
-  font-size: 15px;
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.authForm input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6);
-}
-
-.authBtn {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  color: white;
-  padding: 13px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.authBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
-}
-
-.authFooter {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
-  color: #e5e7eb;
-}
-
-.authFooter a {
-  color: #a5b4fc;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.authSelect {
-  padding: 13px;
-  border-radius: 10px;
-  border: none;
-  font-size: 15px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #111827;
-  appearance: none;
-  cursor: pointer;
-}
-
-.authSelect:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6);
-}
-
-.authError {
-  margin-top: 10px;
-  color: #fecaca;
-  text-align: center;
-  font-size: 14px;
-}
-
-.authSuccess {
-  margin-top: 10px;
-  color: #86efac;
-  text-align: center;
-  font-size: 14px;
-}
-/* .forgotOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-} */
-
-.forgotModal {
-  width: 450px; 
-  max-width: 90%;
-  padding: 30px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.forgotTitle {
-  font-size: 20px;
-  font-weight: 600;
   color: #111827;
   margin-bottom: 6px;
 }
 
-.forgotSubtitle {
+.authSubtitle {
+  text-align: center;
   font-size: 14px;
-  color: #4b5563;
-  margin-bottom: 16px;
+  color: #6b7280;
+  margin-bottom: 26px;
 }
 
-.forgotModal input {
+/* Form */
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.authForm input,
+.authSelect {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #f3f4f6;
   font-size: 14px;
+  color: #111827;
 }
 
-.forgotModal input:focus {
+.authForm input::placeholder {
+  color: #9ca3af;
+}
+
+.authForm input:focus,
+.authSelect:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  background: #eef2ff;
 }
 
-.forgotBtn {
-  width: 100%;
-  margin-top: 14px;
-  padding: 12px;
-  border-radius: 10px;
+/* Forgot */
+
+.otpModal {
+  font-size: 14px;
+  color: #111827;
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+/* Button */
+
+.authBtn {
+  margin-top: 10px;
+  padding: 15px;
+  border-radius: 14px;
   border: none;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  color: #fff;
   font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  color: white;
+  background: #f97316;
+  transition: 0.3s;
 }
 
-.forgotBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+.authBtn:hover {
+  background: #ea580c;
 }
 
-.forgotMsgSuccess {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #16a34a;
-  text-align: center;
-}
+/* Messages */
 
-.forgotMsgError {
-  margin-top: 10px;
-  font-size: 14px;
+.authError {
   color: #dc2626;
+  font-size: 14px;
   text-align: center;
 }
 
-.forgotClose {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  border: none;
-  background: transparent;
-  font-size: 18px;
-  cursor: pointer;
-  color: #374151;
+.authSuccess {
+  color: #16a34a;
+  font-size: 14px;
+  text-align: center;
 }
+
+/* Forgot Modal */
 
 .forgotOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 99;
 }
 
-/* modal box */
-/* .forgotModal {
-  background: #fff;
+.forgotModal {
   width: 100%;
   max-width: 400px;
-  padding: 25px;
-  border-radius: 12px;
-  position: relative;
-} */
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 14px;
+}
 
-.forgotClose {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.forgotModal input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
   border: none;
-  background: transparent;
-  font-size: 18px;
+  background: #f3f4f6;
+  margin-top: 12px;
+}
+
+.forgotBtn {
+  margin-top: 16px;
+  padding: 14px;
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+  background: #f97316;
+  color: white;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.forgotBtn:hover {
+  background: #ea580c;
 }
 
 .otpContainer {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   justify-content: center;
-  margin-bottom: 12px;
+  margin: 16px 0;
 }
 
 .otpContainer input {
-  width: 40px;
-  height: 45px;
+  width: 44px;
+  height: 48px;
   text-align: center;
-  font-size: 18px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: none;
+  background: #f3f4f6;
+  font-size: 16px;
 }
 
-.otpModal{
-  text-align: right;
+.resendBtn {
+  background: none;
+  border: none;
+  color: #f97316;
   cursor: pointer;
-  color: #a5b4fc;
+  font-weight: 500;
 }
 
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.formSlider {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.formWrapper {
+  display: flex;
+  width: 200%; 
+  transition: transform 0.5s ease;
 }
 
-.authForm input,
-.authForm select,
-.authBtn,
-.authFooter {
-  animation: fadeIn 0.5s ease forwards;
-  opacity: 0;
+.formWrapper form {
+  width: 50%;
 }
 
-.authForm input:nth-of-type(1) { animation-delay: 0.15s; }
-.authForm input:nth-of-type(2) { animation-delay: 0.25s; }
-.authForm input:nth-of-type(3) { animation-delay: 0.35s; }
-.authForm input:nth-of-type(4) { animation-delay: 0.45s; }
-.authForm select { animation-delay: 0.55s; }
-.authBtn { animation-delay: 0.65s; }
-.authFooter { animation-delay: 0.75s; }
+.showLogin {
+  transform: translateX(0%);
+}
 
-@keyframes bgZoom {
-  from {
-    background-size: 100%;
-  }
-  to {
-    background-size: 110%;
-  }
+.showRegister {
+  transform: translateX(-50%);
 }
 
 @media (max-width: 480px) {
   .authCard {
-    padding: 22px;
-    border-radius: 14px;
+    padding: 30px 24px;
   }
 }

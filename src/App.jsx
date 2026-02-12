@@ -20,7 +20,7 @@ function App() {
     localStorage.setItem("cartCount", cartCount);
   }, [cartCount]);
   
-  const hideFooterRoutes = ["/login", "/register"];
+  const hideFooterRoutes = ["/auth"];
   const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
 
     console.log("Redux store:", store); 

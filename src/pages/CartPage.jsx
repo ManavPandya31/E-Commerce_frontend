@@ -170,6 +170,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
   const finalAmount = appliedCoupon ? appliedCoupon.payableAmount : grandTotal;
 
   const handlePlaceOrderClick = () => {
+
     if (!selectedAddressId) {
       setShowAddressModal(true);
       return;
@@ -178,6 +179,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
   };
 
   const handleConfirmOrder = async () => {
+
   if (!selectedAddress) return;
 
   setShowOrderModal(false);
@@ -234,6 +236,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
     }).then(() => {
       navigate("/profile/orders");
     });
+    
   } catch (error) {
   console.log("Order API FULL ERROR:", error);
   console.log("Backend response:", error.response?.data);
@@ -336,17 +339,26 @@ return (
     <NavBar cartCount={cartCount} />
 
     {validItems.length === 0 ? (
-      <div className="empty-cart-container">
-        <div className="empty-cart-content">
-          <h2>Your Cart is Empty</h2>
-          <button className="btn-empty-cart" onClick={() => navigate("/")}>
-            Shop Now
-          </button>
-        </div>
-      </div>
-    ) : (
-      <div className="container py-5 cart-container">
+  <div className="empty-cart-container">
+    <div className="empty-cart-icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+    </div>
+    
+    <h2>Your cart is empty</h2>
+    <p className="empty-cart-subtitle">Looks like you haven't added anything yet.</p>
+    
+    <button className="btn-empty-cart" onClick={() => navigate("/")}>
+      Start Shopping
+    </button>
+  </div>
+) : (
+  <div className="container py-5 cart-container">
         <div className="cart-items">
+          <h2 style={{fontSize: '24px', fontWeight: 'bold', marginBottom: '10px'}}>Shopping Cart</h2>
           {validItems.map((item) => {
             const combo = comboMap[item.product._id];
             const isComboSelected = selectedCombos[item.product._id];
@@ -362,44 +374,41 @@ return (
 
                   <div className="cart-info">
                     <h5>{item.product.name}</h5>
-
                     <p className="text-muted">
-                      Price: Rs.{item.finalPrice || 0}
+                      {item.product.category || "Item"}
                     </p>
 
-                    <div className="qty-section">
-                      <button className="qty-btn" onClick={() => decreaseQty(item)}>
-                        -
-                      </button>
-                      <span className="qty-number">{item.quantity}</span>
-                      <button className="qty-btn" onClick={() => increaseQty(item)}>
-                        +
-                      </button>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <div className="qty-section">
+                        <button className="qty-btn" onClick={() => decreaseQty(item)}>
+                            -
+                        </button>
+                        <span className="qty-number">{item.quantity}</span>
+                        <button className="qty-btn" onClick={() => increaseQty(item)}>
+                            +
+                        </button>
+                        </div>
+                        <p className="fw-bold">
+                        Rs. {(isComboSelected && combo
+                            ? combo.comboPrice
+                            : item.finalPrice || 0) * item.quantity}
+                        </p>
                     </div>
-
-                    <p className="fw-bold mt-2 text-end">
-                      Total: Rs.
-                      {(isComboSelected && combo
-                        ? combo.comboPrice
-                        : item.finalPrice || 0) * item.quantity}
-                    </p>
                   </div>
                 </div>
 
                 {combo && (
                   <div className="combo-separate-card">
                     <h6 className="combo-title">Special Combo Offer</h6>
-
-                    <div className="combo-products">
+                    <div className="combo-products" style={{display: 'flex', gap: '10px'}}>
                       {combo.subProducts.map((sub) => (
                         <div key={sub._id} className="combo-small-box">
-                          <img src={sub.productImage} alt={sub.name} />
-                          <p>{sub.name}</p>
-                          <span>Rs. {sub.finalPrice}</span>
+                          <img src={sub.productImage} alt={sub.name} style={{width: '50px', height: '50px', objectFit: 'contain'}} />
+                          <p style={{fontSize: '11px', margin: '4px 0'}}>{sub.name}</p>
+                          <span style={{fontWeight: 'bold', fontSize: '12px'}}>Rs. {sub.finalPrice}</span>
                         </div>
                       ))}
                     </div>
-
                     <div className="combo-footer">
                       <label className="combo-checkbox">
                         <input
@@ -424,64 +433,61 @@ return (
         </div>
 
         <div className="cart-summary">
-          <h3 className="summary-title">Price Details</h3>
+          <h3 className="summary-title">Order Summary</h3>
 
-          {validItems.map((item) => (
-            <div className="price-row" key={item._id}>
-              <span>
-                {item.product.name} × {item.quantity}
-              </span>
-              <span>Rs. {(item.finalPrice || 0) * item.quantity}</span>
+          <div className="price-row">
+            <span>Subtotal</span>
+            <span>Rs. {grandTotal}</span>
+          </div>
+          
+          <div className="price-row">
+            {/* <span>Shipping</span> */}
+            {/* <span style={{color: 'green'}}>Free</span> */}
+          </div>
+
+          {appliedCoupon && (
+            <div className="price-row" style={{color: 'green'}}>
+              <span>Discount</span>
+              <span>- Rs. {appliedCoupon.discountAmount}</span>
             </div>
-          ))}
+          )}
 
           <div className="price-row total">
-            <span>Total Amount</span>
+            <span>Total</span>
             <span>Rs. {appliedCoupon?.payableAmount ?? grandTotal}</span>
           </div>
 
-          {!Object.values(selectedCombos).some(Boolean) ? (
+          {!Object.values(selectedCombos).some(Boolean) && (
             <div className="coupon-section">
               <input
                 type="text"
-                placeholder="Enter Coupon Code"
+                placeholder="Promo code"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
                 className="coupon-input"
               />
               <button className="btn-apply-coupon" onClick={handleApplyCoupon}>
-                Apply Coupon
+                Apply
               </button>
             </div>
-          ) : (
-            <p className="combo-warning" style={{ color: "red" }}>
-              {/* Coupons cannot be applied when combo offers are selected. */}
-            </p>
           )}
-
-          <hr />
 
           {selectedAddress ? (
             <div className="address-box">
               <h4>Delivery Address</h4>
-              <p>
-                {selectedAddress.street}, {selectedAddress.city}
-              </p>
-              <p>
-                {selectedAddress.state} - {selectedAddress.pincode}
-              </p>
-              <p className="mobile">📞 {selectedAddress.mobile}</p>
-
+              <p>{selectedAddress.street}, {selectedAddress.city}</p>
+              <p>{selectedAddress.state} - {selectedAddress.pincode}</p>
               <button
                 className="btn-change-address"
                 onClick={() => setShowAddressModal(true)}
               >
-                Change / Add Address
+               Add/Change Address
               </button>
             </div>
           ) : (
             <button
-              className="btn-add-address"
+              className="btn-change-address"
+              style={{width: '100%'}}
               onClick={() => setShowAddressModal(true)}
             >
               + Add Delivery Address
@@ -490,10 +496,10 @@ return (
 
           <button
             className="btn-place-order2"
-            disabled={!hasAddress}
+            disabled={!hasAddress || validItems.length === 0}
             onClick={handlePlaceOrderClick}
           >
-            PLACE ORDER
+            Payment
           </button>
         </div>
       </div>

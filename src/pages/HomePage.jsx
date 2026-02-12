@@ -1,11 +1,12 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useRef} from "react";
 import NavBar from "../Components/NavBar";
 import axios from "axios";
 // import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
 // import { useDispatch } from "react-redux"; 
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
+import heroImage from "../assets/homepage.png";
 
 export default function HomePage({cartCount}) {
 
@@ -18,11 +19,17 @@ export default function HomePage({cartCount}) {
   const [productPage, setProductPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
   const [productTotalPages, setProductTotalPages] = useState(1);
-  const productsPerPage = 5; 
-  const categoriesPerPage = 5;
+  const productsPerPage = 4; 
+  const categoriesPerPage = 9;
 
+  const categorySectionRef = useRef(null);
+  const initialFetchDone = useRef(false);
   const navigate = useNavigate();
-  // const dispatch = useDispatch(); 
+  // const dispatch = useDispatch();
+
+  const scrollToCategories = () => {
+    categorySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const fetchProducts = async (categoryId = "", page = 1) => {
  
@@ -76,22 +83,27 @@ export default function HomePage({cartCount}) {
 
   useEffect(() => {
   const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 100
-    ) {
-      if (!isFetching && productPage < productTotalPages) {
-        fetchProducts(selectedCategory, productPage + 1);
-      }
-    }
+   if (
+  window.innerHeight + window.scrollY >=
+    document.documentElement.scrollHeight - 100 &&
+  !isFetching &&
+  productPage < productTotalPages
+) {
+  fetchProducts(selectedCategory, productPage + 1);
+}
   };
 
   window.addEventListener("scroll", handleScroll);
   return () => window.removeEventListener("scroll", handleScroll);
+
   }, [isFetching, productPage, productTotalPages, selectedCategory]);
 
 
   useEffect(() => {
+
+  if (initialFetchDone.current) return;
+  initialFetchDone.current = true;
+
     fetchProducts();
     fetchCategories();
   }, []);
@@ -132,114 +144,307 @@ export default function HomePage({cartCount}) {
     navigate(`/product/${productId}`);
   }
 
+// return (
+//   <>
+//     <NavBar cartCount={cartCount} />
+
+//     <section className="hero">
+//       {categories.length === 0 ? (
+//         <p>Loading categories...</p>
+//       ) : (
+//         <div className="categories-wrapper-horizontal">
+//           <button
+//             className="more-button"
+//             onClick={handlePrevious}
+//             disabled={categoryPage === 1}
+//           >
+//             Previous
+//           </button>
+
+//           <div className="categories-horizontal">
+//             {categories.map((cat) => (
+//               <div
+//                 key={cat._id}
+//                 className={`category-pill ${selectedCategory === cat._id ? "active" : ""}`}
+//                 onClick={() => handleCategoryClick(cat._id)}
+//               >
+//                 {cat.name}
+//               </div>
+//             ))}
+//           </div>
+
+//           <button
+//             className="more-button"
+//             onClick={handleMore}
+//             disabled={categoryPage >= totalPages}
+//           >
+//             More
+//           </button>
+
+//           <button className="reset-button" onClick={handleReset}>
+//             View All Category Products
+//           </button>
+//         </div>
+//       )}
+//     </section>
+
+//     <section className="products-section">
+//       {error && <p className="status-text error">{error}</p>}
+
+//       {products.length === 0 && !error ? (
+//         <p className="status-text">
+//           This Category Products Are Available Soon!
+//         </p>
+//       ) : (
+//         <div className="product-grid">
+//           {products.map((product) => (
+//             <div className="product-card" key={product._id}>
+//               <div
+//                 className="product-image"
+//                 onClick={() => handleProductClick(product._id)}
+//               >
+//                 <img src={product.productImage} alt={product.name} />
+//                 {product.discount && product.discount.value > 0 && (
+//                   <div className="discount-badge">
+//                     {product.discount.type === "Percetange"
+//                       ? `${product.discount.value}% OFF`
+//                       : `₹${product.discount.value} OFF`}
+//                   </div>
+//                 )}
+//               </div>
+
+//               <div className="product-info">
+//                 <h3>{product.name}</h3>
+
+//                 {product.discount && product.discount.value > 0 ? (
+//                   <div className="price-section">
+//                     <span className="original-price">Rs. {product.price}</span>
+//                     <span className="final-price">Rs. {product.finalPrice}</span>
+//                   </div>
+//                 ) : (
+//                   <span className="price">Rs. {product.price}</span>
+//                 )}
+
+//                 {product.stock === 0 && (
+//                   <p className="stock-message out-of-stock">Out Of Stock</p>
+//                 )}
+//                 {product.stock > 0 && product.stock < 3 && (
+//                   <p className="stock-message low-stock">Stock Running Low</p>
+//                 )}
+//               </div>
+
+//               <div className="card-footer">
+//                 <button
+//                   className="product-addToCart"
+//                   onClick={() => redirectAddToCart(product._id)}
+//                   disabled={product.stock === 0}
+//                 >
+//                   {product.stock === 0 ? "Comming Soon" : "Add To Cart"}
+//                 </button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//       {isFetching && products.length > 0 && (
+//         <div className="bottom-loader">
+//           <div className="loader"></div>
+//         </div>
+//       )}
+//     </section>
+//   </>
+// );
 return (
   <>
     <NavBar cartCount={cartCount} />
 
-    <section className="hero">
-      {categories.length === 0 ? (
-        <p>Loading categories...</p>
-      ) : (
-        <div className="categories-wrapper-horizontal">
+    <section className="lux-hero">
+      <div className="lux-hero-content">
+        <span className="lux-badge">New Collection 2026</span>
+        <h1>
+          Elevate Your <span>Everyday</span> Style
+        </h1>
+        <p>
+          Discover curated pieces that blend timeless design with modern comfort.
+          Premium quality, thoughtfully priced.
+        </p>
+        <div className="lux-hero-buttons">
+          <button className="lux-primary-btn" onClick={scrollToCategories}>Shop Now</button>
+        </div>
+      </div>
+
+      <div className="lux-hero-image">
+        <img
+          src={heroImage}
+          alt="Hero"
+        />
+        <div className="lux-sale-card">
+          <h3>50%</h3>
+          <span>Up to off on select styles</span>
+        </div>
+      </div>
+    </section>
+
+    <section className="lux-top-features">
+  <div className="lux-feature-item">
+    <div className="lux-feature-icon">🚚</div>
+    <div>
+      <h4>Free Shipping</h4>
+      <p>On orders over $50</p>
+    </div>
+  </div>
+
+  <div className="lux-feature-item">
+    <div className="lux-feature-icon">🛡️</div>
+    <div>
+      <h4>Secure Payment</h4>
+      <p>100% protected</p>
+    </div>
+  </div>
+
+  <div className="lux-feature-item">
+    <div className="lux-feature-icon">↩️</div>
+    <div>
+      <h4>Easy Returns</h4>
+      <p>30-day return policy</p>
+    </div>
+  </div>
+</section>
+
+    <section className="lux-category-section" ref={categorySectionRef}>
+      <div className="lux-section-header">
+        <div>
+          <h2>Shop by Category</h2>
+          <p>Browse our curated collections</p>
+        </div>
+
+        <div className="lux-category-pagination">
           <button
-            className="more-button"
             onClick={handlePrevious}
             disabled={categoryPage === 1}
           >
             Previous
           </button>
 
-          <div className="categories-horizontal">
-            {categories.map((cat) => (
-              <div
-                key={cat._id}
-                className={`category-pill ${selectedCategory === cat._id ? "active" : ""}`}
-                onClick={() => handleCategoryClick(cat._id)}
-              >
-                {cat.name}
-              </div>
-            ))}
-          </div>
-
           <button
-            className="more-button"
             onClick={handleMore}
             disabled={categoryPage >= totalPages}
           >
             More
           </button>
-
-          <button className="reset-button" onClick={handleReset}>
-            View All Category Products
-          </button>
         </div>
+      </div>
+
+      <div className="lux-category-grid">
+  <div
+    className={`lux-category-card ${
+      selectedCategory === null ? "active" : ""
+    }`}
+    onClick={handleReset}
+  >
+    <h4>View All</h4>
+  </div>
+
+  {categories.map((cat) => (
+    <div
+      key={cat._id}
+      className={`lux-category-card ${
+        selectedCategory === cat._id ? "active" : ""
+      }`}
+      onClick={() => handleCategoryClick(cat._id)}
+    >
+      <h4>{cat.name}</h4>
+    </div>
+  ))}
+      </div>
+        
+      {selectedCategory && (
+        <button
+          className="lux-view-all-btn"
+          onClick={handleReset}
+        >
+          {/* View all */}
+        </button>
       )}
     </section>
 
-    <section className="products-section">
-      {error && <p className="status-text error">{error}</p>}
+    <section className="lux-products-section">
+      <div className="lux-section-header">
+        <div>
+          <h2>Featured Products</h2>
+          <p>Handpicked for you</p>
+        </div>
 
-      {products.length === 0 && !error ? (
-        <p className="status-text">
-          This Category Products Are Available Soon!
-        </p>
-      ) : (
-        <div className="product-grid">
-          {products.map((product) => (
-            <div className="product-card" key={product._id}>
-              <div
-                className="product-image"
-                onClick={() => handleProductClick(product._id)}
-              >
-                <img src={product.productImage} alt={product.name} />
-                {product.discount && product.discount.value > 0 && (
-                  <div className="discount-badge">
-                    {product.discount.type === "Percetange"
-                      ? `${product.discount.value}% OFF`
-                      : `₹${product.discount.value} OFF`}
-                  </div>
-                )}
-              </div>
+        <div>
+          {/* <div className="lux-category-pagination">
+            <button onClick={handlePrevious} disabled={categoryPage === 1}>
+              Previous
+            </button>
+            <button onClick={handleMore} disabled={categoryPage >= totalPages}>
+              More
+            </button>
+          </div> */}
 
-              <div className="product-info">
-                <h3>{product.name}</h3>
+          {/* {selectedCategory && (
+            <button
+              className="lux-view-all-btn"
+              onClick={handleReset}
+            >
+              View all
+            </button>
+          )} */}
+        </div>
+      </div>
 
-                {product.discount && product.discount.value > 0 ? (
-                  <div className="price-section">
-                    <span className="original-price">Rs. {product.price}</span>
-                    <span className="final-price">Rs. {product.finalPrice}</span>
-                  </div>
-                ) : (
-                  <span className="price">Rs. {product.price}</span>
-                )}
+      <div className="product-grid">
+        {products.map((product) => (
+          <div className="product-card" key={product._id}>
+            <div
+              className="product-image"
+              onClick={() => handleProductClick(product._id)}
+            >
+              <img src={product.productImage} alt={product.name} />
 
-                {product.stock === 0 && (
-                  <p className="stock-message out-of-stock">Out Of Stock</p>
-                )}
-                {product.stock > 0 && product.stock < 3 && (
-                  <p className="stock-message low-stock">Stock Running Low</p>
-                )}
-              </div>
-
-              <div className="card-footer">
-                <button
-                  className="product-addToCart"
-                  onClick={() => redirectAddToCart(product._id)}
-                  disabled={product.stock === 0}
-                >
-                  {product.stock === 0 ? "Comming Soon" : "Add To Cart"}
-                </button>
-              </div>
+              {product.discount && product.discount.value > 0 && (
+                <div className="discount-badge">
+                  {product.discount.type === "Percentage"
+                    ? `${product.discount.value}% OFF`
+                    : `Rs. ${product.discount.value} OFF`}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      )}
-      {isFetching && products.length > 0 && (
-        <div className="bottom-loader">
-          <div className="loader"></div>
-        </div>
-      )}
+
+            <div className="product-info">
+              <h3>{product.name}</h3>
+
+              {product.discount && product.discount.value > 0 ? (
+                <div className="price-section">
+                  <span className="final-price">Rs. {product.finalPrice}</span>
+                  <span className="original-price">Rs. {product.price}</span>
+                </div>
+              ) : (
+                <span className="price">Rs. {product.price}</span>
+              )}
+            </div>
+          </div>
+        ))}
+        {isFetching && products.length > 0 && (
+          <div className="loader-span-row">
+            <div className="spinner"></div>
+          </div>
+        )}
+      </div>
     </section>
+
+    <section className="lux-promo-banner">
+  <div className="lux-promo-overlay">
+    <h2>Summer Sale</h2>
+    <p>Up to 50% off on trending styles</p>
+    <button className="lux-promo-btn">
+      Shop the Sale →
+    </button>
+  </div>
+</section>
   </>
 );
 }

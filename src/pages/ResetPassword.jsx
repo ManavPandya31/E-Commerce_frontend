@@ -23,7 +23,7 @@ export default function ResetPassword() {
      console.log("Response From Resewt Password Api :-",res);
      
       setSuccess(res.data.message);
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/auth"), 2000);
 
     } catch (err) {
       setError(err.response?.data?.message || "Invalid or expired link");
