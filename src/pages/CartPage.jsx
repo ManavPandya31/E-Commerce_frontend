@@ -375,7 +375,7 @@ return (
                   <div className="cart-info">
                     <h5>{item.product.name}</h5>
                     <p className="text-muted">
-                      {item.product.category || "Item"}
+                      {/* {item.product.category || "Item"} */}
                     </p>
 
                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>

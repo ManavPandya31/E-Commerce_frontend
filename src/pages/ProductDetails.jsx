@@ -441,45 +441,48 @@ return (
           </div>
         </div>
 
-        <div className="product-right">
-          <p className="product-category">Electronics</p>
-          <h2 className="product-title">{product.name}</h2>
-          
-          {product.discount?.value > 0 ? (
-            <div className="price-section2">
-              <span className="final-price2">Rs . {product.finalPrice}</span>
-              <span className="original-price2">Rs . {product.price}</span>
-              <span className="discount-tag">-{product.discount.value}</span>
-            </div>
-          ) : (
-            <span className="final-price2">Rs . {product.price}</span>
-          )}
+       <div className="product-right">
+  <h2 className="product-title">{product.name}</h2>
+  
+  {product.discount?.value > 0 ? (
+    <div className="price-section2">
+      <span className="final-price2">Rs . {product.finalPrice}</span>
+      <span className="original-price2">Rs . {product.price}</span>
+      <span className="discount-tag">
+        {product.discount.type === "Percentage"
+          ? `-${product.discount.value}%`
+          : `-Rs. ${product.discount.value}`}
+      </span>
+    </div>
+  ) : (
+    <span className="final-price2">Rs . {product.price}</span>
+  )}
 
-          <div className="product-actions">
-            <button
-              className="add-to-cart-btn"
-              onClick={handleAddToCart}
-              disabled={isOutOfStock}
-            >
-              Add to Cart
-            </button>
+  <div className="product-actions">
+    <button
+      className="add-to-cart-btn"
+      onClick={handleAddToCart}
+      disabled={isOutOfStock}
+    >
+      Add to Cart
+    </button>
 
-            <button
-              className="buy-now-btn"
-              onClick={BuyButton}
-              disabled={isOutOfStock}
-            >
-              Buy Now
-            </button>
-          </div>
+    <button
+      className="buy-now-btn"
+      onClick={BuyButton}
+      disabled={isOutOfStock}
+    >
+      Buy Now
+    </button>
+  </div>
 
-          <div className="product-description-section">
-            <h4 className="description-title">Description</h4>
-            <p className="product-description">
-              {product.description}
-            </p>
-          </div>
-        </div>
+  <div className="product-description-section">
+    <h4 className="description-title">Description</h4>
+    <p className="product-description">
+      {product.description}
+    </p>
+  </div>
+</div>
       </div>
     </div>
 

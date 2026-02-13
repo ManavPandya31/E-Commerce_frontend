@@ -81,23 +81,22 @@ export default function HomePage({cartCount}) {
     }
   };
 
-  useEffect(() => {
-  const handleScroll = () => {
-   if (
-  window.innerHeight + window.scrollY >=
-    document.documentElement.scrollHeight - 100 &&
-  !isFetching &&
-  productPage < productTotalPages
-) {
-  fetchProducts(selectedCategory, productPage + 1);
-}
-  };
+//   useEffect(() => {
+//   const handleScroll = () => {
+//    if (
+//   window.innerHeight + window.scrollY >=
+//     document.documentElement.scrollHeight - 100 &&
+//   !isFetching &&
+//   productPage < productTotalPages
+// ) {
+//   fetchProducts(selectedCategory, productPage + 1);
+// }
+//   };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
+//   window.addEventListener("scroll", handleScroll);
+//   return () => window.removeEventListener("scroll", handleScroll);
 
-  }, [isFetching, productPage, productTotalPages, selectedCategory]);
-
+//   }, [isFetching, productPage, productTotalPages, selectedCategory]);
 
   useEffect(() => {
 
@@ -109,19 +108,11 @@ export default function HomePage({cartCount}) {
   }, []);
 
   const handleCategoryClick = (categoryId) => {
-
-      setSelectedCategory(categoryId);
-      setProducts([]);
-      setProductPage(1);
-      fetchProducts(categoryId, 1);
+    navigate(`/shop?category=${categoryId}`);
   };
 
   const handleReset = () => {
-
-    setSelectedCategory(null);
-    setProducts([]);
-    setProductPage(1);
-    fetchProducts("", 1);
+    navigate("/shop");
   };
 
   const handleMore = () => {
@@ -418,11 +409,11 @@ return (
             </div>
           </div>
         ))}
-        {isFetching && products.length > 0 && (
+        {/* {isFetching && products.length > 0 && (
           <div className="loader-span-row">
             <div className="spinner"></div>
           </div>
-        )}
+        )} */}
       </div>
     </section>
 

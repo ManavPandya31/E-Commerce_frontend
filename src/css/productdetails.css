@@ -42,15 +42,15 @@
   background: #fff;
 }
 
-.product-image-main .updated-badge {                
+.product-image-main .updated-badge { 
   position: absolute;
-  top: 15px;                                       
-  left: 15px;                                      
-  background-color: #000;                           
+  top: 15px;                  
+  right: 15px;                 
+  background-color: #ff3b3b;
   color: white;
-  padding: 6px 12px;                               
-  border-radius: 20px;                              
-  font-size: 0.75rem;                               
+  padding: 6px 12px;
+  border-radius: 20px; 
+  font-size: 0.75rem; 
   font-weight: bold;
   text-transform: uppercase;
   z-index: 10;
@@ -88,7 +88,7 @@
 }
 
 .rating-count {
-  color: #555;
+  color: #555;  
 }
 
 .price-section2 {
