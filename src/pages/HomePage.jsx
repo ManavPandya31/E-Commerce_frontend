@@ -375,29 +375,19 @@ return (
           <p>Handpicked for you</p>
         </div>
 
-        <div>
-          {/* <div className="lux-category-pagination">
-            <button onClick={handlePrevious} disabled={categoryPage === 1}>
-              Previous
-            </button>
-            <button onClick={handleMore} disabled={categoryPage >= totalPages}>
-              More
-            </button>
-          </div> */}
+     <div>
+  <button
+    className="lux-view-all-arrow"
+    onClick={() => navigate("/shop")}
+  >
+    View All →
+  </button>
+    </div>
 
-          {/* {selectedCategory && (
-            <button
-              className="lux-view-all-btn"
-              onClick={handleReset}
-            >
-              View all
-            </button>
-          )} */}
-        </div>
       </div>
 
       <div className="product-grid">
-        {products.map((product) => (
+        {products.slice(0, 4).map((product) => (
           <div className="product-card" key={product._id}>
             <div
               className="product-image"
