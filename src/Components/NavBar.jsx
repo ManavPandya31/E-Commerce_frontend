@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { HiShoppingCart, HiSearch , HiUser } from "react-icons/hi";
+import { HiShoppingCart, HiSearch , HiUser , HiShoppingBag} from "react-icons/hi";
 import axios from "axios";
 import "../css/navbar.css";
 
@@ -98,7 +98,7 @@ export default function NavBar({ cartCount }) {
         style={{ cursor: "pointer" }}
         onClick={() => navigate("/")}
       >
-        My Flipcart
+       Shopzo
       </div>
 
       <div className="nav-search" ref={searchRef}>
@@ -217,6 +217,15 @@ export default function NavBar({ cartCount }) {
           <HiShoppingCart style={{ marginRight: "8px" }} />
           Cart ({cartCount})
         </button>
+
+        <button
+  className="nav-btn"
+  onClick={() => navigate("/shop")}
+  style={{ display: "flex", alignItems: "center", gap: "6px" }}
+>
+  <HiShoppingBag /> Shop
+</button>
+
 
         <span
           className="nav-user-icon"

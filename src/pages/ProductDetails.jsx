@@ -133,6 +133,7 @@ export default function ProductDetails({ cartItems, setCartItems, cartCount, set
   };
 
   const handleConfirmOrder = async () => {
+    
   if (!selectedAddress) return;
 
   const result = await Swal.fire({

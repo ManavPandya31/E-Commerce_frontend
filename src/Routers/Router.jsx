@@ -9,6 +9,7 @@ import ProfileAndOtherPage from "../pages/ProfileAndOtherPage";
 import ProfileInfo from "../pages/ProfileInfo";
 import ManageAddresses from "../pages/ManageAddress";
 import ResetPassword from "../pages/ResetPassword";
+import ShopPage from "../pages/ShopPage";
 import VerifyEmail from "../pages/VerifyEmail";
 import Orders from "../Components/Orders";
 
@@ -17,6 +18,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
     <Routes>
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
+      <Route path="/shop" element={<ShopPage cartCount={cartCount} />} />
 
       <Route
         path="/"
