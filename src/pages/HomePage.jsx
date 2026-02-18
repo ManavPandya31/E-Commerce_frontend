@@ -81,23 +81,6 @@ export default function HomePage({cartCount}) {
     }
   };
 
-//   useEffect(() => {
-//   const handleScroll = () => {
-//    if (
-//   window.innerHeight + window.scrollY >=
-//     document.documentElement.scrollHeight - 100 &&
-//   !isFetching &&
-//   productPage < productTotalPages
-// ) {
-//   fetchProducts(selectedCategory, productPage + 1);
-// }
-//   };
-
-//   window.addEventListener("scroll", handleScroll);
-//   return () => window.removeEventListener("scroll", handleScroll);
-
-//   }, [isFetching, productPage, productTotalPages, selectedCategory]);
-
   useEffect(() => {
 
   if (initialFetchDone.current) return;
@@ -135,117 +118,7 @@ export default function HomePage({cartCount}) {
     navigate(`/product/${productId}`);
   }
 
-// return (
-//   <>
-//     <NavBar cartCount={cartCount} />
-
-//     <section className="hero">
-//       {categories.length === 0 ? (
-//         <p>Loading categories...</p>
-//       ) : (
-//         <div className="categories-wrapper-horizontal">
-//           <button
-//             className="more-button"
-//             onClick={handlePrevious}
-//             disabled={categoryPage === 1}
-//           >
-//             Previous
-//           </button>
-
-//           <div className="categories-horizontal">
-//             {categories.map((cat) => (
-//               <div
-//                 key={cat._id}
-//                 className={`category-pill ${selectedCategory === cat._id ? "active" : ""}`}
-//                 onClick={() => handleCategoryClick(cat._id)}
-//               >
-//                 {cat.name}
-//               </div>
-//             ))}
-//           </div>
-
-//           <button
-//             className="more-button"
-//             onClick={handleMore}
-//             disabled={categoryPage >= totalPages}
-//           >
-//             More
-//           </button>
-
-//           <button className="reset-button" onClick={handleReset}>
-//             View All Category Products
-//           </button>
-//         </div>
-//       )}
-//     </section>
-
-//     <section className="products-section">
-//       {error && <p className="status-text error">{error}</p>}
-
-//       {products.length === 0 && !error ? (
-//         <p className="status-text">
-//           This Category Products Are Available Soon!
-//         </p>
-//       ) : (
-//         <div className="product-grid">
-//           {products.map((product) => (
-//             <div className="product-card" key={product._id}>
-//               <div
-//                 className="product-image"
-//                 onClick={() => handleProductClick(product._id)}
-//               >
-//                 <img src={product.productImage} alt={product.name} />
-//                 {product.discount && product.discount.value > 0 && (
-//                   <div className="discount-badge">
-//                     {product.discount.type === "Percetange"
-//                       ? `${product.discount.value}% OFF`
-//                       : `₹${product.discount.value} OFF`}
-//                   </div>
-//                 )}
-//               </div>
-
-//               <div className="product-info">
-//                 <h3>{product.name}</h3>
-
-//                 {product.discount && product.discount.value > 0 ? (
-//                   <div className="price-section">
-//                     <span className="original-price">Rs. {product.price}</span>
-//                     <span className="final-price">Rs. {product.finalPrice}</span>
-//                   </div>
-//                 ) : (
-//                   <span className="price">Rs. {product.price}</span>
-//                 )}
-
-//                 {product.stock === 0 && (
-//                   <p className="stock-message out-of-stock">Out Of Stock</p>
-//                 )}
-//                 {product.stock > 0 && product.stock < 3 && (
-//                   <p className="stock-message low-stock">Stock Running Low</p>
-//                 )}
-//               </div>
-
-//               <div className="card-footer">
-//                 <button
-//                   className="product-addToCart"
-//                   onClick={() => redirectAddToCart(product._id)}
-//                   disabled={product.stock === 0}
-//                 >
-//                   {product.stock === 0 ? "Comming Soon" : "Add To Cart"}
-//                 </button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//       {isFetching && products.length > 0 && (
-//         <div className="bottom-loader">
-//           <div className="loader"></div>
-//         </div>
-//       )}
-//     </section>
-//   </>
-// );
-return (
+  return (
   <>
     <NavBar cartCount={cartCount} />
 
@@ -427,5 +300,5 @@ return (
   </div>
 </section>
   </>
-);
+  );
 }
