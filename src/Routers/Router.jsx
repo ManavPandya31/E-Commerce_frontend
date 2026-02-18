@@ -12,6 +12,8 @@ import ResetPassword from "../pages/ResetPassword";
 import ShopPage from "../pages/ShopPage";
 import VerifyEmail from "../pages/VerifyEmail";
 import Orders from "../Components/Orders";
+import AboutPage from "../pages/AboutPage";
+import ContactPage from "../pages/ContactPage";
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
   return (
@@ -19,6 +21,8 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/verify-email/:token" element={<VerifyEmail />} />
       <Route path="/shop" element={<ShopPage cartCount={cartCount} />} />
+      <Route path="/about" element={<AboutPage cartCount={cartCount} />} />
+      <Route path="/contact" element={<ContactPage cartCount={cartCount} />} />
 
       <Route
         path="/"
