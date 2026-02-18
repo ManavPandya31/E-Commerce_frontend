@@ -35,12 +35,6 @@ export default function Footer() {
               <a href="/faq">FAQ</a>
             </li>
             <li>
-              <a href="/shipping">Shipping</a>
-            </li>
-            <li>
-              <a href="/returns">Returns</a>
-            </li>
-            <li>
               <a href="/support">Support</a>
             </li>
           </ul>
