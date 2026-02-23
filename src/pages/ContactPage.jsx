@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
 import NavBar from "../Components/NavBar";
@@ -29,18 +29,14 @@ export default function ContactPage({ cartCount }) {
     setErrorMsg("");
 
     try {
-      const res = await axios.post("http://localhost:3131/api/auth/contact",formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },});
-
+      const res = await axiosInstance.post("/api/auth/contact",formData,{headers: {"Content-Type": "application/json",},});
       console.log("Response From Contact Api :-", res);
 
       if (res.data?.sucess) {
         setSuccessMsg(res.data.message);
         setFormData({name: "",email: "",message: "",});
       }
+      
     } catch (error) {
       setErrorMsg(error.response?.data?.message || "Something went wrong");
       

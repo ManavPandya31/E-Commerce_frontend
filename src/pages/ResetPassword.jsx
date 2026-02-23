@@ -1,10 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../css/auth.module.css";
 
 export default function ResetPassword() {
+
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ export default function ResetPassword() {
     setError("");
 
     try {
-     const res = await axios.post(`http://localhost:3131/api/auth/resetPassword/${token}`,{ password });
+     const res = await axiosInstance.post(`/api/auth/resetPassword/${token}`,{ password });
      console.log("Response From Resewt Password Api :-",res);
      
       setSuccess(res.data.message);

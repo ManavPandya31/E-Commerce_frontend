@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState  , useEffect} from 'react';
-import axios from 'axios';
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from 'react-redux';
 import { showLoader , hideLoader } from '../Slices/loaderSlice';
 import AddAddress from './AddAddress';
@@ -22,7 +22,7 @@ export default function GetAddress({showRadio = false,selectedAddressId,onSelect
 
       if (!token) return;
 
-      const res = await axios.get("http://localhost:3131/api/auth/getAllAddress",config);
+      const res = await axiosInstance.get("/api/auth/getAllAddress",config);
       console.log("Response From Get Address Api :- ",res);
       
       setAddresses(res.data.data.addresses || []);
@@ -49,7 +49,7 @@ export default function GetAddress({showRadio = false,selectedAddressId,onSelect
     try {
       dispatch(showLoader());
 
-      const res = await axios.delete(`http://localhost:3131/api/auth/deleteAddress/${id}`,config);
+      const res = await axiosInstance.delete(`/api/auth/deleteAddress/${id}`,config);
       console.log("Delete Address Response:", res);
 
       fetchAddresses();
@@ -58,6 +58,7 @@ export default function GetAddress({showRadio = false,selectedAddressId,onSelect
       
     } catch (error) {
       console.log("Delete Address Error:", error);
+      
     } finally {
       dispatch(hideLoader());
     }

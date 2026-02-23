@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import { useState, useEffect } from "react";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import AddAddress from "../Components/AddAddress";
 import GetAddress from "../Components/GetAddress";
 import "../css/profileandotherpage.css";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function ManageAddresses() {
+
   const dispatch = useDispatch();
 
   const [showForm, setShowForm] = useState(false);
@@ -21,7 +24,7 @@ export default function ManageAddresses() {
 
       if (!token) return;
 
-      const res = await axios.get("http://localhost:3131/api/auth/getAllAddress",config,);
+      const res = await axiosInstance.get("/api/auth/getAllAddress",config,);
       console.log("Response From getAllAddress :-", res);
 
       setAddresses(res.data.data.addresses || []);

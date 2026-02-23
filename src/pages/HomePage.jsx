@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState , useRef} from "react";
 import NavBar from "../Components/NavBar";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 // import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
 // import { useDispatch } from "react-redux"; 
 import { useNavigate } from "react-router-dom";
@@ -39,12 +39,7 @@ export default function HomePage({cartCount}) {
     
     setIsFetching(true);
 
-    const response = await axios.get("http://localhost:3131/api/products/showAllProducts",
-      {
-        params: {categoryId, page, limit: productsPerPage,},
-      }
-    );
-
+    const response = await axiosInstance.get("/api/products/showAllProducts",{params: {categoryId, page, limit: productsPerPage,},});
     console.log("Show All Products Api Response :-",response)
 
     const newProducts = response.data.data.products;
@@ -67,9 +62,7 @@ export default function HomePage({cartCount}) {
 
   const fetchCategories = async (page = 1) => {
     try {
-      const response = await axios.get("http://localhost:3131/api/products/getCategory", {
-        params: { page, limit: categoriesPerPage }
-      });
+      const response = await axiosInstance.get("/api/products/getCategory",{params: { page, limit: categoriesPerPage }});
       console.log("Response From Get Category API :-", response);
 
       setCategories(response.data.data.categories);
@@ -114,9 +107,9 @@ export default function HomePage({cartCount}) {
     navigate(`/product/${productId}`);
   };
 
-  const redirectAddToCart = (productId)=>{
-    navigate(`/product/${productId}`);
-  }
+  // const redirectAddToCart = (productId)=>{
+  //   navigate(`/product/${productId}`);
+  // }
 
   return (
   <>

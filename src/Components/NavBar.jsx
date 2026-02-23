@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiShoppingCart, HiSearch , HiUser , HiShoppingBag} from "react-icons/hi";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import "../css/navbar.css";
 
 export default function NavBar({ cartCount }) {
@@ -36,10 +36,7 @@ export default function NavBar({ cartCount }) {
 
   const fetchUserDetails = async (token) => {
     try {
-      const res = await axios.get("http://localhost:3131/api/auth/userDetails",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,},},);
+      const res = await axiosInstance.get("/api/auth/userDetails",{headers: { Authorization: `Bearer ${token}`,},},);
       console.log("response from UserDetails APi :-", res);
 
       if (res.data && res.data.data) {
@@ -55,7 +52,7 @@ export default function NavBar({ cartCount }) {
   const fetchSearchResults = async (query) => {
 
     try {
-      const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${query}`,);
+      const res = await axiosInstance.get(`/api/search/searchBar?q=${query}`,);
       console.log("Search API response:", res);
 
       setSearchResults(res.data.data || { categories: [], products: [] });
@@ -126,7 +123,6 @@ export default function NavBar({ cartCount }) {
           >
             {hasResults ? (
               <>
-                {/* Category suggestions */}
                 {searchResults.categories.map((cat) => (
                   <div
                     key={cat._id}
@@ -135,7 +131,7 @@ export default function NavBar({ cartCount }) {
                       setSearchQuery(cat.name);
                       try {
                       
-                        const res = await axios.get(`http://localhost:3131/api/search/searchBar?q=${cat.name}`,);
+                        const res = await axiosInstance.get(`/api/search/searchBar?q=${cat.name}`,);
                         setSearchResults(
                           res.data.data || { categories: [], products: [] },
                         );
@@ -219,13 +215,12 @@ export default function NavBar({ cartCount }) {
         </button>
 
         <button
-  className="nav-btn"
-  onClick={() => navigate("/shop")}
-  style={{ display: "flex", alignItems: "center", gap: "6px" }}
->
-  <HiShoppingBag /> Shop
-</button>
-
+          className="nav-btn"
+          onClick={() => navigate("/shop")}
+          style={{ display: "flex", alignItems: "center", gap: "6px" }}
+        >
+          <HiShoppingBag /> Shop
+        </button>
 
         <span
           className="nav-user-icon"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/auth.module.css";
 import NavBar from "../Components/NavBar";
@@ -35,9 +35,7 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:3131/api/auth/login", {
-        email: data.email,
-        password: data.password,});
+      const res = await axiosInstance.post("/api/auth/login",{email: data.email,password: data.password,});
       console.log("Response From Login Api :-",res);
 
       const token = res.data.data.accessToken;
@@ -60,7 +58,7 @@ export default function AuthPage() {
 
     try {
       const role = "customer";
-      const res = await axios.post(`http://localhost:3131/api/auth/register?role=${role}`,data,);
+      const res = await axiosInstance.post(`/api/auth/register?role=${role}`,data,);
       console.log("Response From Register Api :-",res);
       
       toast.success("Please verify your email first, then login");
@@ -82,7 +80,7 @@ export default function AuthPage() {
     setForgotError("");
 
     try {
-      const res = await axios.post("http://localhost:3131/api/auth/forgotPassword",{ email: forgotEmail },);
+      const res = await axiosInstance.post("/api/auth/forgotPassword",{ email: forgotEmail },);
       console.log("Response From Forgot Password Api :-",res);
       
       setForgotMsg(res.data.message);
@@ -104,7 +102,7 @@ export default function AuthPage() {
 
     try {
       const otpString = otp.join("");
-      const res = await axios.post("http://localhost:3131/api/auth/verifyOTP", {email: forgotEmail,otp: otpString,});
+      const res = await axiosInstance.post("/api/auth/verifyOTP", {email: forgotEmail,otp: otpString,});
       console.log("Response From VerifOTP Api :-",res);
       
       setForgotMsg(res.data.message);
@@ -123,7 +121,7 @@ export default function AuthPage() {
     setForgotError("");
 
     try {
-      const res = await axios.post("http://localhost:3131/api/auth/forgotPassword", {email: forgotEmail,});
+      const res = await axiosInstance.post("/api/auth/forgotPassword", {email: forgotEmail,});
       console.log("Again Response From Forgot Password Api:-",res);
       
       setForgotMsg("OTP resent successfully");
@@ -152,15 +150,9 @@ export default function AuthPage() {
 
     try {
       const otpString = otp.join("");
-      const res = await axios.post("http://localhost:3131/api/auth/resetPassword",
-        {
-          email: forgotEmail,
-          otp: otpString,
-          password: newPassword,
-        },);
-    console.log("Response Form Reset Password Api:-",res);
+      const res = await axiosInstance.post("/api/auth/resetPassword",{email: forgotEmail,otp: otpString,password: newPassword,},);
+      console.log("Response Form Reset Password Api:-",res);
       
-
       setForgotMsg(res.data.message);
       setTimeout(() => {
         setShowForgotModal(false);
