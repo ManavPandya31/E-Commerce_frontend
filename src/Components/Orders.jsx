@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from 'react-redux';
 import { showLoader, hideLoader } from '../Slices/loaderSlice';
 import Swal from "sweetalert2";
@@ -17,14 +18,13 @@ export default function Orders() {
 
       try {
         dispatch(showLoader());
-        const res = await axios.get("http://localhost:3131/api/orders/getOrder", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axiosInstance.get("/api/orders/getOrder",{headers: { Authorization: `Bearer ${token}` },});
         console.log("Response From GetOrder Api :-", res);
 
         if (res.data && res.data.data) {
           setOrders(res.data.data);
         }
+
       } catch (error) {
         console.log("Error fetching orders:", error);
         Swal.fire({
@@ -33,6 +33,7 @@ export default function Orders() {
           text: "Could not fetch your orders.",
           confirmButtonColor: "#d33",
         });
+        
       } finally {
         dispatch(hideLoader());
       }

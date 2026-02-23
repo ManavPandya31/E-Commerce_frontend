@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
@@ -9,6 +9,7 @@ import GetAddress from "../Components/GetAddress";
 import AddAddress from "../Components/AddAddress";
 import "../css/cartpage.css"; 
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}) {
 
@@ -31,8 +32,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
   const fetchCartItems = async () => {
     try {
       dispatch(showLoader());
-      const response = await axios.get("http://localhost:3131/api/cart/readAllItems",
-        { headers: { Authorization: `Bearer ${token}` } },);
+      const response = await axiosInstance.get("/api/cart/readAllItems",{ headers: { Authorization: `Bearer ${token}` } },);
       console.log("Response From Get Cart Api :-", response);
 
       const items = response.data.data.items || [];
@@ -51,8 +51,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
 
   const fetchAddressesForCart = async () => {
     try {
-      const res = await axios.get("http://localhost:3131/api/auth/getAllAddress",
-        { headers: { Authorization: `Bearer ${token}` } },);
+      const res = await axiosInstance.get("/api/auth/getAllAddress",{ headers: { Authorization: `Bearer ${token}` } },);
       console.log("Response From Get Address Api (Cart) :-", res);
 
       const addresses = res.data.data.addresses || [];
@@ -90,7 +89,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
   const increaseQty = async (item) => {
     try {
       dispatch(showLoader());
-      const response = await axios.put("http://localhost:3131/api/cart/updateCartItems",
+      const response = await axiosInstance.put("/api/cart/updateCartItems",
         {
           productId: item.product._id,
           quantity: item.quantity + 1,
@@ -116,7 +115,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
     }
     try {
       dispatch(showLoader());
-      const response = await axios.put("http://localhost:3131/api/cart/updateCartItems",
+      const response = await axiosInstance.put("/api/cart/updateCartItems",
         {
           productId: item.product._id,
           quantity: item.quantity - 1,
@@ -137,17 +136,14 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
   const deleteItem = async (productId) => {
     try {
       dispatch(showLoader());
-      const response = await axios.delete("http://localhost:3131/api/cart/deleteCartItems",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          data: { productId },
-        },);
+      const response = await axiosInstance.delete("/api/cart/deleteCartItems",{headers: { Authorization: `Bearer ${token}` },data: { productId },},);
       console.log("Delete Cart Item Response :-", response);
 
       fetchCartItems();
 
     } catch (error) {
       console.log("Delete Cart Item Error :-", error);
+
     } finally {
       dispatch(hideLoader());
     }
@@ -225,10 +221,9 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
       totalAmount: appliedCoupon?.payableAmount ?? grandTotal,
     };
 
-    const res = await axios.post("http://localhost:3131/api/orders/createOrder",payload,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
+    const res = await axiosInstance.post("/api/orders/createOrder",payload,{ headers: { Authorization: `Bearer ${token}` } });
+    console.log("Response From Create Order Api:-",res);
+    
     Swal.fire({
       icon: "success",
       title: "Order Placed!",
@@ -262,7 +257,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
     dispatch(showLoader());
 
     const validItemsForCoupon = cartItems.filter(item => item.product);
-    const res = await axios.post("http://localhost:3131/api/orders/applyCoupon",
+    const res = await axiosInstance.post("/api/orders/applyCoupon",
       {
         code: couponCode,
          products: validItemsForCoupon.map(item => ({
@@ -313,12 +308,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
 
   const fetchComboForProduct = async (productId) => {
   try {
-    const res = await axios.get(`http://localhost:3131/api/products/getComboProduct/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const res = await axiosInstance.get(`/api/products/getComboProduct/${productId}`,{headers: {Authorization: `Bearer ${token}`,},});
     console.log("Response From Get Combo API :-", res);
 
     if (res.data?.data?.isActive) {
@@ -327,6 +317,7 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
         [productId]: res.data.data,
       }));
     }
+    
   } catch (err) {
     if (err.response?.status !== 404) {
     console.error("Combo API error:", err);

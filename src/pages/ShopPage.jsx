@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
@@ -19,14 +19,7 @@ export default function ShopPage({ cartCount }) {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:3131/api/products/getCategory",
-        {
-          params: {
-            page: 1,
-            limit: 1000,
-          },
-        },
-      );
+      const res = await axiosInstance.get("/api/products/getCategory",{params: {page: 1,limit: 1000,},},);
       console.log("Response From Get Category Api :-",res);
 
       setCategories(res.data.data.categories);
@@ -41,7 +34,7 @@ export default function ShopPage({ cartCount }) {
     try {
       dispatch(showLoader());
 
-      const res = await axios.get("http://localhost:3131/api/products/showAllProducts",{ params: { categoryId } },);
+      const res = await axiosInstance.get("/api/products/showAllProducts",{ params: { categoryId } },);
       console.log("Response From Show All Products Api :-",res);
     
       setProducts(res.data.data.products);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
 import "../css/verifyemail.css"
 
@@ -15,7 +15,7 @@ export default function VerifyEmail() {
     setLoading(true);
 
     try {
-      const res = await axios.get(`http://localhost:3131/api/auth/verifyEmail/${token}`);
+      const res = await axiosInstance.get(`/api/auth/verifyEmail/${token}`);
       console.log("Response From Verify Email APi :-",res);
       
       toast.success("Email verified successfully!");

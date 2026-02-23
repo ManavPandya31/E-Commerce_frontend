@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from "../Utils/axiosInstance.js";
 import { useDispatch } from 'react-redux';
 import { showLoader , hideLoader } from '../Slices/loaderSlice';
 import "../css/addaddress.css"
@@ -35,6 +35,7 @@ export default function AddAddress({ onClose, onSuccess, editData = null }) {
   ];
 
   const btnSave = async () => {
+
     if (!formData.mobile || !formData.street || !formData.city || !formData.pincode || !formData.state) {
       alert("Please fill all required fields.");
       return;
@@ -44,11 +45,11 @@ export default function AddAddress({ onClose, onSuccess, editData = null }) {
       dispatch(showLoader());
 
       if (editId) {
-        const res = await axios.put(`http://localhost:3131/api/auth/updateAddress/${editId}`,formData,config);
+        const res = await axiosInstance.put(`/api/auth/updateAddress/${editId}`,formData,config);
         console.log("Response From Update Address :- ", res);
 
       } else {
-        const response = await axios.post("http://localhost:3131/api/auth/addAddress",formData,config);
+        const response = await axiosInstance.post("/api/auth/addAddress",formData,config);
         console.log("Response From Add Address :- ", response);
       }
 
