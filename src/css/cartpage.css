@@ -807,6 +807,61 @@
   margin-top: 10px;
 }
 
+.payment-method-box{
+  display:flex;
+  gap:15px;
+  margin:15px 0;
+}
+
+.payment-option{
+  flex:1;
+  border:1px solid #ddd;
+  padding:12px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.payment-option:hover{
+  border-color:#3399cc;
+}
+
+.payment-option.active{
+  border-color:#3399cc;
+  background:#f0f8ff;
+}
+
+.payment-method-box{
+  display:flex;
+  gap:15px;
+  margin:15px 0;
+}
+
+.payment-option{
+  flex:1;
+  border:1px solid #ddd;
+  padding:12px;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.payment-option.active{
+  border-color:#f76b1c;
+  background:#fff3e6;
+}
+
+.payment-option:hover{
+  border-color:#f76b1c;
+} 
+
 @media (max-width: 768px) {
   .cart-container {
     padding: 20px;

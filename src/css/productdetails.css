@@ -428,3 +428,30 @@ textarea {
 .review-modal-buttons button {
   flex: 1;  
 }
+
+.payment-method-box{
+  display:flex;
+  gap:15px;
+  margin:15px 0;
+}
+
+.payment-option{
+  flex:1;
+  border:1px solid #ddd;
+  padding:12px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.payment-option:hover{
+  border-color:#3399cc;
+}
+
+.payment-option.active{
+  border-color:#3399cc;
+  background:#f0f8ff;
+}
