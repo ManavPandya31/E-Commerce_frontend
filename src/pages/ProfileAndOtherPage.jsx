@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import axiosInstance from "../utils/axiosInstance";
 import { NavLink, Outlet , useNavigate} from 'react-router-dom';
 import { useDispatch } from "react-redux";
@@ -68,6 +69,10 @@ export default function ProfileAndOtherPage({cartCount}) {
             
             <NavLink to="orders" className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
               <span className="menu-item-icon">📦</span> ORDERS
+            </NavLink>
+
+            <NavLink to="wishlist" className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
+              <span className="menu-item-icon">❤️</span> WISHLIST
             </NavLink>
 
             <NavLink to="addresses" className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>

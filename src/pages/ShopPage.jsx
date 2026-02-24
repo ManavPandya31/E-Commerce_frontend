@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import NavBar from "../Components/NavBar";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import "../css/shop.css";
 
 export default function ShopPage({ cartCount }) {
@@ -14,6 +16,7 @@ export default function ShopPage({ cartCount }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loader.isLoading);
+  const [wishlistIds, setWishlistIds] = useState([]);
 
   const navigate = useNavigate();
 
@@ -51,12 +54,59 @@ export default function ShopPage({ cartCount }) {
   useEffect(() => {
     fetchCategories();
     fetchProducts();
+    // fetchWishlist();
   }, []);
 
   const handleCategoryClick = (id) => {
     setSelectedCategory(id);
     fetchProducts(id);
   };
+
+  const handleWishlist = async (e, productId) => {
+  e.stopPropagation(); 
+
+  try {
+    dispatch(showLoader());
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Please login first");
+      return;
+    }
+
+    await axiosInstance.post(`/api/wishlists/addWishLists/${productId}`,{},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    setWishlistIds((prev) => [...prev, productId]);
+
+    toast.success("Added to wishlist");
+
+  } catch (error) {
+    console.log("Wishlist error:", error);
+    toast.error("Already in wishlist");
+
+  }finally{
+    dispatch(hideLoader());
+  }
+  };
+
+  // const fetchWishlist = async () => {
+  // try {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) return;
+
+  //   const res = await axiosInstance.get("/api/v1/wishlist", {
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   });
+
+  //   const ids = res.data.data.map((item) => item._id);
+  //   setWishlistIds(ids);
+
+  // } catch (error) {
+  //   console.log("Error fetching wishlist:", error);
+  // }
+  // };
 
   return (
     <>
@@ -107,15 +157,25 @@ export default function ShopPage({ cartCount }) {
           ) : (
             <div className="shop-product-grid">
               {products.map((product) => (
-                <div
-                  key={product._id}
-                  className="shop-product-card"
-                  onClick={() => navigate(`/product/${product._id}`)}
-                >
-                  <img src={product.productImage} alt={product.name} />
-                  <h4>{product.name}</h4>
-                  <p>Rs. {product.finalPrice || product.price}</p>
-                </div>
+            <div
+              key={product._id}
+              className="shop-product-card"
+              onClick={() => navigate(`/product/${product._id}`)}
+            >
+             <div className="wishlist-heart"
+                onClick={(e) => handleWishlist(e, product._id)}
+              >
+                {wishlistIds.includes(product._id) ? (
+                  <FaHeart className="heart-filled" />
+                ) : (
+                  <FaRegHeart className="heart-outline" />
+                )}
+              </div>
+
+              <img src={product.productImage} alt={product.name} />
+              <h4>{product.name}</h4>
+              <p>Rs. {product.finalPrice || product.price}</p>
+            </div>
               ))}
             </div>
           )}

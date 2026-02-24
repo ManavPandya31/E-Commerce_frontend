@@ -6,7 +6,6 @@ import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import AddAddress from "../Components/AddAddress";
 import GetAddress from "../Components/GetAddress";
 import "../css/profileandotherpage.css";
-import axiosInstance from "../utils/axiosInstance";
 
 export default function ManageAddresses() {
 
@@ -40,7 +39,6 @@ export default function ManageAddresses() {
   useEffect(() => {
     fetchAddresses();
   }, []);
-
 
   return (
   <div className="address-wrapper">
