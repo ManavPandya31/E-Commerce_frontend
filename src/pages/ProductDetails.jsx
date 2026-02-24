@@ -137,71 +137,173 @@ export default function ProductDetails({setCartItems,cartCount,setCartCount,}) {
     setShowOrderModal(true);
   };
 
+  // const handleConfirmOrder = async () => {
+
+  //   if (!selectedAddress) return;
+
+  //   const result = await Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "Do you want to place this order?",
+  //     icon: "question",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Yes, place order",
+  //     cancelButtonText: "Cancel",
+  //     customClass: {
+  //       container: "my-swal-highest",
+  //     },
+  //   });
+
+  //   if (!result.isConfirmed) {
+  //     return;
+  //   }
+
+  //   try {
+  //     dispatch(showLoader());
+  //     const payload = {
+  //       products: [
+  //         {
+  //           product: product._id,
+  //           quantity: 1,
+  //           price: product.finalPrice ?? product.price,
+  //         },
+  //       ],
+  //       addressId: selectedAddress._id,
+  //     };
+
+  //     const res = await axiosInstance.post("/api/orders/createOrder", payload,config);
+  //     console.log("Response From Create Order API :-", res);
+
+  //     setShowOrderModal(false);
+
+  //     Swal.fire({
+  //       icon: "success",
+  //       title: "Order Placed!",
+  //       text: res.data.message || "Your order has been placed successfully!",
+  //       customClass: {
+  //         container: "my-swal-highest",
+  //       },
+  //     }).then(() => {
+  //       navigate("/profile/orders");
+  //     });
+
+  //   } catch (error) {
+  //     console.log("Order Error :-", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Error",
+  //       text: "Something went wrong while placing the order",
+  //       customClass: {
+  //         container: "my-swal-highest",
+  //       },
+  //     });
+
+  //   } finally {
+  //     dispatch(hideLoader());
+  //   }
+  // };
+  
+  const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+   };
+
   const handleConfirmOrder = async () => {
 
-    if (!selectedAddress) return;
+  if (!selectedAddress) return;
 
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to place this order?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, place order",
-      cancelButtonText: "Cancel",
-      customClass: {
-        container: "my-swal-highest",
-      },
-    });
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to place this order?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, place order",
+    cancelButtonText: "Cancel",
+  });
 
-    if (!result.isConfirmed) {
+  if (!result.isConfirmed) return;
+
+  try {
+    dispatch(showLoader());
+
+    const payload = {
+      products: [
+        {
+          product: product._id,
+          quantity: 1,
+        },
+      ],
+      addressId: selectedAddress._id,
+    };
+
+    const res = await axiosInstance.post(
+      "/api/orders/createOrder",
+      payload,
+      config
+    );
+
+    const { razorpayOrderId, amount, currency, key } = res.data.data;
+
+    const isLoaded = await loadRazorpayScript();
+
+    if (!isLoaded) {
+      alert("Razorpay SDK failed to load.");
       return;
     }
 
-    try {
-      dispatch(showLoader());
-      const payload = {
-        products: [
+    const options = {
+      key,
+      amount,
+      currency,
+      name: "Your Store",
+      description: "Order Payment",
+      order_id: razorpayOrderId,
+      handler: async function (response) {
+
+        await axiosInstance.post(
+          "/api/orders/verifyPayment",
           {
-            product: product._id,
-            quantity: 1,
-            price: product.finalPrice ?? product.price,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
           },
-        ],
-        addressId: selectedAddress._id,
-      };
+          config
+        );
 
-      const res = await axiosInstance.post("/api/orders/createOrder", payload,config);
-      console.log("Response From Create Order API :-", res);
+        Swal.fire({
+          icon: "success",
+          title: "Payment Successful!",
+        }).then(() => {
+          navigate("/profile/orders");
+        });
+      },
+      prefill: {
+        name: selectedAddress.fullName,
+        contact: selectedAddress.mobile,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
 
-      setShowOrderModal(false);
+    const rzp = new window.Razorpay(options);
+    rzp.open();
 
-      Swal.fire({
-        icon: "success",
-        title: "Order Placed!",
-        text: res.data.message || "Your order has been placed successfully!",
-        customClass: {
-          container: "my-swal-highest",
-        },
-      }).then(() => {
-        navigate("/profile/orders");
-      });
+  } catch (error) {
 
-    } catch (error) {
-      console.log("Order Error :-", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Something went wrong while placing the order",
-        customClass: {
-          container: "my-swal-highest",
-        },
-      });
+    Swal.fire({
+      icon: "error",
+      title: "Payment Failed",
+      text: "Something went wrong",
+    });
 
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
-
+  } finally {
+    dispatch(hideLoader());
+  }
+};
   const fetchRelatedProducts = async (productId) => {
     try {
       const res = await axiosInstance.get(`/api/products/related-products/related/${productId}`,);

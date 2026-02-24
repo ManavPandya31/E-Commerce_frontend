@@ -54,7 +54,7 @@ export default function ShopPage({ cartCount }) {
   useEffect(() => {
     fetchCategories();
     fetchProducts();
-    // fetchWishlist();
+    fetchWishlist();
   }, []);
 
   const handleCategoryClick = (id) => {
@@ -63,10 +63,9 @@ export default function ShopPage({ cartCount }) {
   };
 
   const handleWishlist = async (e, productId) => {
-  e.stopPropagation(); 
+  e.stopPropagation();
 
   try {
-    dispatch(showLoader());
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -74,39 +73,53 @@ export default function ShopPage({ cartCount }) {
       return;
     }
 
-    await axiosInstance.post(`/api/wishlists/addWishLists/${productId}`,{},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    const isAlreadyInWishlist = wishlistIds.includes(productId);
 
-    setWishlistIds((prev) => [...prev, productId]);
+    if (isAlreadyInWishlist) {
+    
+      const res = await axiosInstance.delete(`/api/wishlists/removeFromWishLists/${productId}`,{ headers: { Authorization: `Bearer ${token}` } });
+      console.log("Response From Remove Wishlists Api :-",res);
+      
+      setWishlistIds((prev) =>
+        prev.filter((id) => id !== productId)
+      );
 
-    toast.success("Added to wishlist");
+      toast.success("Removed from wishlist");
+
+    } else {
+    
+      const response = await axiosInstance.post(`/api/wishlists/addWishLists/${productId}`,{},{ headers: { Authorization: `Bearer ${token}` } });
+      console.log("Response From Added Wishlists Api :-",response);
+
+      setWishlistIds((prev) => [...prev, productId]);
+
+      toast.success("Added to wishlist");
+    }
 
   } catch (error) {
     console.log("Wishlist error:", error);
-    toast.error("Already in wishlist");
-
-  }finally{
-    dispatch(hideLoader());
+    toast.error("Something went wrong");
   }
+  };  
+
+  const fetchWishlist = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const res = await axiosInstance.get("/api/wishlists/getUsersWishLists",{ headers: { Authorization: `Bearer ${token}` } });
+      console.log("Wishlist API Response:", res);
+
+      const wishlists = res.data?.data || [];
+
+      const ids = wishlists.map((item) => item._id.toString());
+
+      setWishlistIds(ids);
+
+    } catch (error) {
+      console.log("Error fetching wishlist:", error);
+    }
   };
-
-  // const fetchWishlist = async () => {
-  // try {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) return;
-
-  //   const res = await axiosInstance.get("/api/v1/wishlist", {
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   });
-
-  //   const ids = res.data.data.map((item) => item._id);
-  //   setWishlistIds(ids);
-
-  // } catch (error) {
-  //   console.log("Error fetching wishlist:", error);
-  // }
-  // };
 
   return (
     <>
@@ -146,7 +159,7 @@ export default function ShopPage({ cartCount }) {
 
           {isLoading ? (
             <div className="shop-loader">
-              <div className="spinner"></div>
+              {/* <div className="spinner"></div> */}
             </div>
           ) : products.length === 0 ? (
             <div className="no-products-message">

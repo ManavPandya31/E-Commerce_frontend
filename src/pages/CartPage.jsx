@@ -174,6 +174,16 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
     setShowOrderModal(true);
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleConfirmOrder = async () => {
 
   if (!selectedAddress) return;
@@ -198,20 +208,19 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
     dispatch(showLoader());
 
     const payload = {
-   products: cartItems
-  .filter(item => item.product)
-  .map((item) => {
-    const productId = item.product?._id;
+      products: cartItems
+        .filter(item => item.product)
+        .map((item) => {
+          const productId = item.product?._id;
+          const combo = comboMap[productId];
+          const isComboSelected = selectedCombos[productId];
 
-    const combo = comboMap[productId];
-    const isComboSelected = selectedCombos[productId];
-
-    return {
-      product: productId,
-      quantity: item.quantity,
-      comboId: isComboSelected ? combo?._id : null,
-    };
-  }),
+          return {
+            product: productId,
+            quantity: item.quantity,
+            comboId: isComboSelected ? combo?._id : null,
+          };
+        }),
 
       addressId: selectedAddress._id,
       coupon: appliedCoupon?.code || null,
@@ -222,32 +231,66 @@ export default function CartPage({cartItems,setCartItems,cartCount,setCartCount}
     };
 
     const res = await axiosInstance.post("/api/orders/createOrder",payload,{ headers: { Authorization: `Bearer ${token}` } });
-    console.log("Response From Create Order Api:-",res);
+    console.log("Response From Create Order Api :-",res);
     
-    Swal.fire({
-      icon: "success",
-      title: "Order Placed!",
-      text: res.data.message || "Your order has been placed successfully!",
-    }).then(() => {
-      navigate("/profile/orders");
-    });
-    
+    const { razorpayOrderId, amount, currency, key } = res.data.data;
+
+    const isLoaded = await loadRazorpayScript();
+
+    if (!isLoaded) {
+      alert("Razorpay SDK failed to load.");
+      return;
+    }
+
+    const options = {
+      key,
+      amount,
+      currency,
+      name: "Your Store",
+      description: "Order Payment",
+      order_id: razorpayOrderId,
+      handler: async function (response) {
+
+      const res = await axiosInstance.post("/api/orders/verifyPayment",
+          {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      console.log("Response From Verify Payment Api :- ",res);
+      
+        Swal.fire({
+          icon: "success",
+          title: "Payment Successful!",
+        }).then(() => {
+          navigate("/profile/orders");
+        });
+      },
+      prefill: {
+        name: selectedAddress.fullName,
+        contact: selectedAddress.mobile,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+
   } catch (error) {
-  console.log("Order API FULL ERROR:", error);
-  console.log("Backend response:", error.response?.data);
 
-  Swal.fire({
-    icon: "error",
-    title: "Order Failed",
-    text: error.response?.data?.message || "Order failed",
-  });
-
-  setShowOrderModal(true);
+    Swal.fire({
+      icon: "error",
+      title: "Payment Failed",
+      text: error.response?.data?.message || "Something went wrong",
+    });
 
   } finally {
     dispatch(hideLoader());
   }
-  };
+};
 
  const handleApplyCoupon = async () => {
 
