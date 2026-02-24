@@ -14,6 +14,7 @@ import VerifyEmail from "../pages/VerifyEmail";
 import Orders from "../Components/Orders";
 import AboutPage from "../pages/AboutPage";
 import ContactPage from "../pages/ContactPage";
+import Wishlist from "../Components/Wishlist";
 
 const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
   return (
@@ -76,6 +77,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
         <Route path="info" element={<ProfileInfo />} />
         <Route path="addresses" element={<ManageAddresses />} />
         <Route path="orders" element={<Orders />} />
+        <Route path="wishlist" element={<Wishlist />} />
       </Route>
     </Routes>
   );
