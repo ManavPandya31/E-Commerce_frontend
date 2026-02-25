@@ -169,7 +169,7 @@
 }
 
 .add-to-cart-btn {
-  background-color: #ff6a00; /* Matching the orange in the image */
+  background-color: #ff6a00; 
   color: #fff;
 }
 
@@ -221,7 +221,13 @@
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   display: flex;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   flex-direction: column;
+}
+
+.related-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
 
 .related-product-img {
@@ -454,4 +460,70 @@ textarea {
 .payment-option.active{
   border-color:#3399cc;
   background:#f0f8ff;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #e65c00;
+  transform: translateY(-2px);
+}
+
+.buy-now-btn:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+
+.add-to-cart-btn:active,
+.buy-now-btn:active {
+  transform: scale(0.98);
+}
+
+.quantity-controls button:hover {
+  background-color: #f5f5f5;
+}
+
+@media (max-width: 992px) {
+  .product-page-container {
+    padding: 30px 40px;
+  }
+
+  .product-page-card {
+    flex-direction: column;
+    padding: 30px;
+  }
+
+  .product-image-main img {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-page-container {
+    padding: 20px;
+  }
+
+  .product-page-card {
+    padding: 20px;
+    gap: 25px;
+  }
+
+  .product-title {
+    font-size: 22px;
+  }
+
+  .final-price2 {
+    font-size: 26px;
+  }
+
+  .product-actions {
+    flex-direction: column;
+  }
+
+  .add-to-cart-btn,
+  .buy-now-btn {
+    width: 100%;
+  }
+
+  .related-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
 }

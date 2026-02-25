@@ -1,3 +1,12 @@
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
 .product-addToCart {
   background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: #ffffff;
@@ -246,7 +255,7 @@
 }
 
 .lux-category-section {
-  padding: 80px 60px;
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 5vw, 60px);
   background: #faf7f2;
   margin-top: -60px;
   border-radius: 40px 40px 0 0;
@@ -509,7 +518,6 @@
   }
 }
 
-/* Mobile Responsive */
 @media (max-width: 768px) {
   .lux-top-features {
     flex-direction: column;
@@ -549,4 +557,147 @@
   100% {
     clip-path: inset(0 0 0 0);
   }
+}
+
+@media (max-width: 1400px) {
+
+  .lux-hero-content h1 {
+    font-size: 48px;
+  }
+
+  .lux-hero-image img {
+    height: 450px;
+  }
+
+}
+
+@media (max-width: 1200px) {
+
+  .lux-hero {
+    padding: 60px 40px 100px;
+    gap: 40px;
+  }
+
+  .lux-hero-content h1 {
+    font-size: 42px;
+  }
+
+  .lux-category-section,
+  .lux-products-section {
+    padding: 60px 40px;
+  }
+
+}
+
+@media (max-width: 1024px) {
+
+  .lux-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .lux-hero-buttons {
+    justify-content: center;
+  }
+
+  .lux-hero-content p {
+    margin: 0 auto 30px;
+  }
+
+  .lux-hero-image img {
+    height: 380px;
+  }
+
+  .lux-top-features {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .lux-hero {
+    padding: 40px 20px 60px;
+  }
+
+  .lux-hero-content h1 {
+    font-size: 32px;
+  }
+
+  .lux-hero-content p {
+    font-size: 14px;
+  }
+
+  .lux-hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .lux-primary-btn,
+  .lux-secondary-btn {
+    width: 100%;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image {
+    height: 240px;
+  }
+
+  .lux-category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lux-promo-overlay h2 {
+    font-size: 28px;
+  }
+
+  .lux-promo-overlay p {
+    font-size: 14px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .lux-hero-content h1 {
+    font-size: 26px;
+  }
+
+  .lux-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .product-info h3 {
+    font-size: 14px;
+  }
+
+  .final-price {
+    font-size: 14px;
+  }
+
+  .lux-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lux-promo-banner {
+    height: 200px;
+  }
+
+  .lux-promo-overlay h2 {
+    font-size: 22px;
+  }
+
+  .lux-promo-overlay p {
+    font-size: 13px;
+  }
+
 }

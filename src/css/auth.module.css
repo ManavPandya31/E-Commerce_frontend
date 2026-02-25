@@ -233,8 +233,136 @@
   transform: translateX(-50%);
 }
 
+.formWrapper {
+  will-change: transform;
+}
+
+.formWrapper form {
+  padding-right: 5px;
+}
+
+@media (min-width: 1400px) {
+  .authCard {
+    max-width: 500px;
+    padding: 50px 45px;
+  }
+
+  .authTitle {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .authContainer {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .authCard {
+    max-width: 420px;
+    padding: 35px 28px;
+  }
+
+  .authTitle {
+    font-size: 22px;
+  }
+
+  .authSubtitle {
+    font-size: 13px;
+  }
+
+  .authBtn {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .toggleWrapper button {
+    font-size: 13px;
+    padding: 8px 0;
+  }
+
+  .forgotModal {
+    margin: 20px;
+  }
+}
+
 @media (max-width: 480px) {
   .authCard {
     padding: 30px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .authContainer {
+    padding: 15px;
+  }
+
+  .authCard {
+    padding: 25px 20px;
+    border-radius: 14px;
+  }
+
+  .authTitle {
+    font-size: 20px;
+  }
+
+  .authSubtitle {
+    font-size: 12px;
+  }
+
+  .authForm {
+    gap: 14px;
+  }
+
+  .authForm input,
+  .authSelect {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .authBtn {
+    padding: 13px;
+    font-size: 14px;
+  }
+
+  .otpContainer input {
+    width: 38px;
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .forgotModal {
+    padding: 22px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+
+  .authCard {
+    padding: 20px 16px;
+  }
+
+  .toggleWrapper button {
+    font-size: 12px;
+  }
+
+  .otpContainer {
+    gap: 6px;
+  }
+
+  .otpContainer input {
+    width: 34px;
+    height: 40px;
+  }
+}
+
+@media (max-height: 600px) {
+  .forgotModal {
+    max-height: 90vh;
+    overflow-y: auto;
   }
 }
