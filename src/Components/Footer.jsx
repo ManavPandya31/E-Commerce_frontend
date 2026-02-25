@@ -28,7 +28,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="footer-section">
+        {/* <div className="footer-section">
           <h3>Customer Service</h3>
           <ul>
             <li>
@@ -38,7 +38,7 @@ export default function Footer() {
               <a href="/support">Support</a>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         <div className="footer-section">
           <h3>Follow Us</h3>
