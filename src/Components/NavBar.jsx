@@ -96,7 +96,7 @@ export default function NavBar({ cartCount }) {
         style={{ cursor: "pointer" }}
         onClick={() => navigate("/")}
       >
-       Shopzo
+       Shoppzo
       </div>
 
       <div className="nav-search" ref={searchRef}>
