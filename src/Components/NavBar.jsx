@@ -14,6 +14,7 @@ export default function NavBar({ cartCount }) {
   const debounceRef = useRef(null);
   const searchRef = useRef(null);
   const [userName, setUserName] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -194,7 +195,11 @@ export default function NavBar({ cartCount }) {
         )}
       </div>
 
-      <div className="nav-buttons">
+      <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        ☰
+      </div>
+
+      <div className={`nav-buttons ${menuOpen ? "active" : ""}`}>
         {!isLoggedIn ? (
           <>
             <Link to="/auth" className="nav-btn login-btn">

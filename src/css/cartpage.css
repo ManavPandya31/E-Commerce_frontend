@@ -54,18 +54,16 @@
   gap: 20px;
   padding: 20px;
   border-radius: 12px;
-  /* Updated shadow for a lifted look */
   box-shadow: 0 4px 6px rgba(0,0,0,0.03); 
   background: #fff;
   align-items: center;
-  /* Added a subtle border */
   border: 1px solid #f0f0f0; 
-  transition: all 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .cart-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   border-color: #e0e0e0;
 }
 
@@ -172,25 +170,26 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .btn-place-order2 {
   width: 100%;
   padding: 16px;
   margin-top: 20px;
-  background-color: #f76b1c; 
+  background: linear-gradient(90deg, #ff6a00, #ff3c00);
   color: #fff;
   font-size: 16px;
   font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .btn-place-order2:hover {
-  background-color: #e55e10;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,106,0,0.3);
 }
 
 .btn-place-order2:disabled {
@@ -441,22 +440,6 @@
   color: #fff;
 }
 
-.combo-wrapper {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.combo-box.small {
-  width: 90px;
-  padding: 6px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  text-align: center;
-  background: #fafafa;
-}
-
 .combo-box.small img {
   width: 100%;
   height: 60px;
@@ -601,15 +584,6 @@
   color: #111;
 }
 
-
-/* Combo/Sub-products in Order Modal */
-.order-modal .combo-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
 .order-modal .combo-box.small {
   width: 80px;
   padding: 6px;
@@ -652,8 +626,9 @@
     flex-direction: column;
   }
 
-  .cart-summary {
-    margin-top: 30px;
+   .cart-summary {
+    position: static;
+    max-width: 100%;
   }
 
   .cart-img {
@@ -692,7 +667,11 @@
 }
 
 .btn-apply-coupon:hover {
-  background-color: #1e40af;
+    background-color: #e55e10;
+}
+
+.qty-btn:active {
+  transform: scale(0.9);
 }
 
 .final-amount {
@@ -702,12 +681,12 @@
 }
 
 .summary-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 20px;
   color: #111;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  border-bottom: 2px solid #f76b1c;
+  padding-bottom: 8px;
 }
 
 .price-row {
@@ -803,26 +782,10 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.combo-separate-card {
-  margin-top: 10px;
-}
-
 .payment-method-box{
   display:flex;
   gap:15px;
   margin:15px 0;
-}
-
-.payment-option{
-  flex:1;
-  border:1px solid #ddd;
-  padding:12px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
-  transition:0.3s;
 }
 
 .payment-option:hover{
@@ -832,12 +795,6 @@
 .payment-option.active{
   border-color:#3399cc;
   background:#f0f8ff;
-}
-
-.payment-method-box{
-  display:flex;
-  gap:15px;
-  margin:15px 0;
 }
 
 .payment-option{
@@ -863,12 +820,14 @@
 } 
 
 @media (max-width: 768px) {
+
   .cart-container {
     padding: 20px;
   }
 
   .cart-card {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .cart-img {
@@ -877,6 +836,31 @@
   }
 
   .cart-summary {
-    min-width: unset;
+    position: static; 
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .cart-info h5 {
+    font-size: 15px;
+  }
+
+  .price-row {
+    font-size: 14px;
+  }
+
+  .price-row.total {
+    font-size: 16px;
+  }
+
+  .btn-place-order2 {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .combo-products {
+    justify-content: center;
   }
 }

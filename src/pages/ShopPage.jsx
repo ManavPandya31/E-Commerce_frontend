@@ -84,7 +84,7 @@ export default function ShopPage({ cartCount }) {
         prev.filter((id) => id !== productId)
       );
 
-      toast.success("Removed from wishlist");
+      //toast.success("Removed from wishlist");
 
     } else {
     
@@ -93,7 +93,7 @@ export default function ShopPage({ cartCount }) {
 
       setWishlistIds((prev) => [...prev, productId]);
 
-      toast.success("Added to wishlist");
+      //toast.success("Added to wishlist");
     }
 
   } catch (error) {
