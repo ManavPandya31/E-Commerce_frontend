@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiShoppingCart, HiSearch , HiUser , HiShoppingBag} from "react-icons/hi";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../Utils/axiosInstance";
 import "../css/navbar.css";
 
 export default function NavBar({ cartCount }) {
