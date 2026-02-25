@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../Utils/axiosInstance";
 import { toast } from "react-toastify";
 import "../css/verifyemail.css"
 

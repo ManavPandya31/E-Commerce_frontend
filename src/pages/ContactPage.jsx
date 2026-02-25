@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../Utils/axiosInstance";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice.js";
 import NavBar from "../Components/NavBar";

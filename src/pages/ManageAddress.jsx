@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../Utils/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../Slices/loaderSlice";
 import AddAddress from "../Components/AddAddress";
