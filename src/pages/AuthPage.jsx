@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import axiosInstance from "../Utils/axiosInstance";
+import { showLoader, hideLoader } from "../Slices/loaderSlice";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/auth.module.css";
 import NavBar from "../Components/NavBar";
@@ -25,6 +28,8 @@ export default function AuthPage() {
   const [resendTimer, setResendTimer] = useState(0);
   const [resendLoading, setResendLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const fieldChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -35,6 +40,7 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
+      dispatch(showLoader());
       const res = await axiosInstance.post("/api/auth/login",{email: data.email,password: data.password,});
       console.log("Response From Login Api :-",res);
 
@@ -46,7 +52,7 @@ export default function AuthPage() {
       setError("Invalid Email Or Password");
 
     } finally {
-      setLoading(false);
+      dispatch(hideLoader());
     }
   };
 
@@ -58,10 +64,11 @@ export default function AuthPage() {
 
     try {
       const role = "customer";
+      dispatch(showLoader());
       const res = await axiosInstance.post(`/api/auth/register?role=${role}`,data,);
       console.log("Response From Register Api :-",res);
       
-      toast.success("Please verify your email first, then login");
+      // toast.success("Please verify your email first, then login");
       setSuccess("Registration successful");
       setIsLogin(true);
 
@@ -69,7 +76,7 @@ export default function AuthPage() {
       setError("Registration Failed");
 
     } finally {
-      setLoading(false);
+      dispatch(hideLoader());
     }
   };
 
@@ -80,6 +87,7 @@ export default function AuthPage() {
     setForgotError("");
 
     try {
+      dispatch(showLoader());
       const res = await axiosInstance.post("/api/auth/forgotPassword",{ email: forgotEmail },);
       console.log("Response From Forgot Password Api :-",res);
       
@@ -91,7 +99,7 @@ export default function AuthPage() {
       setForgotError("Something went wrong");
 
     } finally {
-      setForgotLoading(false);
+      dispatch(hideLoader());
     }
   };
 
@@ -102,6 +110,7 @@ export default function AuthPage() {
 
     try {
       const otpString = otp.join("");
+      dispatch(showLoader());
       const res = await axiosInstance.post("/api/auth/verifyOTP", {email: forgotEmail,otp: otpString,});
       console.log("Response From VerifOTP Api :-",res);
       
@@ -112,7 +121,7 @@ export default function AuthPage() {
       setForgotError("Invalid OTP");
 
     } finally {
-      setForgotLoading(false);
+      dispatch(hideLoader());
     }
   };
 
@@ -121,6 +130,7 @@ export default function AuthPage() {
     setForgotError("");
 
     try {
+      dispatch(showLoader());
       const res = await axiosInstance.post("/api/auth/forgotPassword", {email: forgotEmail,});
       console.log("Again Response From Forgot Password Api:-",res);
       
@@ -131,7 +141,7 @@ export default function AuthPage() {
       setForgotError("Failed to resend OTP");
 
     } finally {
-      setResendLoading(false);
+      dispatch(hideLoader());
     }
   };
 
@@ -150,6 +160,7 @@ export default function AuthPage() {
 
     try {
       const otpString = otp.join("");
+      dispatch(showLoader());
       const res = await axiosInstance.post("/api/auth/resetPassword",{email: forgotEmail,otp: otpString,password: newPassword,},);
       console.log("Response Form Reset Password Api:-",res);
       
@@ -168,7 +179,7 @@ export default function AuthPage() {
       setForgotError("Invalid or expired OTP");
 
     } finally {
-      setForgotLoading(false);
+      dispatch(hideLoader());
     }
   };
 
