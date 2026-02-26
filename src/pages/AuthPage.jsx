@@ -37,7 +37,6 @@ export default function AuthPage() {
   const formSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
     try {
       dispatch(showLoader());
