@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/auth.module.css";
 import NavBar from "../Components/NavBar";
-import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 export default function AuthPage() {
 
@@ -14,7 +14,7 @@ export default function AuthPage() {
 
   const [isLogin, setIsLogin] = useState(true);
   const [data, setData] = useState({fullName: "",email: "",password: "",phoneNumber: "",gender: "",});
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -27,6 +27,7 @@ export default function AuthPage() {
   const [forgotError, setForgotError] = useState("");
   const [resendTimer, setResendTimer] = useState(0);
   const [resendLoading, setResendLoading] = useState(false);
+  const { isLoading } = useSelector((state) => state.loader);
 
   const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ export default function AuthPage() {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    //setLoading(true);
     setError("");
     setSuccess("");
 
@@ -253,16 +254,15 @@ export default function AuthPage() {
                   Forgot / Reset password
                 </p>
                 {error && <p className={styles.authError}>{error}</p>}
-                <button
-                  type="submit"
-                  className={styles.authBtn}
-                  disabled={loading}
-                >
-                  {loading ? "Logging in..." : "Sign In"}
-                </button>
+              <button
+                type="submit"
+                className={styles.authBtn}
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Sign In"}
+              </button>
               </form>
 
-              {/* Register Form */}
               <form className={styles.authForm} onSubmit={submitForm}>
                 <input
                   type="text"
@@ -304,12 +304,12 @@ export default function AuthPage() {
                   required
                 />
                 {error && <p className={styles.authError}>{error}</p>}
-                <button
+               <button
                   type="submit"
                   className={styles.authBtn}
-                  disabled={loading}
+                  disabled={isLoading}
                 >
-                  {loading ? "Registering..." : "Sign Up"}
+                  {isLoading ? "Please wait..." : "Sign Up"}
                 </button>
               </form>
             </div>
