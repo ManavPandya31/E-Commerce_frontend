@@ -20,7 +20,7 @@ const AppRouter = ({ cartItems, setCartItems, cartCount, setCartCount }) => {
   return (
     <Routes>
       <Route path="/reset-password/:token" element={<ResetPassword />} />
-      <Route path="/verify-email/:token" element={<VerifyEmail />} />
+      <Route path="/verifyEmail/:token" element={<VerifyEmail />} />
       <Route path="/shop" element={<ShopPage cartCount={cartCount} />} />
       <Route path="/about" element={<AboutPage cartCount={cartCount} />} />
       <Route path="/contact" element={<ContactPage cartCount={cartCount} />} />
